@@ -495,15 +495,24 @@ jQuery(function($){
       $p.find('.pa-event-card__location,.pa-event-card__meta-dot,.pa-event-card__description').css('color',locCol);
     }
     applyProgramBorder($p,'agenda'); if(bc){ $p.css({'borderColor':bc,'--pa-event-card-border-color':bc}); }
-    $p.css('overflow','hidden');
+    var borderMap={tl:'top-left',tr:'top-right',br:'bottom-right',bl:'bottom-left'};
+    ['tl','tr','br','bl'].forEach(function(k){
+      var v=$('[name="agenda[radius_'+k+']"]').val();
+      if(v !== undefined && v !== ''){ $p[0].style.setProperty('border-'+borderMap[k]+'-radius', v+'px', 'important'); }
+    });
+    ['top','right','bottom','left'].forEach(function(k){
+      var v=$('[name="agenda[width_'+k+']"]').val();
+      if(v !== undefined && v !== ''){ $p[0].style.setProperty('border-'+k+'-width', v+'px', 'important'); $p[0].style.setProperty('border-style', 'solid', 'important'); }
+    });
+    if(bc){ $p[0].style.setProperty('border-color', bc, 'important'); }
+    $p[0].style.setProperty('overflow','hidden','important');
     var cardSize=$('[name="agenda[card_size]"]').val() || 'full';
     cardSize = cardSize === 'thin' ? 'thin' : 'full';
     $('[name="agenda[card_size]"]').val(cardSize);
     $p.removeClass('pa-event-card--size-thin pa-event-card--size-full').addClass('pa-event-card--size-'+cardSize);
     $('.pa-event-card-preview-description').toggle(cardSize !== 'thin' && $('[name="agenda[show_descriptions]"]').val() !== 'hide');
     $p.addClass('pa-event-card--speakers-inline');
-    var hoverAnim=$('[name="agenda[hover_animation]"]').val() || 'default'; if(hoverAnim !== 'slant') hoverAnim = 'default';
-    $p.removeClass('pa-event-card--hover-default pa-event-card--hover-slant').addClass('pa-event-card--hover-'+hoverAnim);
+    $p.removeClass('pa-event-card--hover-default pa-event-card--hover-slant');
     var mode=$('[name="agenda[display_mode]"]').val();
     $tabs.prop('hidden', mode !== 'tabs');
     if(mode === 'tabs'){
@@ -558,7 +567,6 @@ jQuery(function($){
     $('[name="agenda[tab_shape]"]').val('rounded');
     $('[name="agenda[speaker_layout]"]').val('inline');
     $('[name="agenda[date_display]"]').val('numeric');
-    $('[name="agenda[hover_animation]"]').val('default');
     $('[name="agenda[card_size]"]').val('full');
     setColor($('[name="agenda[background]"]').closest('.pa-color-control'),'');
     setColor($('[name="agenda[accent_bar_color]"]').closest('.pa-color-control'),'');
@@ -615,7 +623,6 @@ jQuery(function($){
       $('[name="agenda[display_mode]"]').val(ag.display_mode === 'tabs' ? 'tabs' : 'stacked');
       $('[name="agenda[tab_shape]"]').val(ag.tab_shape === 'square' ? 'square' : 'rounded');
       $('[name="agenda[speaker_layout]"]').val('inline');
-      $('[name="agenda[hover_animation]"]').val(ag.hover_animation || 'default');
       var copiedCardSize = ag.card_size === 'thin' ? 'thin' : 'full';
       $('[name="agenda[card_size]"]').val(copiedCardSize);
       var dd=(ag.date_display==='abbrev'||ag.date_display==='numeric')?ag.date_display:(ag.date_display==='full'?'abbrev':'numeric');
