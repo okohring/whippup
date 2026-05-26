@@ -22,13 +22,14 @@ jobs:
             mv -f program-agenda/assets/img/whippup-logo.svg program-agenda/assets/img/stagecard-logo.svg
           fi
 
-          # Replace only tracked text files. This avoids binary/image/archive files.
-          git grep -Il 'Whippup\|whippup\|WHIPPUP' -- . ':!:.github/workflows/rename-to-stagecard.yml' | while IFS= read -r file; do
+          # Replace only tracked text files outside .github. GitHub blocks Actions from
+          # modifying workflow files unless the token has separate workflow permission.
+          git grep -Il 'Whippup\|whippup\|WHIPPUP' -- . ':!:.github/*' | while IFS= read -r file; do
             perl -pi -e 's/Whippup/Stagecard/g; s/whippup/stagecard/g; s/WHIPPUP/STAGECARD/g;' "$file"
           done
 
-          echo "Remaining old brand references, if any:"
-          git grep -n 'Whippup\|whippup\|WHIPPUP' -- . ':!:.github/workflows/rename-to-stagecard.yml' || true
+          echo "Remaining old brand references outside .github, if any:"
+          git grep -n 'Whippup\|whippup\|WHIPPUP' -- . ':!:.github/*' || true
 
       - name: Commit rename
         shell: bash
