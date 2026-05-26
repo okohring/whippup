@@ -1,6 +1,6 @@
 # Stagecard
 
-Stagecard is a WordPress program manager for creating and displaying programs, agendas, events, speakers, sponsors, sponsor showcase pages.
+Stagecard is a WordPress plugin designed for creating, managing, and customizing program agendas, including individual speaker, event, and sponsor pages. 
 
 Made with ChatGPT. 
 
