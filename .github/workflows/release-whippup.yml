@@ -1,0 +1,58 @@
+name: Release Whippup
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number to release, for example 1.15.145'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Validate plugin version
+        shell: bash
+        run: |
+          VERSION='${{ inputs.version }}'
+          HEADER_VERSION=$(grep -m1 "Version:" program-agenda/program-agenda.php | sed 's/.*Version:[[:space:]]*//')
+          CONSTANT_VERSION=$(grep -m1 "const VERSION" program-agenda/program-agenda.php | sed "s/.*const VERSION = '\([^']*\)'.*/\1/")
+          if [ "$HEADER_VERSION" != "$VERSION" ]; then
+            echo "Plugin header version is $HEADER_VERSION, but workflow input is $VERSION."
+            exit 1
+          fi
+          if [ "$CONSTANT_VERSION" != "$VERSION" ]; then
+            echo "Plugin class constant version is $CONSTANT_VERSION, but workflow input is $VERSION."
+            exit 1
+          fi
+
+      - name: Build plugin ZIP
+        shell: bash
+        run: |
+          VERSION='${{ inputs.version }}'
+          SAFE_VERSION=${VERSION//./-}
+          ZIP_NAME="program-agenda-v${SAFE_VERSION}.zip"
+          zip -r "$ZIP_NAME" program-agenda \
+            -x "*.DS_Store" \
+            -x "*/.git/*" \
+            -x "*/node_modules/*"
+          echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
+
+      - name: Create GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION='${{ inputs.version }}'
+          TAG="v${VERSION}"
+          gh release create "$TAG" "$ZIP_NAME" \
+            --title "Whippup ${VERSION}" \
+            --notes "Whippup ${VERSION}" \
+            --latest
