@@ -1,4 +1,4 @@
-name: Apply Stagecard layout and URL polish
+name: Apply Stagecard accent and sponsor page polish
 
 on:
   workflow_dispatch:
@@ -13,90 +13,100 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Apply event title, sponsor position, and slug changes
+      - name: Apply accent animation and sponsor page changes
         shell: bash
         run: |
           set -e
           python3 <<'PY'
           from pathlib import Path
-          import re
 
           php_path = Path('program-agenda/program-agenda.php')
           css_path = Path('program-agenda/assets/css/public.css')
 
           php = php_path.read_text()
-          original_php = php
 
-          php = php.replace("'rewrite' => ['slug' => 'program-event'],", "'rewrite' => ['slug' => 'program-event', 'with_front' => false],")
-          php = php.replace("'rewrite' => ['slug' => 'program-speaker'],", "'rewrite' => ['slug' => 'program-speaker', 'with_front' => false],")
-          php = php.replace("'rewrite' => ['slug' => 'program-sponsor'],", "'rewrite' => ['slug' => 'program-sponsor', 'with_front' => false],")
-          php = php.replace("'rewrite' => ['slug' => 'program-event', 'with_front' => false, 'with_front' => false],", "'rewrite' => ['slug' => 'program-event', 'with_front' => false],")
-          php = php.replace("'rewrite' => ['slug' => 'program-speaker', 'with_front' => false, 'with_front' => false],", "'rewrite' => ['slug' => 'program-speaker', 'with_front' => false],")
-          php = php.replace("'rewrite' => ['slug' => 'program-sponsor', 'with_front' => false, 'with_front' => false],", "'rewrite' => ['slug' => 'program-sponsor', 'with_front' => false],")
+          old = """    private function single_sponsor($post) {
+        ob_start();
+        $program_ids = $this->sponsor_program_ids($post->ID);
+        $program_id = $program_ids ? absint($program_ids[0]) : absint(get_post_meta($post->ID, '_pa_sponsor_program_id', true));
+        $logo_id = absint(get_post_meta($post->ID, '_pa_sponsor_logo_id', true));
+        $website = get_post_meta($post->ID, '_pa_sponsor_website', true);
+        echo '<article id=\"pa-single-sponsor-' . absint($post->ID) . '\" class=\"pa-theme-sponsor-page\">';
+        echo $this->back_to_program_link($program_id);
+        echo '<div class=\"pa-sponsor-profile-row\">';
+        if ($logo_id) {
+            echo '<div class=\"pa-sponsor-logo\"><a href=\"' . esc_url(get_permalink($post)) . '\" aria-label=\"' . esc_attr($post->post_title) . '\">' . wp_get_attachment_image($logo_id, 'full', false, ['class'=>'pa-sponsor-logo-img', 'alt'=>esc_attr($post->post_title)]) . '</a></div>';
+        }
+        echo '<div class=\"pa-sponsor-profile-info\">';
+        echo '<h1>' . esc_html($post->post_title) . '</h1>';
+        if ($website) { echo '<p><a class=\"pa-sponsor-website-link\" href=\"' . esc_url($website) . '\" target=\"_blank\" rel=\"noopener\">Visit sponsor website</a></p>'; }
+        echo '</div></div>';
+        echo '<div class=\"pa-sponsor-content\">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
+        echo '</article>';
+        return ob_get_clean();
+    }"""
 
-          php = re.sub(
-              r'<h3 class="pa-event-card__title">(.*?)</h3>',
-              r'<h4 class="pa-event-card__title">\1</h4>',
-              php,
-              flags=re.S
-          )
+          new = """    private function single_sponsor($post) {
+        ob_start();
+        $program_ids = $this->sponsor_program_ids($post->ID);
+        $program_id = $program_ids ? absint($program_ids[0]) : absint(get_post_meta($post->ID, '_pa_sponsor_program_id', true));
+        $s = $this->speaker_page_settings_for_program($program_id);
+        $logo_id = absint(get_post_meta($post->ID, '_pa_sponsor_logo_id', true));
+        $website = get_post_meta($post->ID, '_pa_sponsor_website', true);
+        $sponsor_page_id = 'pa-single-sponsor-' . absint($post->ID);
+        $header_color = sanitize_hex_color($s['header_color'] ?? '');
+        $content_color = sanitize_hex_color($s['content_color'] ?? '');
+        $scoped_color_css = '';
+        if ($header_color) {
+            $scoped_color_css .= '#' . $sponsor_page_id . ' .pa-single-header,#' . $sponsor_page_id . ' .pa-single-header *{color:' . $header_color . ' !important;}';
+        }
+        if ($content_color) {
+            $scoped_color_css .= '#' . $sponsor_page_id . ' .pa-single-content,#' . $sponsor_page_id . ' .pa-single-content *{color:' . $content_color . ' !important;}';
+        }
+        if ($scoped_color_css) { echo '<style>' . esc_html($scoped_color_css) . '</style>'; }
 
-          sponsor_pattern = re.compile(
-              r"(?P<open>\s*echo '<div class=\"pa-single-content ' \.[\s\S]*?wp_kses_post\(wpautop\(\$post->post_content\)\) \. '</div>';\n)"
-              r"(?P<sponsors>\s*\$sponsor_ids = get_post_meta\(\$post->ID, '_pa_sponsor_ids', true\);[\s\S]*?echo '</div></div>';\n\s*}\n)"
-              r"(?P<speakers>\s*\$speaker_ids = get_post_meta\(\$post->ID, '_pa_speaker_ids', true\);[\s\S]*?echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' \. \$this->speaker_cards\(\$speaker_ids, \$program_id, 'agenda'\) \. '</div>';\n\s*}\n)"
-              r"\s*echo '</div></article>'; return ob_get_clean\(\);"
-          )
+        echo '<article id="' . esc_attr($sponsor_page_id) . '" class="pa-single pa-single-sponsor">';
+        echo $this->back_to_program_link($program_id);
+        echo '<header class="pa-single-header pa-speaker-hero pa-sponsor-hero ' . esc_attr($this->area_class($s, 'header')) . '" style="' . esc_attr($this->inline_header_style($s)) . '">';
+        if ($logo_id) {
+            echo '<div class="pa-sponsor-hero-logo"><a href="' . esc_url(get_permalink($post)) . '" aria-label="' . esc_attr($post->post_title) . '">' . wp_get_attachment_image($logo_id, 'full', false, ['class'=>'pa-sponsor-hero-logo-img', 'alt'=>esc_attr($post->post_title)]) . '</a></div>';
+        }
+        echo '<div class="pa-speaker-hero-text pa-sponsor-hero-text"><h5 class="pa-speaker-page-label pa-sponsor-page-label">Sponsor</h5><h3 class="pa-speaker-name pa-sponsor-name">' . esc_html($post->post_title) . '</h3>';
+        if ($website) { echo '<h5 class="pa-speaker-company pa-sponsor-website"><a href="' . esc_url($website) . '" target="_blank" rel="noopener">Visit sponsor website</a></h5>'; }
+        echo '</div></header>';
+        echo '<div class="pa-single-content ' . esc_attr($this->area_class($s, 'content')) . '" style="' . esc_attr($this->inline_content_style($s)) . '">';
+        echo '<div class="pa-single-text">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
+        echo '</div>';
+        echo '</article>';
+        return ob_get_clean();
+    }"""
 
-          if 'pa-event-sponsor-logos-below' not in php:
-              match = sponsor_pattern.search(php)
-              if not match:
-                  raise SystemExit('Could not find expected event page sponsor/speaker block.')
-
-              sponsors = match.group('sponsors').replace(
-                  'pa-event-sponsor-logos"><h4>Sponsored by</h4>',
-                  'pa-event-sponsor-logos pa-event-sponsor-logos-below"><h4>Sponsored by</h4>'
-              )
-              replacement = (
-                  match.group('open') +
-                  match.group('speakers') +
-                  "        echo '</div>';\n" +
-                  sponsors +
-                  "        echo '</article>'; return ob_get_clean();"
-              )
-              php = php[:match.start()] + replacement + php[match.end():]
-
-          if php == original_php:
-              raise SystemExit('No PHP changes were applied. The current file may already include these changes.')
-          php_path.write_text(php)
+          if old not in php and 'class="pa-single pa-single-sponsor"' not in php:
+              raise SystemExit('Could not find expected single_sponsor function.')
+          if old in php:
+              php = php.replace(old, new)
+              php_path.write_text(php)
 
           css = css_path.read_text()
-          marker = '/* Stagecard layout and URL polish */'
-          addition = "\n\n".join([])
+          marker = '/* v1.15.156: visual-only accent hover and sponsor page layout */'
           addition = "\n".join([
               "",
-              "/* Stagecard layout and URL polish */",
-              ".pa-event-card .pa-event-card__title,",
-              ".pa-event-card .pa-event-card__title a{",
-              "  margin:0!important;",
-              "  font-size:1rem!important;",
-              "  line-height:1.15!important;",
-              "  font-weight:600!important;",
-              "  letter-spacing:normal!important;",
-              "  text-transform:none!important;",
-              "}",
-              ".pa-event-sponsor-logos-below{",
-              "  padding:32px 50px 50px;",
-              "  margin:0;",
-              "}",
-              ".pa-event-sponsor-logos-below h4{",
-              "  margin-top:0;",
-              "}",
-              "@media(max-width:700px){",
-              "  .pa-event-sponsor-logos-below{",
-              "    padding:24px 30px 30px;",
-              "  }",
-              "}",
+              "/* v1.15.156: visual-only accent hover and sponsor page layout */",
+              ".pa-agenda-category-bar, .pa-event-card__datebar{position:relative!important;overflow:visible!important;transition:none!important;z-index:2;}",
+              ".pa-schedule .pa-agenda-category-bar, .pa-single .pa-agenda-category-bar{width:68px!important;flex:0 0 68px!important;}",
+              ".pa-agenda-category-bar::before, .pa-event-card__datebar::before{content:\"\";position:absolute;inset:0;background:inherit;transform-origin:left center;transform:scaleX(1);transition:transform .18s ease;z-index:0;pointer-events:none;}",
+              ".pa-agenda-category-bar > *, .pa-event-card__datebar > *{position:relative;z-index:1;}",
+              ".pa-agenda-item:hover .pa-agenda-category-bar, .pa-agenda-item:focus-within .pa-agenda-category-bar, .pa-event-card:hover .pa-event-card__datebar, .pa-event-card:focus-within .pa-event-card__datebar{width:68px!important;flex-basis:68px!important;}",
+              ".pa-agenda-item:hover .pa-agenda-category-bar::before, .pa-agenda-item:focus-within .pa-agenda-category-bar::before, .pa-event-card:hover .pa-event-card__datebar::before, .pa-event-card:focus-within .pa-event-card__datebar::before{transform:scaleX(1.75);}",
+              ".pa-agenda-summary h4, .pa-agenda-summary h4 a, .pa-event-card .pa-event-card__title, .pa-event-card .pa-event-card__title a{margin:0!important;font-size:1rem!important;line-height:1.15!important;font-weight:600!important;letter-spacing:normal!important;text-transform:none!important;}",
+              ".pa-single-sponsor{width:min(100%,1120px);max-width:1120px;margin-left:auto;margin-right:auto;box-sizing:border-box;}",
+              ".pa-single-sponsor *{box-sizing:border-box;}",
+              ".pa-sponsor-hero-logo{width:250px!important;height:150px!important;flex:0 0 250px!important;padding:30px!important;background:#fff!important;border-radius:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;line-height:0!important;}",
+              ".pa-sponsor-hero-logo a{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;}",
+              ".pa-sponsor-hero-logo-img{display:block!important;max-width:100%!important;max-height:100%!important;width:auto!important;height:auto!important;object-fit:contain!important;border-radius:0!important;margin:0!important;}",
+              ".pa-single-sponsor .pa-sponsor-website a{color:inherit!important;text-decoration:underline;text-underline-offset:.18em;}",
+              "@media(max-width:1180px){.pa-single-sponsor{width:calc(100% - 32px);}}",
+              "@media(max-width:700px){.pa-single-sponsor{width:100%;}.pa-single-sponsor .pa-sponsor-hero{align-items:flex-start;gap:20px;}.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar,.pa-agenda-item:hover .pa-agenda-category-bar,.pa-agenda-item:focus-within .pa-agenda-category-bar{width:100%!important;flex-basis:auto!important;}.pa-agenda-category-bar::before,.pa-event-card__datebar::before{transform:none!important;}}",
               "",
           ])
           if marker not in css:
@@ -107,11 +117,11 @@ jobs:
         shell: bash
         run: |
           if git diff --quiet; then
-            echo "No layout or URL polish changes to commit."
+            echo "No accent or sponsor page changes to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add program-agenda/program-agenda.php program-agenda/assets/css/public.css
-          git commit -m "Polish event titles sponsors and slugs"
+          git commit -m "Polish accent animation and sponsor pages"
           git push
