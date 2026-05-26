@@ -3144,7 +3144,7 @@ final class Program_Agenda_Plugin {
             'requires_php' => $release['requires_php'],
             'last_updated' => $release['published_at'],
             'sections' => [
-                'description' => 'Stagecard is a WordPress program manager for programs, events, speakers, sponsors, agendas, sponsor showcases, and mass imports.',
+                'description' => 'Stagecard is a WordPress program manager that includes unique pages for events, speakers, and sponsors. Using simple shortcode plugins, you can easily generate an on-brand agenda featuring customizable event cards and speaker profiles. <br> This plugin has been created with ChatGPT.',
                 'changelog' => $release['body'] ? wp_kses_post(wpautop($release['body'])) : 'See the GitHub release notes for this version.',
             ],
         ];
