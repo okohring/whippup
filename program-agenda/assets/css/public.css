@@ -2581,3 +2581,25 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
     max-width:100%!important;
   }
 }
+/* Stagecard layout and URL polish */
+.pa-event-card .pa-event-card__title,
+.pa-event-card .pa-event-card__title a{
+  margin:0!important;
+  font-size:1rem!important;
+  line-height:1.15!important;
+  font-weight:600!important;
+  letter-spacing:normal!important;
+  text-transform:none!important;
+}
+.pa-event-sponsor-logos-below{
+  padding:32px 50px 50px;
+  margin:0;
+}
+.pa-event-sponsor-logos-below h4{
+  margin-top:0;
+}
+@media(max-width:700px){
+  .pa-event-sponsor-logos-below{
+    padding:24px 30px 30px;
+  }
+}

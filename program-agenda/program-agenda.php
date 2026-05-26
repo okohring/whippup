@@ -66,7 +66,7 @@ final class Program_Agenda_Plugin {
             'public' => true,
             'show_ui' => false,
             'has_archive' => false,
-            'rewrite' => ['slug' => 'program-event'],
+            'rewrite' => ['slug' => 'program-event', 'with_front' => false],
             'supports' => ['title', 'editor', 'thumbnail', 'author'],
             'capability_type' => 'post',
         ]);
@@ -75,7 +75,7 @@ final class Program_Agenda_Plugin {
             'public' => true,
             'show_ui' => false,
             'has_archive' => false,
-            'rewrite' => ['slug' => 'program-speaker'],
+            'rewrite' => ['slug' => 'program-speaker', 'with_front' => false],
             'supports' => ['title', 'editor', 'thumbnail', 'author'],
             'capability_type' => 'post',
         ]);
@@ -84,7 +84,7 @@ final class Program_Agenda_Plugin {
             'public' => true,
             'show_ui' => false,
             'has_archive' => false,
-            'rewrite' => ['slug' => 'program-sponsor'],
+            'rewrite' => ['slug' => 'program-sponsor', 'with_front' => false],
             'supports' => ['title', 'editor', 'thumbnail', 'author'],
             'capability_type' => 'post',
         ]);
@@ -1310,7 +1310,7 @@ final class Program_Agenda_Plugin {
         echo '<div class="pa-agenda-tabs-preview" hidden><button type="button" class="active">8/20</button><button type="button">8/21</button></div>';
         echo '<article class="pa-event-card pa-event-card-preview pa-event-card--has-speakers pa-event-card--speakers-inline pa-event-card--size-full pa-event-card--hover-default">';
         echo '<div class="pa-event-card__datebar"><span class="pa-event-card__date pa-event-card-preview-date">8/20</span><span class="pa-event-card__time">00:00</span></div>';
-        echo '<div class="pa-event-card__body"><div class="pa-event-card__summary"><h3 class="pa-event-card__title"><a href="#">Event title</a></h3><p class="pa-event-card__meta"><span class="pa-event-card__category"><span class="pa-event-card__category-icon">★</span><span class="pa-event-card__category-text">Category</span></span><span class="pa-event-card__meta-dot" aria-hidden="true">•</span><span class="pa-event-card__location">Event location</span></p><div class="pa-event-card__description pa-event-card-preview-description">Event description preview appears here when descriptions are shown.</div></div>';
+        echo '<div class="pa-event-card__body"><div class="pa-event-card__summary"><h4 class="pa-event-card__title"><a href="#">Event title</a></h4><p class="pa-event-card__meta"><span class="pa-event-card__category"><span class="pa-event-card__category-icon">★</span><span class="pa-event-card__category-text">Category</span></span><span class="pa-event-card__meta-dot" aria-hidden="true">•</span><span class="pa-event-card__location">Event location</span></p><div class="pa-event-card__description pa-event-card-preview-description">Event description preview appears here when descriptions are shown.</div></div>';
         echo '<div class="pa-event-card__speakers"><div class="pa-speaker-card-list pa-speaker-card-list-agenda"><article class="pa-speaker-card pa-speaker-card-preview"><span class="pa-speaker-card-image"><span class="pa-speaker-card-thumb pa-speaker-card-preview-thumb" aria-hidden="true"></span></span><div class="pa-speaker-card-text pa-speaker-card-preview-text"><h3><a href="#">Speaker Name</a></h3><p class="pa-speaker-card-role">Speaker role</p><p class="pa-speaker-card-company">Company</p></div></article></div></div></div></article>';
         echo '</section>';
     }
@@ -2800,11 +2800,16 @@ final class Program_Agenda_Plugin {
         echo '</div></header>';
         echo '<div class="pa-single-content ' . esc_attr($this->area_class($s, 'content')) . '" style="' . esc_attr($this->inline_content_style($s)) . '">';
         echo '<div class="pa-single-text">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
+        $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
+        if (is_array($speaker_ids) && $speaker_ids) {
+            echo '<div class="pa-event-single-speakers"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda') . '</div>';
+        }
+        echo '</div>';
         $sponsor_ids = get_post_meta($post->ID, '_pa_sponsor_ids', true);
         if (!is_array($sponsor_ids)) { $sponsor_ids = []; }
         $sponsor_ids = array_values(array_filter(array_map('absint', $sponsor_ids)));
         if ($sponsor_ids) {
-            echo '<div class="pa-event-sponsor-logos"><h4>Sponsored by</h4><div class="pa-event-sponsor-logo-list">';
+            echo '<div class="pa-event-sponsor-logos pa-event-sponsor-logos-below"><h4>Sponsored by</h4><div class="pa-event-sponsor-logo-list">';
             foreach ($sponsor_ids as $sponsor_id) {
                 $sponsor = get_post($sponsor_id);
                 if (!$sponsor || $sponsor->post_type !== 'pa_sponsor') { continue; }
@@ -2817,11 +2822,7 @@ final class Program_Agenda_Plugin {
             }
             echo '</div></div>';
         }
-        $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
-        if (is_array($speaker_ids) && $speaker_ids) {
-            echo '<div class="pa-event-single-speakers"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda') . '</div>';
-        }
-        echo '</div></article>'; return ob_get_clean();
+        echo '</article>'; return ob_get_clean();
     }
 
     private function single_speaker($post) {
@@ -3001,7 +3002,7 @@ final class Program_Agenda_Plugin {
         ob_start();
         echo '<article class="' . esc_attr(implode(' ', $card_classes)) . '" style="' . esc_attr($item_style) . '">';
         echo '<div class="pa-event-card__datebar"><span class="pa-event-card__date">' . esc_html($date_text ?: 'Date') . '</span><span class="pa-event-card__time">' . esc_html($time_text ?: 'Time') . '</span></div>';
-        echo '<div class="pa-event-card__body"><div class="pa-event-card__summary"><h3 class="pa-event-card__title"><a href="' . esc_url(get_permalink($event)) . '">' . esc_html($event->post_title) . '</a></h3>';
+        echo '<div class="pa-event-card__body"><div class="pa-event-card__summary"><h4 class="pa-event-card__title"><a href="' . esc_url(get_permalink($event)) . '">' . esc_html($event->post_title) . '</a></h4>';
 
         if ($cat || $loc || $invite_only) {
             echo '<p class="pa-event-card__meta">';
