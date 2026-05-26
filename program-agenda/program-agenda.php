@@ -922,11 +922,11 @@ final class Program_Agenda_Plugin {
     public function page_mass_import() {
         $this->nav('import');
         echo '<section class="pa-card pa-import-card"><h2>Mass Import</h2>';
-        echo '<p>Upload Events, Speakers or Sponsors from a CSV/XLSX spreadsheet. Images can be added with public image URLS, or by uploading a ZIP file that contains the spreadsheet and an images folder. Use the file name from the images folder in the excel sheet cell (ex: speaker-jane-doe.jpg)</p>';
-        echo '<p><strong>The uploaded ZIP file should look like this:</strong></p>';
+        echo '<p>Upload Events, Speakers or Sponsors from a CSV/XLSX spreadsheet. Images can be added to the spreadsheet with public image URLS (https://example.com/speaker-jane-doe.jpg), or by uploading a ZIP file that contains the spreadsheet and an images folder. Use the file name from the images folder in the excel sheet cell (ex: speaker-jane-doe.jpg)</p>';
+        echo '<p><strong>Example structure:</strong></p>';
         echo '<pre class="pa-import-zip-example">example-program-speakers.zip
-- images folder &gt; speaker-jane-doe.jpg
-- example-program-speakers.xlsx</pre>';
+> images folder &gt; speaker-jane-doe.jpg
+> example-program-speakers.xlsx</pre>';
         echo '<div class="pa-import-template-links"><strong>Download templates:</strong> ';
         foreach (['events'=>'Events','speakers'=>'Speakers','sponsors'=>'Sponsors'] as $type => $label) {
             $url = wp_nonce_url(admin_url('admin-post.php?action=pa_download_import_template&type=' . $type), 'pa_download_import_template_' . $type);
@@ -944,8 +944,6 @@ final class Program_Agenda_Plugin {
         echo '<p class="description">Spreadsheet-only uploads should use image URLs. ZIP uploads may use image filenames that match files inside the ZIP <code>images</code> folder. Do not embed images directly inside spreadsheet cells.</p>';
         echo '<p><button type="submit" class="button button-primary">Import file</button></p>';
         echo '</form>';
-        echo '<h3>Image instructions</h3><p>Use either a public image URL, such as <code>https://example.com/jane.jpg</code>, or a filename such as <code>jane.jpg</code> when uploading a ZIP with an <code>images</code> folder.</p>';
-        echo '</section></div>';
     }
 
     public function page_settings() {
