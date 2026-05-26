@@ -27,17 +27,13 @@ jobs:
           php = php_path.read_text()
           original_php = php
 
-          # Keep event/speaker/sponsor URLs from inheriting permalink front bases like /news/.
           php = php.replace("'rewrite' => ['slug' => 'program-event'],", "'rewrite' => ['slug' => 'program-event', 'with_front' => false],")
           php = php.replace("'rewrite' => ['slug' => 'program-speaker'],", "'rewrite' => ['slug' => 'program-speaker', 'with_front' => false],")
           php = php.replace("'rewrite' => ['slug' => 'program-sponsor'],", "'rewrite' => ['slug' => 'program-sponsor', 'with_front' => false],")
-
-          # Do not duplicate if this has already been applied.
           php = php.replace("'rewrite' => ['slug' => 'program-event', 'with_front' => false, 'with_front' => false],", "'rewrite' => ['slug' => 'program-event', 'with_front' => false],")
           php = php.replace("'rewrite' => ['slug' => 'program-speaker', 'with_front' => false, 'with_front' => false],", "'rewrite' => ['slug' => 'program-speaker', 'with_front' => false],")
           php = php.replace("'rewrite' => ['slug' => 'program-sponsor', 'with_front' => false, 'with_front' => false],", "'rewrite' => ['slug' => 'program-sponsor', 'with_front' => false],")
 
-          # Make agenda event-card titles smaller/safer semantically by using h4 instead of h3.
           php = re.sub(
               r'<h3 class="pa-event-card__title">(.*?)</h3>',
               r'<h4 class="pa-event-card__title">\1</h4>',
@@ -45,8 +41,6 @@ jobs:
               flags=re.S
           )
 
-          # Move the Sponsored by block after the gray content area, below the speakers section.
-          # This regex is intentionally scoped to the single_event output area and tolerant of small text edits elsewhere.
           sponsor_pattern = re.compile(
               r"(?P<open>\s*echo '<div class=\"pa-single-content ' \.[\s\S]*?wp_kses_post\(wpautop\(\$post->post_content\)\) \. '</div>';\n)"
               r"(?P<sponsors>\s*\$sponsor_ids = get_post_meta\(\$post->ID, '_pa_sponsor_ids', true\);[\s\S]*?echo '</div></div>';\n\s*}\n)"
@@ -78,31 +72,33 @@ jobs:
 
           css = css_path.read_text()
           marker = '/* Stagecard layout and URL polish */'
-          addition = '''
-
-/* Stagecard layout and URL polish */
-.pa-event-card .pa-event-card__title,
-.pa-event-card .pa-event-card__title a{
-  margin:0!important;
-  font-size:1rem!important;
-  line-height:1.15!important;
-  font-weight:600!important;
-  letter-spacing:normal!important;
-  text-transform:none!important;
-}
-.pa-event-sponsor-logos-below{
-  padding:32px 50px 50px;
-  margin:0;
-}
-.pa-event-sponsor-logos-below h4{
-  margin-top:0;
-}
-@media(max-width:700px){
-  .pa-event-sponsor-logos-below{
-    padding:24px 30px 30px;
-  }
-}
-'''
+          addition = "\n\n".join([])
+          addition = "\n".join([
+              "",
+              "/* Stagecard layout and URL polish */",
+              ".pa-event-card .pa-event-card__title,",
+              ".pa-event-card .pa-event-card__title a{",
+              "  margin:0!important;",
+              "  font-size:1rem!important;",
+              "  line-height:1.15!important;",
+              "  font-weight:600!important;",
+              "  letter-spacing:normal!important;",
+              "  text-transform:none!important;",
+              "}",
+              ".pa-event-sponsor-logos-below{",
+              "  padding:32px 50px 50px;",
+              "  margin:0;",
+              "}",
+              ".pa-event-sponsor-logos-below h4{",
+              "  margin-top:0;",
+              "}",
+              "@media(max-width:700px){",
+              "  .pa-event-sponsor-logos-below{",
+              "    padding:24px 30px 30px;",
+              "  }",
+              "}",
+              "",
+          ])
           if marker not in css:
               css_path.write_text(css.rstrip() + addition)
           PY
