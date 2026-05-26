@@ -1,0 +1,13 @@
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# WordPress/package artifacts
+*.zip
+*.tar.gz
+
+# Logs/temp
+*.log
+/tmp/
