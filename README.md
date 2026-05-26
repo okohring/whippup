@@ -2,6 +2,8 @@
 
 Whippup is a WordPress program manager for creating and displaying programs, agendas, events, speakers, sponsors, sponsor showcase pages.
 
+Mad with ChatGPT. 
+
 ## Current updater workflow
 
 This repository hosts Whippup releases for WordPress plugin updates.
