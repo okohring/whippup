@@ -38,7 +38,3 @@ Before giving a version to a client:
 3. Upload the ZIP as a GitHub Release asset, or use the GitHub Actions packaging workflow once source files are in the repo.
 4. Confirm WordPress detects the update on the test site.
 5. Click through Programs, Events, Speakers, Sponsors, Mass Import, and public shortcodes.
-
-## Public branding note
-
-Stagecard branding is admin-facing only. Public-facing program, event, speaker, and sponsor pages should not include maker credit by default.
