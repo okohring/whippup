@@ -965,7 +965,7 @@ final class Program_Agenda_Plugin {
         echo '<section class="pa-field pa-cleanup-setting">';
         echo '<h3>Uninstall cleanup</h3>';
         echo '<p class="description">By default, deleting the plugin keeps all Programs, Events, Speakers, and Sponsors so a temporary uninstall does not erase client content.</p>';
-        echo '<label class="pa-checkbox-field"><input type="checkbox" name="delete_data_on_uninstall" value="1" ' . checked($enabled, true, false) . '> Delete only Programs, Events, Speakers, and Sponsors created by this plugin when this plugin is deleted</label>';
+        echo '<label class="pa-checkbox-field"><input type="checkbox" name="delete_data_on_uninstall" value="1" ' . checked($enabled, true, false) . '> Delete Programs, Events, Speakers, and Sponsors created by this plugin when this plugin is deleted</label>';
         echo '<p class="description pa-danger-note">Only enable this for testing or when you intentionally want this plugin’s Programs, Events, Speakers, and Sponsors permanently removed during uninstall. Normal WordPress Pages, Posts, Media Library uploads, menus, users, theme settings, and WPBakery/Salient content are not deleted.</p>';
         echo '</section>';
         echo '<p><button class="button button-primary">Save Settings</button></p>';
