@@ -1,0 +1,43 @@
+name: Rename Whippup to Stagecard
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Rename files and text
+        shell: bash
+        run: |
+          set -e
+
+          if [ -f program-agenda/assets/img/whippup-logo.svg ]; then
+            mv program-agenda/assets/img/whippup-logo.svg program-agenda/assets/img/stagecard-logo.svg
+          fi
+
+          find . -type f \
+            -not -path './.git/*' \
+            -not -path './.github/workflows/rename-to-stagecard.yml' \
+            -print0 | xargs -0 perl -pi -e 's/Whippup/Stagecard/g; s/whippup/stagecard/g; s/WHIPPUP/STAGECARD/g;'
+
+          grep -R "Whippup\|whippup" . --exclude-dir=.git --exclude=rename-to-stagecard.yml || true
+
+      - name: Commit rename
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No Stagecard rename changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Rename Whippup to Stagecard"
+          git push
