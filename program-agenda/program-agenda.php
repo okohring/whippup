@@ -2588,23 +2588,36 @@ final class Program_Agenda_Plugin {
         ob_start();
         $program_ids = $this->sponsor_program_ids($post->ID);
         $program_id = $program_ids ? absint($program_ids[0]) : absint(get_post_meta($post->ID, '_pa_sponsor_program_id', true));
+        $s = $this->speaker_page_settings_for_program($program_id);
         $logo_id = absint(get_post_meta($post->ID, '_pa_sponsor_logo_id', true));
         $website = get_post_meta($post->ID, '_pa_sponsor_website', true);
-        echo '<article id="pa-single-sponsor-' . absint($post->ID) . '" class="pa-theme-sponsor-page">';
-        echo $this->back_to_program_link($program_id);
-        echo '<div class="pa-sponsor-profile-row">';
-        if ($logo_id) {
-            echo '<div class="pa-sponsor-logo"><a href="' . esc_url(get_permalink($post)) . '" aria-label="' . esc_attr($post->post_title) . '">' . wp_get_attachment_image($logo_id, 'full', false, ['class'=>'pa-sponsor-logo-img', 'alt'=>esc_attr($post->post_title)]) . '</a></div>';
+        $sponsor_page_id = 'pa-single-sponsor-' . absint($post->ID);
+        $header_color = sanitize_hex_color($s['header_color'] ?? '');
+        $content_color = sanitize_hex_color($s['content_color'] ?? '');
+        $scoped_color_css = '';
+        if ($header_color) {
+            $scoped_color_css .= '#' . $sponsor_page_id . ' .pa-single-header,#' . $sponsor_page_id . ' .pa-single-header *{color:' . $header_color . ' !important;}';
         }
-        echo '<div class="pa-sponsor-profile-info">';
-        echo '<h1>' . esc_html($post->post_title) . '</h1>';
-        if ($website) { echo '<p><a class="pa-sponsor-website-link" href="' . esc_url($website) . '" target="_blank" rel="noopener">Visit sponsor website</a></p>'; }
-        echo '</div></div>';
-        echo '<div class="pa-sponsor-content">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
+        if ($content_color) {
+            $scoped_color_css .= '#' . $sponsor_page_id . ' .pa-single-content,#' . $sponsor_page_id . ' .pa-single-content *{color:' . $content_color . ' !important;}';
+        }
+        if ($scoped_color_css) { echo '<style>' . esc_html($scoped_color_css) . '</style>'; }
+
+        echo '<article id="' . esc_attr($sponsor_page_id) . '" class="pa-single pa-single-sponsor">';
+        echo $this->back_to_program_link($program_id);
+        echo '<header class="pa-single-header pa-speaker-hero pa-sponsor-hero ' . esc_attr($this->area_class($s, 'header')) . '" style="' . esc_attr($this->inline_header_style($s)) . '">';
+        if ($logo_id) {
+            echo '<div class="pa-sponsor-hero-logo"><a href="' . esc_url(get_permalink($post)) . '" aria-label="' . esc_attr($post->post_title) . '">' . wp_get_attachment_image($logo_id, 'full', false, ['class'=>'pa-sponsor-hero-logo-img', 'alt'=>esc_attr($post->post_title)]) . '</a></div>';
+        }
+        echo '<div class="pa-speaker-hero-text pa-sponsor-hero-text"><h5 class="pa-speaker-page-label pa-sponsor-page-label">Sponsor</h5><h3 class="pa-speaker-name pa-sponsor-name">' . esc_html($post->post_title) . '</h3>';
+        if ($website) { echo '<h5 class="pa-speaker-company pa-sponsor-website"><a href="' . esc_url($website) . '" target="_blank" rel="noopener">Visit sponsor website</a></h5>'; }
+        echo '</div></header>';
+        echo '<div class="pa-single-content ' . esc_attr($this->area_class($s, 'content')) . '" style="' . esc_attr($this->inline_content_style($s)) . '">';
+        echo '<div class="pa-single-text">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
+        echo '</div>';
         echo '</article>';
         return ob_get_clean();
     }
-
     public function admin_bar_edit_link($wp_admin_bar) {
         if (!is_singular(['pa_event','pa_speaker','pa_sponsor']) || !is_admin_bar_showing()) { return; }
         $post = get_queried_object();
