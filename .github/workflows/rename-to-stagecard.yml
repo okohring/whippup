@@ -1,4 +1,4 @@
-name: Rename Whippup to Stagecard
+name: Apply Stagecard layout and URL polish
 
 on:
   workflow_dispatch:
@@ -7,39 +7,136 @@ permissions:
   contents: write
 
 jobs:
-  rename:
+  polish:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Rename files and text
+      - name: Apply event title, sponsor position, and slug changes
         shell: bash
         run: |
           set -e
+          python3 <<'PY'
+          from pathlib import Path
+          import re
 
-          if [ -f program-agenda/assets/img/whippup-logo.svg ]; then
-            mv -f program-agenda/assets/img/whippup-logo.svg program-agenda/assets/img/stagecard-logo.svg
-          fi
+          php_path = Path('program-agenda/program-agenda.php')
+          css_path = Path('program-agenda/assets/css/public.css')
 
-          # Replace only tracked text files outside .github. GitHub blocks Actions from
-          # modifying workflow files unless the token has separate workflow permission.
-          git grep -Il 'Whippup\|whippup\|WHIPPUP' -- . ':!:.github/*' | while IFS= read -r file; do
-            perl -pi -e 's/Whippup/Stagecard/g; s/whippup/stagecard/g; s/WHIPPUP/STAGECARD/g;' "$file"
-          done
+          php = php_path.read_text()
+          original_php = php
 
-          echo "Remaining old brand references outside .github, if any:"
-          git grep -n 'Whippup\|whippup\|WHIPPUP' -- . ':!:.github/*' || true
+          # Keep event/speaker/sponsor URLs from inheriting permalink front bases like /news/.
+          php = php.replace("'rewrite' => ['slug' => 'program-event'],", "'rewrite' => ['slug' => 'program-event', 'with_front' => false],")
+          php = php.replace("'rewrite' => ['slug' => 'program-speaker'],", "'rewrite' => ['slug' => 'program-speaker', 'with_front' => false],")
+          php = php.replace("'rewrite' => ['slug' => 'program-sponsor'],", "'rewrite' => ['slug' => 'program-sponsor', 'with_front' => false],")
 
-      - name: Commit rename
+          # Make agenda event-card titles smaller/safer semantically by using h4 instead of h3.
+          php = re.sub(
+              r'<h3 class="pa-event-card__title">(.*?)</h3>',
+              r'<h4 class="pa-event-card__title">\1</h4>',
+              php
+          )
+
+          # Move the Sponsored by block after the gray content area, below the speakers section.
+          old = """        echo '<div class=\"pa-single-content ' . esc_attr($this->area_class($s, 'content')) . '\" style=\"' . esc_attr($this->inline_content_style($s)) . '\">';
+        echo '<div class=\"pa-single-text\">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
+        $sponsor_ids = get_post_meta($post->ID, '_pa_sponsor_ids', true);
+        if (!is_array($sponsor_ids)) { $sponsor_ids = []; }
+        $sponsor_ids = array_values(array_filter(array_map('absint', $sponsor_ids)));
+        if ($sponsor_ids) {
+            echo '<div class=\"pa-event-sponsor-logos\"><h4>Sponsored by</h4><div class=\"pa-event-sponsor-logo-list\">';
+            foreach ($sponsor_ids as $sponsor_id) {
+                $sponsor = get_post($sponsor_id);
+                if (!$sponsor || $sponsor->post_type !== 'pa_sponsor') { continue; }
+                $logo_id = absint(get_post_meta($sponsor_id, '_pa_sponsor_logo_id', true));
+                $sponsor_url = get_permalink($sponsor);
+                echo '<a class=\"pa-event-sponsor-logo\" href=\"' . esc_url($sponsor_url) . '\" aria-label=\"' . esc_attr($sponsor->post_title) . '\">';
+                if ($logo_id) { echo wp_get_attachment_image($logo_id, 'full', false, ['class'=>'pa-event-sponsor-logo-img', 'alt'=>esc_attr($sponsor->post_title)]); }
+                else { echo '<span class=\"pa-event-sponsor-name\">' . esc_html($sponsor->post_title) . '</span>'; }
+                echo '</a>';
+            }
+            echo '</div></div>';
+        }
+        $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
+        if (is_array($speaker_ids) && $speaker_ids) {
+            echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda') . '</div>';
+        }
+        echo '</div></article>'; return ob_get_clean();"""
+          new = """        echo '<div class=\"pa-single-content ' . esc_attr($this->area_class($s, 'content')) . '\" style=\"' . esc_attr($this->inline_content_style($s)) . '\">';
+        echo '<div class=\"pa-single-text\">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
+        $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
+        if (is_array($speaker_ids) && $speaker_ids) {
+            echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda') . '</div>';
+        }
+        echo '</div>';
+        $sponsor_ids = get_post_meta($post->ID, '_pa_sponsor_ids', true);
+        if (!is_array($sponsor_ids)) { $sponsor_ids = []; }
+        $sponsor_ids = array_values(array_filter(array_map('absint', $sponsor_ids)));
+        if ($sponsor_ids) {
+            echo '<div class=\"pa-event-sponsor-logos pa-event-sponsor-logos-below\"><h4>Sponsored by</h4><div class=\"pa-event-sponsor-logo-list\">';
+            foreach ($sponsor_ids as $sponsor_id) {
+                $sponsor = get_post($sponsor_id);
+                if (!$sponsor || $sponsor->post_type !== 'pa_sponsor') { continue; }
+                $logo_id = absint(get_post_meta($sponsor_id, '_pa_sponsor_logo_id', true));
+                $sponsor_url = get_permalink($sponsor);
+                echo '<a class=\"pa-event-sponsor-logo\" href=\"' . esc_url($sponsor_url) . '\" aria-label=\"' . esc_attr($sponsor->post_title) . '\">';
+                if ($logo_id) { echo wp_get_attachment_image($logo_id, 'full', false, ['class'=>'pa-event-sponsor-logo-img', 'alt'=>esc_attr($sponsor->post_title)]); }
+                else { echo '<span class=\"pa-event-sponsor-name\">' . esc_html($sponsor->post_title) . '</span>'; }
+                echo '</a>';
+            }
+            echo '</div></div>';
+        }
+        echo '</article>'; return ob_get_clean();"""
+          if old not in php:
+              raise SystemExit('Could not find expected event page sponsor/speaker block.')
+          php = php.replace(old, new)
+
+          if php == original_php:
+              raise SystemExit('No PHP changes were applied.')
+          php_path.write_text(php)
+
+          css = css_path.read_text()
+          marker = '/* Stagecard layout and URL polish */'
+          addition = '''
+
+/* Stagecard layout and URL polish */
+.pa-event-card .pa-event-card__title,
+.pa-event-card .pa-event-card__title a{
+  margin:0!important;
+  font-size:1rem!important;
+  line-height:1.15!important;
+  font-weight:600!important;
+  letter-spacing:normal!important;
+  text-transform:none!important;
+}
+.pa-event-sponsor-logos-below{
+  padding:32px 50px 50px;
+  margin:0;
+}
+.pa-event-sponsor-logos-below h4{
+  margin-top:0;
+}
+@media(max-width:700px){
+  .pa-event-sponsor-logos-below{
+    padding:24px 30px 30px;
+  }
+}
+'''
+          if marker not in css:
+              css_path.write_text(css.rstrip() + addition)
+          PY
+
+      - name: Commit polish changes
         shell: bash
         run: |
           if git diff --quiet; then
-            echo "No Stagecard rename changes to commit."
+            echo "No layout or URL polish changes to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Rename Whippup to Stagecard"
+          git add program-agenda/program-agenda.php program-agenda/assets/css/public.css
+          git commit -m "Polish event titles sponsors and slugs"
           git push
