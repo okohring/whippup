@@ -1,6 +1,6 @@
 # Whippup
 
-Whippup is a WordPress program manager for creating and displaying programs, agendas, events, speakers, sponsors, sponsor showcase pages, and mass imports.
+Whippup is a WordPress program manager for creating and displaying programs, agendas, events, speakers, sponsors, sponsor showcase pages.
 
 ## Current updater workflow
 
