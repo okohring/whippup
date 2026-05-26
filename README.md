@@ -1,12 +1,12 @@
-# Whippup
+# Stagecard
 
-Whippup is a WordPress program manager for creating and displaying programs, agendas, events, speakers, sponsors, sponsor showcase pages.
+Stagecard is a WordPress program manager for creating and displaying programs, agendas, events, speakers, sponsors, sponsor showcase pages.
 
 Made with ChatGPT. 
 
 ## Current updater workflow
 
-This repository hosts Whippup releases for WordPress plugin updates.
+This repository hosts Stagecard releases for WordPress plugin updates.
 
 Each client-ready version should have:
 
@@ -14,7 +14,7 @@ Each client-ready version should have:
 2. A matching GitHub release tag, such as `v1.15.144`.
 3. A plugin ZIP attached to the release, such as `program-agenda-v1-15-144.zip`.
 
-The updater inside Whippup checks this GitHub repository for the latest release and downloads the uploaded plugin ZIP asset.
+The updater inside Stagecard checks this GitHub repository for the latest release and downloads the uploaded plugin ZIP asset.
 
 ## Important packaging note
 
@@ -41,4 +41,4 @@ Before giving a version to a client:
 
 ## Public branding note
 
-Whippup branding is admin-facing only. Public-facing program, event, speaker, and sponsor pages should not include maker credit by default.
+Stagecard branding is admin-facing only. Public-facing program, event, speaker, and sponsor pages should not include maker credit by default.
