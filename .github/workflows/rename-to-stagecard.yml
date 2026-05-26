@@ -19,15 +19,16 @@ jobs:
           set -e
 
           if [ -f program-agenda/assets/img/whippup-logo.svg ]; then
-            mv program-agenda/assets/img/whippup-logo.svg program-agenda/assets/img/stagecard-logo.svg
+            mv -f program-agenda/assets/img/whippup-logo.svg program-agenda/assets/img/stagecard-logo.svg
           fi
 
-          find . -type f \
-            -not -path './.git/*' \
-            -not -path './.github/workflows/rename-to-stagecard.yml' \
-            -print0 | xargs -0 perl -pi -e 's/Whippup/Stagecard/g; s/whippup/stagecard/g; s/WHIPPUP/STAGECARD/g;'
+          # Replace only tracked text files. This avoids binary/image/archive files.
+          git grep -Il 'Whippup\|whippup\|WHIPPUP' -- . ':!:.github/workflows/rename-to-stagecard.yml' | while IFS= read -r file; do
+            perl -pi -e 's/Whippup/Stagecard/g; s/whippup/stagecard/g; s/WHIPPUP/STAGECARD/g;' "$file"
+          done
 
-          grep -R "Whippup\|whippup" . --exclude-dir=.git --exclude=rename-to-stagecard.yml || true
+          echo "Remaining old brand references, if any:"
+          git grep -n 'Whippup\|whippup\|WHIPPUP' -- . ':!:.github/workflows/rename-to-stagecard.yml' || true
 
       - name: Commit rename
         shell: bash
