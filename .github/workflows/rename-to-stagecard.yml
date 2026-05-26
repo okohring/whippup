@@ -13,8 +13,10 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Run hover and sponsor polish script
-        run: python3 .github/scripts/stagecard-hover-sponsor-polish.py
+      - name: Run hover and sponsor polish scripts
+        run: |
+          python3 .github/scripts/stagecard-hover-sponsor-polish.py
+          python3 .github/scripts/stagecard-final-hover-lock.py
 
       - name: Commit final hover and sponsor polish
         shell: bash
