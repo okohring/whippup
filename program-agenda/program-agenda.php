@@ -2602,10 +2602,14 @@ final class Program_Agenda_Plugin {
         echo $this->back_to_program_link($program_id);
         echo '<header class="pa-single-header pa-speaker-hero pa-sponsor-hero ' . esc_attr($this->area_class($s, 'header')) . '" style="' . esc_attr($this->inline_header_style($s)) . '">';
         if ($logo_id) {
-            echo '<div class="pa-sponsor-hero-logo"><a href="' . esc_url(get_permalink($post)) . '" aria-label="' . esc_attr($post->post_title) . '">' . wp_get_attachment_image($logo_id, 'full', false, ['class'=>'pa-sponsor-hero-logo-img', 'alt'=>esc_attr($post->post_title)]) . '</a></div>';
+            $logo_meta = wp_get_attachment_metadata($logo_id);
+            $logo_width = is_array($logo_meta) ? absint($logo_meta['width'] ?? 0) : 0;
+            $logo_height = is_array($logo_meta) ? absint($logo_meta['height'] ?? 0) : 0;
+            $logo_shape_class = ($logo_width && $logo_height && abs($logo_width - $logo_height) <= 12) ? ' pa-sponsor-hero-logo-square' : ' pa-sponsor-hero-logo-wide';
+            echo '<div class="pa-sponsor-hero-logo' . esc_attr($logo_shape_class) . '"><a href="' . esc_url(get_permalink($post)) . '" aria-label="' . esc_attr($post->post_title) . '">' . wp_get_attachment_image($logo_id, 'full', false, ['class'=>'pa-sponsor-hero-logo-img', 'alt'=>esc_attr($post->post_title)]) . '</a></div>';
         }
         echo '<div class="pa-speaker-hero-text pa-sponsor-hero-text"><h5 class="pa-speaker-page-label pa-sponsor-page-label">Sponsor</h5><h3 class="pa-speaker-name pa-sponsor-name">' . esc_html($post->post_title) . '</h3>';
-        if ($website) { echo '<h5 class="pa-speaker-company pa-sponsor-website"><a href="' . esc_url($website) . '" target="_blank" rel="noopener">Visit sponsor website</a></h5>'; }
+        if ($website) { echo '<h6 class="pa-speaker-company pa-sponsor-website"><a href="' . esc_url($website) . '" target="_blank" rel="noopener">Visit sponsor website</a></h6>'; }
         echo '</div></header>';
         echo '<div class="pa-single-content ' . esc_attr($this->area_class($s, 'content')) . '" style="' . esc_attr($this->inline_content_style($s)) . '">';
         echo '<div class="pa-single-text">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
