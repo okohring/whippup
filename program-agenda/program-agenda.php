@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Whippup
+ * Plugin Name: Stagecard
  * Description: Create programs, events, speakers, and theme-inherited public schedules with customizable event and speaker pages.
  * Version: 1.15.144
- * Update URI: https://github.com/okohring/whippup
+ * Update URI: https://github.com/okohring/stagecard
  * Author: Olivia Kohring
  * Text Domain: program-agenda
  */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) { exit; }
 
 final class Program_Agenda_Plugin {
     const VERSION = '1.15.144';
-    const GITHUB_REPO = 'okohring/whippup';
+    const GITHUB_REPO = 'okohring/stagecard';
     const OPT_EVENT = 'pa_event_page_settings';
     const OPT_SPEAKER = 'pa_speaker_page_settings';
     const META_EVENT_SETTINGS = '_pa_event_page_settings';
@@ -569,7 +569,7 @@ final class Program_Agenda_Plugin {
             'advanced' => ['Advanced Settings', admin_url('admin.php?page=program-advanced-settings')],
             'settings' => ['Admin Settings', admin_url('admin.php?page=program-admin-settings')],
         ];
-        echo '<div class="pa-wrap"><h1 class="pa-admin-brand"><img class="pa-admin-brand-logo" src="' . esc_url(plugin_dir_url(__FILE__) . 'assets/img/whippup-logo.svg?v=' . self::VERSION) . '" alt="Whippup"><small>(v ' . esc_html(self::VERSION) . ')</small></h1><nav class="pa-tabs">';
+        echo '<div class="pa-wrap"><h1 class="pa-admin-brand"><img class="pa-admin-brand-logo" src="' . esc_url(plugin_dir_url(__FILE__) . 'assets/img/stagecard-logo.svg?v=' . self::VERSION) . '" alt="Stagecard"><small>(v ' . esc_html(self::VERSION) . ')</small></h1><nav class="pa-tabs">';
         foreach ($items as $key => $item) {
             $is_active = $active === $key;
             $label = $item[0];
@@ -3069,15 +3069,15 @@ final class Program_Agenda_Plugin {
 
     public function maybe_clear_github_update_cache() {
         if (!is_admin() || !current_user_can('update_plugins')) { return; }
-        if (isset($_GET['force-check']) || isset($_GET['pa_whippup_clear_update_cache'])) {
-            delete_site_transient('pa_whippup_github_release');
+        if (isset($_GET['force-check']) || isset($_GET['pa_stagecard_clear_update_cache'])) {
+            delete_site_transient('pa_stagecard_github_release');
             delete_site_transient('update_plugins');
             if (function_exists('wp_clean_plugins_cache')) { wp_clean_plugins_cache(true); }
         }
     }
 
     /**
-     * Checks the public GitHub Releases feed for newer Whippup ZIP releases.
+     * Checks the public GitHub Releases feed for newer Stagecard ZIP releases.
      *
      * Release setup notes:
      * - Create tags like v1.15.137.
@@ -3133,7 +3133,7 @@ final class Program_Agenda_Plugin {
         if (!$release) { return $result; }
 
         return (object) [
-            'name' => 'Whippup',
+            'name' => 'Stagecard',
             'slug' => dirname(plugin_basename(__FILE__)),
             'version' => $release['version'],
             'author' => '<a href="https://oliviakohring.com/">Olivia Kohring</a>',
@@ -3144,14 +3144,14 @@ final class Program_Agenda_Plugin {
             'requires_php' => $release['requires_php'],
             'last_updated' => $release['published_at'],
             'sections' => [
-                'description' => 'Whippup is a WordPress program manager for programs, events, speakers, sponsors, agendas, sponsor showcases, and mass imports.',
+                'description' => 'Stagecard is a WordPress program manager for programs, events, speakers, sponsors, agendas, sponsor showcases, and mass imports.',
                 'changelog' => $release['body'] ? wp_kses_post(wpautop($release['body'])) : 'See the GitHub release notes for this version.',
             ],
         ];
     }
 
     private function github_latest_release($use_cache = true) {
-        $cache_key = 'pa_whippup_github_release';
+        $cache_key = 'pa_stagecard_github_release';
         if ($use_cache) {
             $cached = get_site_transient($cache_key);
             if (is_array($cached)) { return $cached; }
@@ -3161,7 +3161,7 @@ final class Program_Agenda_Plugin {
             'timeout' => 12,
             'headers' => [
                 'Accept' => 'application/vnd.github+json',
-                'User-Agent' => 'Whippup/' . self::VERSION . '; ' . home_url('/'),
+                'User-Agent' => 'Stagecard/' . self::VERSION . '; ' . home_url('/'),
             ],
         ]);
 
@@ -3184,7 +3184,7 @@ final class Program_Agenda_Plugin {
             }
         }
 
-        // Fallback for Whippup's release-asset naming convention, in case GitHub's asset list is delayed or filtered.
+        // Fallback for Stagecard's release-asset naming convention, in case GitHub's asset list is delayed or filtered.
         if (!$download_url && $version) {
             $download_url = esc_url_raw('https://github.com/' . self::GITHUB_REPO . '/releases/download/' . rawurlencode((string) $data['tag_name']) . '/program-agenda-v' . str_replace('.', '-', $version) . '.zip');
         }
