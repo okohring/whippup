@@ -1249,7 +1249,6 @@ final class Program_Agenda_Plugin {
         $tab_shape = ($s['tab_shape'] ?? 'rounded') === 'square' ? 'square' : 'rounded';
         $date_display = $s['date_display'] ?? 'numeric';
         if (!in_array($date_display, ['numeric','abbrev'], true)) { $date_display = 'numeric'; }
-        $hover_animation = in_array(($s['hover_animation'] ?? 'default'), ['default','slant'], true) ? ($s['hover_animation'] ?? 'default') : 'default';
         $card_size = $this->normalize_agenda_card_size($s['card_size'] ?? 'full');
 
         echo '<section class="pa-program-design-panel pa-agenda-section pa-event-card-section pa-advanced-tab-panel active" data-pa-program-panel="agenda"><h4>Event Card Settings</h4><p class="description">Controls how event cards appear on the public agenda.</p>';
@@ -1265,14 +1264,13 @@ final class Program_Agenda_Plugin {
         $this->program_border_controls('agenda', $s, 'Border', 'pa-agenda-live-field');
         echo '</div>';
 
-        echo '<details class="pa-nested-advanced-settings"><summary><span>Advanced Settings</span><small>Display options, tabs, date format, and hover behavior</small></summary>';
+        echo '<details class="pa-nested-advanced-settings"><summary><span>Advanced Settings</span><small>Display options, tabs, date format, and card size</small></summary>';
         echo '<div class="pa-agenda-options-row pa-agenda-behavior-row">';
         echo '<label class="pa-field">Event descriptions <span>*</span><select class="pa-agenda-live-field" required name="agenda[show_descriptions]"><option value="show" ' . selected($show_desc, 'show', false) . '>Show</option><option value="hide" ' . selected($show_desc, 'hide', false) . '>Hide</option></select></label>';
         echo '<label class="pa-field">Agenda display <select class="pa-agenda-live-field" name="agenda[display_mode]"><option value="stacked" ' . selected($display_mode, 'stacked', false) . '>Stacked</option><option value="tabs" ' . selected($display_mode, 'tabs', false) . '>Tabs by day</option></select></label>';
         echo '<input type="hidden" class="pa-agenda-live-field" name="agenda[speaker_layout]" value="inline">';
         echo '<label class="pa-field">Tab shape <select class="pa-agenda-live-field" name="agenda[tab_shape]"><option value="rounded" ' . selected($tab_shape, 'rounded', false) . '>Rounded</option><option value="square" ' . selected($tab_shape, 'square', false) . '>Square</option></select></label>';
         echo '<label class="pa-field">Date display <select class="pa-agenda-live-field" name="agenda[date_display]"><option value="numeric" ' . selected($date_display, 'numeric', false) . '>8/20</option><option value="abbrev" ' . selected($date_display, 'abbrev', false) . '>Aug. 20</option></select></label>';
-        echo '<label class="pa-field">Hover animation <select class="pa-agenda-live-field" name="agenda[hover_animation]"><option value="default" ' . selected($hover_animation, 'default', false) . '>Default</option><option value="slant" ' . selected($hover_animation, 'slant', false) . '>Slant</option></select></label>';
         echo '<label class="pa-field">Card size <select class="pa-agenda-live-field" name="agenda[card_size]"><option value="full" ' . selected($card_size, 'full', false) . '>Full: compact speaker cards</option><option value="thin" ' . selected($card_size, 'thin', false) . '>Thin: title/meta only</option></select></label>';
         echo '</div></details>';
         echo '</section>';
@@ -1308,7 +1306,7 @@ final class Program_Agenda_Plugin {
     private function combined_program_preview($agenda, $speaker_card) {
         echo '<section class="pa-combined-preview-section"><h3>Preview</h3>';
         echo '<div class="pa-agenda-tabs-preview" hidden><button type="button" class="active">8/20</button><button type="button">8/21</button></div>';
-        echo '<article class="pa-event-card pa-event-card-preview pa-event-card--has-speakers pa-event-card--speakers-inline pa-event-card--size-full pa-event-card--hover-default">';
+        echo '<article class="pa-event-card pa-event-card-preview pa-event-card--has-speakers pa-event-card--speakers-inline pa-event-card--size-full">';
         echo '<div class="pa-event-card__datebar"><span class="pa-event-card__date pa-event-card-preview-date">8/20</span><span class="pa-event-card__time">00:00</span></div>';
         echo '<div class="pa-event-card__body"><div class="pa-event-card__summary"><h4 class="pa-event-card__title"><a href="#">Event title</a></h4><p class="pa-event-card__meta"><span class="pa-event-card__category"><span class="pa-event-card__category-icon">★</span><span class="pa-event-card__category-text">Category</span></span><span class="pa-event-card__meta-dot" aria-hidden="true">•</span><span class="pa-event-card__location">Event location</span></p><div class="pa-event-card__description pa-event-card-preview-description">Event description preview appears here when descriptions are shown.</div></div>';
         echo '<div class="pa-event-card__speakers"><div class="pa-speaker-card-list pa-speaker-card-list-agenda"><article class="pa-speaker-card pa-speaker-card-preview"><span class="pa-speaker-card-image"><span class="pa-speaker-card-thumb pa-speaker-card-preview-thumb" aria-hidden="true"></span></span><div class="pa-speaker-card-text pa-speaker-card-preview-text"><h3><a href="#">Speaker Name</a></h3><p class="pa-speaker-card-role">Speaker role</p><p class="pa-speaker-card-company">Company</p></div></article></div></div></div></article>';
@@ -1583,7 +1581,6 @@ final class Program_Agenda_Plugin {
             'tab_shape' => sanitize_key($agenda_in['tab_shape'] ?? 'rounded') === 'square' ? 'square' : 'rounded',
             'speaker_layout' => 'inline',
             'date_display' => in_array(sanitize_key($agenda_in['date_display'] ?? 'numeric'), ['numeric','abbrev'], true) ? sanitize_key($agenda_in['date_display'] ?? 'numeric') : 'numeric',
-            'hover_animation' => in_array(sanitize_key($agenda_in['hover_animation'] ?? 'default'), ['default','slant'], true) ? sanitize_key($agenda_in['hover_animation'] ?? 'default') : 'default',
             'card_size' => $this->normalize_agenda_card_size($agenda_in['card_size'] ?? 'full'),
             'background' => sanitize_hex_color($agenda_in['background'] ?? '') ?: '',
             'accent_bar_color' => sanitize_hex_color($agenda_in['accent_bar_color'] ?? '') ?: '',
@@ -1653,7 +1650,6 @@ final class Program_Agenda_Plugin {
             'tab_shape' => sanitize_key($agenda_in['tab_shape'] ?? 'rounded') === 'square' ? 'square' : 'rounded',
             'speaker_layout' => 'inline',
             'date_display' => in_array(sanitize_key($agenda_in['date_display'] ?? 'numeric'), ['numeric','abbrev'], true) ? sanitize_key($agenda_in['date_display'] ?? 'numeric') : 'numeric',
-            'hover_animation' => in_array(sanitize_key($agenda_in['hover_animation'] ?? 'default'), ['default','slant'], true) ? sanitize_key($agenda_in['hover_animation'] ?? 'default') : 'default',
             'card_size' => $this->normalize_agenda_card_size($agenda_in['card_size'] ?? 'full'),
             'background' => sanitize_hex_color($agenda_in['background'] ?? '') ?: '',
             'accent_bar_color' => sanitize_hex_color($agenda_in['accent_bar_color'] ?? '') ?: '',
@@ -2459,7 +2455,6 @@ final class Program_Agenda_Plugin {
         $tab_shape = ($agenda['tab_shape'] ?? 'rounded') === 'square' ? 'square' : 'rounded';
         $date_display = $agenda['date_display'] ?? 'numeric';
         if (!in_array($date_display, ['numeric','abbrev'], true)) { $date_display = 'numeric'; }
-        $hover_animation = in_array(($agenda['hover_animation'] ?? 'default'), ['default','slant'], true) ? ($agenda['hover_animation'] ?? 'default') : 'default';
         $card_size = $this->normalize_agenda_card_size($agenda['card_size'] ?? 'full');
         $agenda_style = $this->agenda_item_style($agenda);
         $cats = get_post_meta($program_id, '_pa_categories', true); if (!is_array($cats)) { $cats = []; }
@@ -2980,7 +2975,6 @@ final class Program_Agenda_Plugin {
         $speaker_layout = 'inline';
         $date_display = $agenda['date_display'] ?? 'numeric';
         if (!in_array($date_display, ['numeric','abbrev'], true)) { $date_display = 'abbrev'; }
-        $hover_animation = in_array(($agenda['hover_animation'] ?? 'default'), ['default','slant'], true) ? ($agenda['hover_animation'] ?? 'default') : 'default';
         $card_size = $this->normalize_agenda_card_size($agenda['card_size'] ?? 'full');
         $agenda_style = $this->agenda_item_style($agenda);
         $show_desc = ($agenda['show_descriptions'] ?? get_post_meta($program_id, '_pa_show_event_descriptions', true) ?: 'hide') !== 'hide';
@@ -3009,7 +3003,6 @@ final class Program_Agenda_Plugin {
             'pa-event-card--' . ($speaker_ids ? 'has-speakers' : 'no-speakers'),
             'pa-event-card--speakers-' . $speaker_layout,
             'pa-event-card--size-' . $card_size,
-            'pa-event-card--hover-' . $hover_animation,
         ];
 
         ob_start();

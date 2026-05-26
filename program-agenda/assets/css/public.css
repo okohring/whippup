@@ -2619,3 +2619,12 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 .pa-single-sponsor .pa-sponsor-website a{color:inherit!important;text-decoration:underline;text-underline-offset:.18em;}
 @media(max-width:1180px){.pa-single-sponsor{width:calc(100% - 32px);}}
 @media(max-width:700px){.pa-single-sponsor{width:100%;}.pa-single-sponsor .pa-sponsor-hero{align-items:flex-start;gap:20px;}.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar,.pa-agenda-item:hover .pa-agenda-category-bar,.pa-agenda-item:focus-within .pa-agenda-category-bar{width:100%!important;flex-basis:auto!important;}.pa-agenda-category-bar::before,.pa-event-card__datebar::before{transform:none!important;}}
+/* v1.15.157: remove event card hover animations; use stable whole-card hover scale */
+.pa-event-card,.pa-agenda-item{transition:transform .16s ease, box-shadow .16s ease!important;transform-origin:center center;}
+.pa-event-card:hover,.pa-event-card:focus-within,.pa-agenda-item:hover,.pa-agenda-item:focus-within{transform:scale(1.015)!important;}
+.pa-event-card--hover-default,.pa-event-card--hover-slant{transform:none;}
+.pa-event-card__datebar,.pa-agenda-category-bar{transition:none!important;transform:none!important;}
+.pa-event-card__datebar::before,.pa-agenda-category-bar::before{transform:none!important;transition:none!important;display:none!important;}
+.pa-event-card:hover .pa-event-card__datebar,.pa-event-card:focus-within .pa-event-card__datebar,.pa-agenda-item:hover .pa-agenda-category-bar,.pa-agenda-item:focus-within .pa-agenda-category-bar{width:inherit!important;transform:none!important;}
+.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar{width:68px!important;flex:0 0 68px!important;}
+@media(max-width:700px){.pa-event-card:hover,.pa-event-card:focus-within,.pa-agenda-item:hover,.pa-agenda-item:focus-within{transform:none!important;}.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar,.pa-agenda-item:hover .pa-agenda-category-bar,.pa-agenda-item:focus-within .pa-agenda-category-bar{width:100%!important;flex-basis:auto!important;}}
