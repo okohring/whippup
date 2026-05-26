@@ -18,20 +18,14 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Validate plugin version
+      - name: Stamp plugin version for release
         shell: bash
         run: |
           VERSION='${{ inputs.version }}'
-          HEADER_VERSION=$(grep -m1 "Version:" program-agenda/program-agenda.php | sed 's/.*Version:[[:space:]]*//')
-          CONSTANT_VERSION=$(grep -m1 "const VERSION" program-agenda/program-agenda.php | sed "s/.*const VERSION = '\([^']*\)'.*/\1/")
-          if [ "$HEADER_VERSION" != "$VERSION" ]; then
-            echo "Plugin header version is $HEADER_VERSION, but workflow input is $VERSION."
-            exit 1
-          fi
-          if [ "$CONSTANT_VERSION" != "$VERSION" ]; then
-            echo "Plugin class constant version is $CONSTANT_VERSION, but workflow input is $VERSION."
-            exit 1
-          fi
+          perl -0pi -e "s/Version:\s*[0-9]+\.[0-9]+\.[0-9]+/Version: ${VERSION}/" program-agenda/program-agenda.php
+          perl -0pi -e "s/const VERSION = '[0-9]+\.[0-9]+\.[0-9]+';/const VERSION = '${VERSION}';/" program-agenda/program-agenda.php
+          grep -m1 "Version:" program-agenda/program-agenda.php
+          grep -m1 "const VERSION" program-agenda/program-agenda.php
 
       - name: Build plugin ZIP
         shell: bash
