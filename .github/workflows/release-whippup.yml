@@ -1,10 +1,10 @@
-name: Release Whippup
+name: Release Stagecard
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version number to release, for example 1.15.145'
+        description: 'Version number to release, for example 1.15.149'
         required: true
         type: string
 
@@ -47,6 +47,6 @@ jobs:
           VERSION='${{ inputs.version }}'
           TAG="v${VERSION}"
           gh release create "$TAG" "$ZIP_NAME" \
-            --title "Whippup ${VERSION}" \
-            --notes "Whippup ${VERSION}" \
+            --title "Stagecard ${VERSION}" \
+            --notes "Stagecard ${VERSION}" \
             --latest
