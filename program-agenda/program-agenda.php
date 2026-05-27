@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Stagecard
- * Description: Create programs, events, speakers, and theme-inherited public schedules with customizable event and speaker pages.
+ * Description: A program schedule builder that includes on-brand customization options and automated page creation for events, speakers, and sponsors.
  * Version: 1.15.144
  * Update URI: https://github.com/okohring/stagecard
  * Author: Olivia Kohring
