@@ -2266,7 +2266,7 @@ body.pa-program-entity-page .byline{
   background: linear-gradient(
   to right,
   var(--pa-agenda-bar-color,#1d2327) 0%,
-  var(--pa-agenda-bar-color,#1d2327) 70%,
+  var(--pa-agenda-bar-color,#1d2327) 50%,
   transparent 100%
 ) !important;
   transition: width .2s ease-in-out !important;
@@ -2293,6 +2293,26 @@ body.pa-program-entity-page .byline{
 .pa-event-card:focus-within .pa-event-card__body {
  padding-left: 50px !important;
 }
+
+@media (max-width: 800px) {
+  .pa-event-card .pa-event-card__datebar::before {
+    width: 100% !important;
+    transition: none !important;
+  }
+
+  .pa-event-card:hover .pa-event-card__datebar::before,
+  .pa-event-card:focus-within .pa-event-card__datebar::before {
+    width: 100% !important;
+  }
+
+  .pa-event-card .pa-event-card__body {
+    transition: none !important;
+  }
+
+  .pa-event-card:hover .pa-event-card__body,
+  .pa-event-card:focus-within .pa-event-card__body {
+    padding-left: 28px !important;
+  }
 
 .pa-event-card::after{
   content:""!important;
