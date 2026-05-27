@@ -2645,8 +2645,9 @@ body.pa-program-entity-page .byline{
 
 .pa-sponsor-showcase{width:100%;box-sizing:border-box;}
 .pa-sponsor-level-group{margin:0;padding:0;}
-.pa-sponsor-level-group h1,
-.pa-sponsor-level-group h2{margin:0 0 24px!important;}
+.pa-sponsor-level-group h3 {
+  margin: 0 0 24px !important;
+}
 .pa-sponsor-level-group + .pa-sponsor-level-group{margin-top:60px!important;}
 .pa-sponsor-showcase-separator{display:none!important;margin:0!important;border:0!important;}
 .pa-sponsor-logo-grid{
