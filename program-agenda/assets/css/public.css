@@ -2811,3 +2811,25 @@ body.pa-program-entity-page .byline{
     overflow-wrap: anywhere !important;
   }
 }
+
+/* Stagecard program PDF shortcode */
+.pa-program-pdf-download{
+  margin:1rem 0;
+}
+.pa-program-pdf-link{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:.4rem!important;
+  padding:.65rem 1rem!important;
+  border:1px solid currentColor!important;
+  border-radius:.35rem!important;
+  color:inherit!important;
+  text-decoration:none!important;
+  line-height:1.2!important;
+}
+.pa-program-pdf-link:hover,
+.pa-program-pdf-link:focus{
+  text-decoration:underline!important;
+  text-underline-offset:.18em!important;
+}
