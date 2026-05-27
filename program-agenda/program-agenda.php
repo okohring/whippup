@@ -2877,8 +2877,10 @@ final class Program_Agenda_Plugin {
         echo '<div class="pa-speaker-hero-text"><h5 class="pa-speaker-page-label">Speaker</h5><h3 class="pa-speaker-name">' . esc_html($post->post_title);
         if ($credentials) { echo ' <span class="pa-speaker-credentials">' . esc_html($credentials) . '</span>'; }
         echo '</h3>';
-        if ($role_title) { echo '<h4 class="pa-speaker-role">' . esc_html($role_title) . '</h4>'; }
-        if ($company) { echo '<h5 class="pa-speaker-company">' . esc_html($company) . '</h5>'; }
+        $speaker_meta_parts = array_filter([$role_title, $company]);
+        if ($speaker_meta_parts) {
+        echo '<h4 class="pa-speaker-role-company">' . esc_html(implode(' • ', $speaker_meta_parts)) . '</h4>';
+   }
         echo '</div>';
         if ($li || $web) {
             echo '<nav class="pa-speaker-header-links" aria-label="Speaker links">';
