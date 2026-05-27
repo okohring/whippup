@@ -2590,3 +2590,51 @@
 .pa-live-preview .pa-preview-content p::before{width:min(360px,100%)!important;height:6px!important;box-shadow:0 13px 0 currentColor,0 26px 0 currentColor!important;opacity:.75!important;}
 .pa-preview-speaker-role::before{width:95px!important;}
 .pa-preview-speaker-company::before{width:120px!important;}
+.pa-preview-line {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: .9;
+}
+
+.pa-preview-line + .pa-preview-line {
+  margin-top: 8px;
+}
+
+.pa-preview-line-title {
+  width: 120px;
+  height: 8px;
+}
+
+.pa-preview-line-short {
+  width: 65px;
+  height: 6px;
+}
+
+.pa-preview-line-medium {
+  width: 130px;
+  height: 6px;
+}
+
+.pa-preview-line-content {
+  width: min(260px, 100%);
+  height: 6px;
+}
+
+.pa-preview-line-speaker-name {
+  width: 95px;
+  height: 7px;
+}
+
+.pa-preview-line-speaker-role {
+  width: 75px;
+  height: 5px;
+  opacity: .75;
+}
+
+.pa-preview-line-speaker-company {
+  width: 88px;
+  height: 5px;
+  opacity: .75;
+}
