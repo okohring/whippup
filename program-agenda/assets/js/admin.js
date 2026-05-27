@@ -77,6 +77,37 @@ jQuery(function($){
   $(document).on('click','.pa-move-speaker-up',function(e){e.preventDefault();var $li=$(this).closest('li'),$prev=$li.prev('li'); if($prev.length){$li.insertBefore($prev); updateSpeakerOrder();}});
   $(document).on('click','.pa-move-speaker-down',function(e){e.preventDefault();var $li=$(this).closest('li'),$next=$li.next('li'); if($next.length){$li.insertAfter($next); updateSpeakerOrder();}});
 
+
+  $(document).on('input','.pa-speaker-event-search',function(){
+    var q=String($(this).val()||'').toLowerCase();
+    $('.pa-speaker-event-picker label').each(function(){
+      var terms=String($(this).data('name')||'').toLowerCase();
+      $(this).toggle(terms.indexOf(q)!==-1);
+    });
+  });
+  $(document).on('change','.pa-speaker-event-check',function(){
+    var id=$(this).val(), name=$(this).closest('label').text().trim(), $list=$('.pa-selected-speaker-events');
+    if(this.checked){
+      if(!$list.find('li[data-id="'+id+'"]').length){
+        $list.append('<li data-id="'+id+'"><span class="pa-selected-speaker-event-name">'+name+'</span><button type="button" class="button-link pa-remove-speaker-event">Remove</button></li>');
+      }
+    } else {
+      $list.find('li[data-id="'+id+'"]').remove();
+    }
+  });
+  $(document).on('click','.pa-remove-speaker-event',function(e){
+    e.preventDefault();
+    var id=$(this).closest('li').data('id');
+    $('.pa-speaker-event-check[value="'+id+'"]').prop('checked',false);
+    $(this).closest('li').remove();
+  });
+  $(document).on('click','.pa-select-all-speaker-events',function(e){
+    e.preventDefault();
+    $('.pa-speaker-event-picker label:visible .pa-speaker-event-check').each(function(){
+      if(!this.checked){ $(this).prop('checked',true).trigger('change'); }
+    });
+  });
+
   function updateSponsorOrder(){var ids=[];$('.pa-selected-sponsors li').each(function(){ids.push($(this).data('id'));});$('.pa-sponsor-order').val(ids.join(','));}
   $('.pa-selected-sponsors').sortable({update:updateSponsorOrder});
   $(document).on('input','.pa-sponsor-search',function(){var q=String($(this).val()||'').toLowerCase();$('.pa-sponsor-picker label').each(function(){var terms=String($(this).data('name')||'').toLowerCase();$(this).toggle(terms.indexOf(q)!==-1);});});

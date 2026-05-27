@@ -666,6 +666,71 @@ final class Program_Agenda_Plugin {
         return $titles;
     }
 
+
+    private function speaker_event_ids($speaker_id) {
+        $speaker_id = absint($speaker_id);
+        if (!$speaker_id) { return []; }
+        $events = get_posts([
+            'post_type' => 'pa_event',
+            'post_status' => ['publish','draft'],
+            'numberposts' => -1,
+            'meta_key' => '_pa_event_date',
+            'orderby' => 'meta_value',
+            'order' => 'ASC',
+        ]);
+        $ids = [];
+        foreach ($events as $event) {
+            $speaker_ids = get_post_meta($event->ID, '_pa_speaker_ids', true);
+            if (!is_array($speaker_ids)) { $speaker_ids = []; }
+            if (in_array($speaker_id, array_map('absint', $speaker_ids), true)) { $ids[] = absint($event->ID); }
+        }
+        return $ids;
+    }
+
+    private function speaker_event_picker_label($event_id) {
+        $event = get_post($event_id);
+        if (!$event || $event->post_type !== 'pa_event') { return ''; }
+        $parts = [$event->post_title];
+        $when = $this->format_event_when($event_id);
+        if ($when) { $parts[] = $when; }
+        $program_id = absint(get_post_meta($event_id, '_pa_program_id', true));
+        $program_title = $program_id ? get_the_title($program_id) : '';
+        if ($program_title) { $parts[] = $program_title; }
+        return implode(' — ', array_filter($parts));
+    }
+
+    private function sync_speaker_events($speaker_id, $selected_event_ids) {
+        $speaker_id = absint($speaker_id);
+        if (!$speaker_id) { return; }
+        $selected_event_ids = array_values(array_filter(array_unique(array_map('absint', (array)$selected_event_ids))));
+        $selected_event_ids = array_values(array_filter($selected_event_ids, static function($event_id) { return get_post_type($event_id) === 'pa_event'; }));
+        $selected_lookup = array_fill_keys($selected_event_ids, true);
+
+        $events = get_posts([
+            'post_type' => 'pa_event',
+            'post_status' => ['publish','draft'],
+            'numberposts' => -1,
+            'orderby' => 'date',
+            'order' => 'DESC',
+        ]);
+        foreach ($events as $event) {
+            $event_id = absint($event->ID);
+            $speaker_ids = get_post_meta($event_id, '_pa_speaker_ids', true);
+            if (!is_array($speaker_ids)) { $speaker_ids = []; }
+            $speaker_ids = array_values(array_filter(array_unique(array_map('absint', $speaker_ids))));
+            $currently_attached = in_array($speaker_id, $speaker_ids, true);
+            $should_attach = isset($selected_lookup[$event_id]);
+
+            if ($should_attach && !$currently_attached) {
+                $speaker_ids[] = $speaker_id;
+                update_post_meta($event_id, '_pa_speaker_ids', $speaker_ids);
+            } elseif (!$should_attach && $currently_attached) {
+                $speaker_ids = array_values(array_filter($speaker_ids, static function($id) use ($speaker_id) { return absint($id) !== $speaker_id; }));
+                update_post_meta($event_id, '_pa_speaker_ids', $speaker_ids);
+            }
+        }
+    }
+
     /**
      * Sponsors can belong to multiple programs, so levels are resolved per program first.
      * The legacy general level meta remains as a fallback for older records/admin tables.
@@ -1500,6 +1565,25 @@ final class Program_Agenda_Plugin {
         echo '<label class="pa-field">Role Title<input type="text" name="role_title" value="' . esc_attr($id ? get_post_meta($id, '_pa_speaker_role_title', true) : '') . '"></label>';
         echo '<div class="pa-inline-fields pa-two-fields"><label class="pa-field">LinkedIn<input type="url" name="linkedin" value="' . esc_attr($id ? get_post_meta($id, '_pa_speaker_linkedin', true) : '') . '"></label>';
         echo '<label class="pa-field">Website<input type="url" name="website" value="' . esc_attr($id ? get_post_meta($id, '_pa_speaker_website', true) : '') . '"></label></div>';
+        $selected_event_ids = $id ? $this->speaker_event_ids($id) : [];
+        $events_for_speaker = get_posts(['post_type'=>'pa_event','post_status'=>['publish','draft'],'numberposts'=>-1,'meta_key'=>'_pa_event_date','orderby'=>'meta_value','order'=>'ASC']);
+        echo '<section class="pa-field pa-speaker-event-picker-field"><h3 class="pa-field-heading">Events</h3><p class="description">Searchable and multi-selectable. Selected events are automatically sorted by event date.</p><div class="pa-speaker-event-toolbar"><input type="search" class="pa-speaker-event-search" placeholder="Search events by title, program, date, category, or location"><button type="button" class="button pa-select-all-speaker-events">Select all visible</button></div><div class="pa-speaker-event-picker">';
+        foreach ($events_for_speaker as $event_for_speaker) {
+            $event_program_id = absint(get_post_meta($event_for_speaker->ID, '_pa_program_id', true));
+            $event_program_title = $event_program_id ? get_the_title($event_program_id) : '';
+            $event_when = $this->format_event_when($event_for_speaker->ID);
+            $event_category = get_post_meta($event_for_speaker->ID, '_pa_event_category', true);
+            $event_location = get_post_meta($event_for_speaker->ID, '_pa_event_location', true);
+            $event_label = $this->speaker_event_picker_label($event_for_speaker->ID);
+            $event_search_terms = strtolower(trim($event_for_speaker->post_title . ' ' . $event_program_title . ' ' . $event_when . ' ' . $event_category . ' ' . $event_location));
+            echo '<label data-name="' . esc_attr($event_search_terms) . '"><input type="checkbox" class="pa-speaker-event-check" name="speaker_event_ids[]" value="' . esc_attr($event_for_speaker->ID) . '" ' . checked(in_array(absint($event_for_speaker->ID), array_map('intval', $selected_event_ids), true), true, false) . '> ' . esc_html($event_label) . '</label>';
+        }
+        echo '</div><ul class="pa-selected-speaker-events" data-empty="No events selected.">';
+        foreach ($selected_event_ids as $selected_event_id) {
+            $selected_event_label = $this->speaker_event_picker_label($selected_event_id);
+            if ($selected_event_label) { echo '<li data-id="' . esc_attr($selected_event_id) . '"><span class="pa-selected-speaker-event-name">' . esc_html($selected_event_label) . '</span><button type="button" class="button-link pa-remove-speaker-event">Remove</button></li>'; }
+        }
+        echo '</ul></section>';
         $style_program_id = $id ? absint(get_post_meta($id, '_pa_speaker_style_program_id', true)) : 0;
         if (!$style_program_id && $id) { $style_program_id = $this->speaker_primary_program_id($id); }
         $programs_for_style = get_posts(['post_type'=>'pa_program','post_status'=>['publish','draft'],'numberposts'=>-1,'orderby'=>'date','order'=>'DESC']);
@@ -1762,6 +1846,8 @@ final class Program_Agenda_Plugin {
             update_post_meta($new_id, $meta, $value);
         }
         update_post_meta($new_id, '_pa_speaker_style_program_id', absint($_POST['speaker_style_program_id'] ?? 0));
+        $selected_event_ids = array_values(array_filter(array_unique(array_map('absint', (array)($_POST['speaker_event_ids'] ?? [])))));
+        $this->sync_speaker_events($new_id, $selected_event_ids);
         wp_safe_redirect(admin_url('admin.php?page=program-edit-speaker&id=' . $new_id . '&saved=1')); exit;
     }
 
