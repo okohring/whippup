@@ -2339,8 +2339,18 @@ body.pa-program-entity-page .byline{
 .pa-event-card .pa-event-card__datebar > * {
   position: relative !important;
   z-index: 1 !important;
+  transition: transform .2s ease-in-out !important;
 }
 
+.pa-event-card:hover .pa-event-card__datebar > *,
+.pa-event-card:focus-within .pa-event-card__datebar > * {
+  transform: translateX(12px) !important;
+}
+
+.pa-event-card:hover .pa-event-card__datebar > *,
+.pa-event-card:focus-within .pa-event-card__datebar > * {
+  transform: translateX(12px) !important;
+}
 /* Nudge event info away from the accent expansion */
 .pa-event-card .pa-event-card__body {
   transition: padding-left .2s ease-in-out !important;
@@ -2369,6 +2379,18 @@ body.pa-program-entity-page .byline{
   .pa-event-card:hover .pa-event-card__body,
   .pa-event-card:focus-within .pa-event-card__body {
     padding-left: 28px !important;
+  }
+}
+
+/* Turning off event date/time onhover movement on mobile */
+@media (max-width: 768px) {
+  .pa-event-card:hover .pa-event-card__datebar > *,
+  .pa-event-card:focus-within .pa-event-card__datebar > * {
+    transform: none !important;
+  }
+
+  .pa-event-card .pa-event-card__datebar > * {
+    transition: none !important;
   }
 }
 
@@ -2735,4 +2757,51 @@ body.pa-program-entity-page .byline{
   width:auto!important;
   height:auto!important;
   object-fit:contain!important;
+}
+
+/* Mobile responsiveness for sponsor pages */
+
+@media (max-width: 700px) {
+  .pa-single-sponsor .pa-sponsor-hero {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 18px !important;
+  }
+
+  .pa-single-sponsor .pa-sponsor-hero-logo {
+    margin: 0 auto !important;
+  }
+
+  .pa-single-sponsor .pa-sponsor-hero-logo-wide {
+    width: min(250px, 100%) !important;
+    height: 150px !important;
+    flex: 0 0 auto !important;
+  }
+
+  .pa-single-sponsor .pa-sponsor-hero-logo-square {
+    width: 150px !important;
+    height: 150px !important;
+    flex: 0 0 auto !important;
+  }
+
+  .pa-single-sponsor .pa-sponsor-hero-text {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+  }
+
+  .pa-single-sponsor .pa-sponsor-name {
+    max-width: 100% !important;
+    font-size: clamp(1.5rem, 7vw, 2.2rem) !important;
+    line-height: 1.08 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .pa-single-sponsor .pa-sponsor-website {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
 }
