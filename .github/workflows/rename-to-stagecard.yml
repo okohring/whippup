@@ -1,4 +1,4 @@
-name: Finalize Stagecard hover sponsor and preview styling
+name: Finalize Stagecard showcase card and preview styling
 
 on:
   workflow_dispatch:
@@ -13,11 +13,12 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Run hover sponsor and preview polish scripts
+      - name: Run final polish scripts
         run: |
           python3 .github/scripts/stagecard-hover-sponsor-polish.py
           python3 .github/scripts/stagecard-final-hover-lock.py
           python3 .github/scripts/stagecard-preview-polish.py
+          python3 .github/scripts/stagecard-showcase-card-preview-polish.py
 
       - name: Commit final polish
         shell: bash
@@ -29,5 +30,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add program-agenda/program-agenda.php program-agenda/assets/css/public.css program-agenda/assets/css/admin.css program-agenda/assets/js/admin.js
-          git commit -m "Finalize hover sponsor and preview styling"
+          git commit -m "Finalize showcase card and preview styling"
           git push
