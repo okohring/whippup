@@ -2716,3 +2716,23 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
     grid-template-columns:58px minmax(0,1fr)!important;
   }
 }
+
+/* v1.15.161: sponsor showcase spacing and borderless event cards */
+.pa-sponsor-level-group h1,
+.pa-sponsor-level-group h2{
+  margin:0 0 24px!important;
+}
+.pa-sponsor-level-group + .pa-sponsor-level-group{
+  margin-top:60px!important;
+}
+.pa-sponsor-showcase-separator{
+  display:none!important;
+  margin:0!important;
+  border:0!important;
+}
+.pa-event-card{
+  border-color:var(--pa-event-card-border-color, transparent)!important;
+}
+.pa-event-card::after{
+  border-color:var(--pa-event-card-border-color, transparent)!important;
+}

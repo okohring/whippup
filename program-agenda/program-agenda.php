@@ -2554,8 +2554,7 @@ final class Program_Agenda_Plugin {
         $printed = 0;
         foreach ($grouped as $level => $level_sponsors) {
             if (!$level_sponsors) { continue; }
-            if ($printed > 0) { echo '<div class="pa-sponsor-showcase-separator" aria-hidden="true"></div>'; }
-            echo '<section class="pa-sponsor-level-group"><h1>' . esc_html($level) . '</h1><div class="pa-sponsor-logo-grid">';
+            echo '<section class="pa-sponsor-level-group"><h2>' . esc_html($level) . '</h2><div class="pa-sponsor-logo-grid">';
             foreach ($level_sponsors as $sponsor) { echo $this->sponsor_showcase_logo($sponsor); }
             echo '</div></section>';
             $printed++;
