@@ -35,11 +35,6 @@
   gap:4px;
   padding:14px 6px;
   text-align:center;
-  transition:width .18s ease;
-}
-.pa-agenda-item:hover .pa-agenda-category-bar,
-.pa-agenda-item:focus-within .pa-agenda-category-bar{
-  width:145px;
 }
 .pa-agenda-date,
 .pa-agenda-time{
@@ -197,9 +192,7 @@
   .pa-agenda-item{
     display:block;
   }
-  .pa-agenda-category-bar,
-  .pa-agenda-item:hover .pa-agenda-category-bar,
-  .pa-agenda-item:focus-within .pa-agenda-category-bar{
+  .pa-agenda-category-bar{
     width:100%;
     min-height:64px;
     flex-direction:row;
@@ -277,7 +270,6 @@
   display:block;
 }
 
-
 /* Force individual Event/Speaker page color choices to override theme heading/link rules. */
 .pa-single-header.pa-has-custom-font-color,
 .pa-single-header.pa-has-custom-font-color :where(h1,h2,h3,h4,h5,h6,p,span,small,strong,em,a,a:visited,a:hover,a:focus),
@@ -337,7 +329,6 @@
 
 .pa-event-single-category{color:var(--pa-single-header-color, inherit);}
 .pa-single-header.pa-has-custom-font-color .pa-event-single-category{color:var(--pa-single-header-color, inherit) !important;}
-
 
 /* v46: speaker header social icons and category icon cleanup */
 .pa-speaker-hero{
@@ -401,7 +392,6 @@
   color:inherit!important;
 }
 
-
 /* v49: ensure public speaker cards honor user-selected card colors. */
 .pa-speaker-card[style]{
   color:var(--pa-speaker-card-text-color, inherit) !important;
@@ -418,7 +408,6 @@
 .pa-speaker-card[style] .pa-speaker-card-text h3 a:not([style]){
   color:inherit !important;
 }
-
 
 /* v50: Event pages use a title + accent metadata block layout. */
 .pa-single-event .pa-event-hero{
@@ -475,7 +464,6 @@
   .pa-single-event .pa-event-meta-block{gap:14px;}
   .pa-single-event .pa-event-accent-bar{width:10px;flex-basis:10px;}
 }
-
 
 /* v51: Event metadata spacing, location pin, and end-time display polish. */
 .pa-single-event .pa-event-meta-stack .pa-single-calendar-link{
@@ -626,7 +614,6 @@
 }
 .pa-agenda-meta-line{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;}
 
-
 /* v60: compact agenda event cards */
 .pa-event-list{
   gap:1.1rem;
@@ -710,13 +697,7 @@
   }
 }
 
-
-/* Legacy agenda hover animation CSS removed; current cards use pa-event-card--hover-default/slant. */
-
-/* v78: agenda item border color applies only to event cards, not day tabs or outer schedule */
-.pa-schedule{--pa-agenda-tab-border-color:initial;}
 .pa-agenda-day-tab{border-color:color-mix(in srgb,currentColor 25%,transparent)!important;}
-
 
 /* v79 cleanup: event card borders, filters, and removed width feature */
 .pa-schedule{
@@ -872,7 +853,6 @@
   margin-top:.5em;
 }
 
-
 /* v92: center the individual Event/Speaker page container on the page, while keeping content alignment theme/default. */
 .pa-single-event,
 .pa-single-speaker{
@@ -932,7 +912,6 @@
 .pa-event-invite-warning > :first-child{margin-top:0;}
 .pa-event-invite-warning > :last-child{margin-bottom:0;}
 
-
 /* v103: invite-only tooltip */
 .pa-agenda-invite-only-wrap{
   position:relative;
@@ -973,7 +952,6 @@
   opacity:1;
   visibility:visible;
 }
-
 
 /* v108: invite-only event page warning layout */
 .pa-event-invite-warning{
@@ -1106,7 +1084,6 @@
 .pa-event-single-calendar .pa-calendar-option:focus{text-decoration:none!important;opacity:.86;}
 
 .pa-event-sponsor-name{display:inline-block;font-weight:600;line-height:1.2;max-width:150px}
-
 
 /* v1.15.39: keep Speaker page heading hierarchy from inheriting large theme heading margins. */
 .pa-single-speaker .pa-speaker-hero-text > h3,
@@ -1344,11 +1321,6 @@ body.pa-program-entity-page time.entry-date,
 body.pa-program-entity-page .byline{
   display:none!important;
 }
-body.pa-program-entity-page .pa-theme-sponsor-page .entry-title,
-body.pa-program-entity-page .pa-theme-event-page .entry-title,
-body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
-  display:revert!important;
-}
 
 /* v1.15.55: image centering, revised entity heading hierarchy, and theme heading protection. */
 .pa-speaker-card-image{
@@ -1429,7 +1401,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
   .pa-single-event .pa-event-hero h3{margin-bottom:18px!important;}
 }
 
-
 /* v1.15.58: add breathing room above Event page metadata and invite-only notice. */
 .pa-single-event .pa-event-hero > .pa-event-hero-inner > h3{
   margin-bottom:20px!important;
@@ -1440,8 +1411,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 .pa-single-event .pa-event-invite-warning{
   margin-top:20px!important;
 }
-
-
 
 /* v1.15.64: event card vertical alignment and speaker thumbnail sizing. */
 .pa-agenda-item .pa-agenda-main{
@@ -1503,7 +1472,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 .pa-agenda-item .pa-speaker-card-text p{
   line-height:1.2 !important;
 }
-
 
 /* v1.15.65: stronger event card title placement and speaker thumbnail sizing. */
 .pa-schedule .pa-agenda-item{
@@ -1699,7 +1667,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
   letter-spacing:normal !important;
 }
 
-
 /* v1.15.69: keep reusable event/speaker cards consistent outside the agenda. */
 .pa-speaker-upcoming-events .pa-agenda-item .pa-agenda-summary h1,
 .pa-speaker-upcoming-events .pa-agenda-item .pa-agenda-summary h2,
@@ -1758,7 +1725,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 .pa-speaker-card-list-agenda{
   overflow-x:auto !important;
 }
-
 
 /* v1.15.71: keep Speaker-page upcoming event cards aligned like agenda cards. */
 .pa-speaker-upcoming-events > h5{
@@ -2080,13 +2046,10 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 @media (max-width:700px){
   .pa-event-card{
     --pa-event-card-datebar-width:58px;
-    --pa-event-card-datebar-hover-width:58px;
-    min-height:150px!important;
+      min-height:150px!important;
   }
   .pa-event-card__body{padding:24px!important;}
 }
-
-
 
 /* v1.15.96: Event Card size options.
    Thin keeps the same card component but removes speaker/description height.
@@ -2175,7 +2138,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
   .pa-event-card.pa-event-card--size-thin .pa-event-card__body{padding:10px 14px!important;}
 }
 
-
 /* v1.15.99: remove faint inner seams between the event-card border, accent bar, and content panel. */
 .pa-event-card{
   gap:0!important;
@@ -2196,15 +2158,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 .pa-event-card__body{
   background:var(--pa-agenda-card-bg,#fff)!important;
 }
-.pa-event-card.pa-event-card--hover-slant:hover .pa-event-card__datebar,
-.pa-event-card.pa-event-card--hover-slant:focus-within .pa-event-card__datebar{
-  box-shadow:18px 0 0 var(--pa-agenda-bar-color,#1d2327)!important;
-}
-.pa-event-card.pa-event-card--size-thin.pa-event-card--hover-slant:hover .pa-event-card__datebar,
-.pa-event-card.pa-event-card--size-thin.pa-event-card--hover-slant:focus-within .pa-event-card__datebar{
-  box-shadow:10px 0 0 var(--pa-agenda-bar-color,#1d2327)!important;
-}
-
 
 /* v1.15.100: hard seam fix. Draw the card border as an overlay instead of a layout border, so the accent bar/body sit directly under it with no visible gutter. */
 .pa-event-card{
@@ -2237,7 +2190,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
   background-color:var(--pa-agenda-card-bg,#fff)!important;
 }
 
-
 /* v1.15.101: final edge-bleed fix for card hairlines.
    The accent bar and body now extend 2px underneath the overlay border, removing sub-pixel gaps at the outer edges and during slant hover. */
 .pa-event-card{
@@ -2259,192 +2211,296 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
   min-height:calc(100% + 4px)!important;
   transform:translateZ(0)!important;
 }
-.pa-event-card.pa-event-card--hover-slant .pa-event-card__datebar,
-.pa-event-card.pa-event-card--hover-slant:hover .pa-event-card__datebar,
-.pa-event-card.pa-event-card--hover-slant:focus-within .pa-event-card__datebar{
-  left:-2px!important;
-}
+
 .pa-event-card::after{
   border-radius:inherit!important;
 }
 
-/* v1.15.102: Sponsor Showcase + Individual Sponsor Pages */
-.pa-sponsor-showcase{
-  width:100%;
-  box-sizing:border-box;
+/* Stagecard final public layout cleanup: event cards, sponsor showcase, sponsor pages */
+.pa-event-card{
+  --pa-event-card-datebar-width:64px;
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-columns:var(--pa-event-card-datebar-width) minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-height:118px!important;
+  overflow:hidden!important;
+  position:relative!important;
+  isolation:isolate!important;
+  background:var(--pa-agenda-card-bg,#fff)!important;
+  background-color:var(--pa-agenda-card-bg,#fff)!important;
+  color:inherit!important;
+  border:0!important;
+  gap:0!important;
+  border-spacing:0!important;
+  grid-auto-rows:1fr!important;
+  transition:transform .16s ease,box-shadow .16s ease!important;
+  transform-origin:center center!important;
 }
-.pa-sponsor-level-group{
-  margin:0;
-  padding:0;
+.pa-event-card:hover,
+.pa-event-card:focus-within{
+  grid-template-columns:var(--pa-event-card-datebar-width) minmax(0,1fr)!important;
+  transform:scale(1.015)!important;
 }
-.pa-sponsor-level-group h1{
-  margin:0 0 24px;
-}
-.pa-sponsor-logo-grid{
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:24px;
-  align-items:center;
-}
-.pa-sponsor-showcase-logo{
-  box-sizing:border-box;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:100%;
-  min-height:150px;
-  padding:12px;
-  text-decoration:none!important;
-}
-.pa-sponsor-showcase-logo-img{
+.pa-event-card::after{
+  content:""!important;
   display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  pointer-events:none!important;
+  z-index:10!important;
+  border:1px solid var(--pa-event-card-border-color, transparent)!important;
+  border-radius:inherit!important;
+  box-sizing:border-box!important;
+}
+.pa-event-card__datebar{
+  box-sizing:border-box!important;
+  grid-column:1!important;
+  grid-row:1!important;
   width:auto!important;
-  height:auto!important;
-  max-width:250px!important;
-  max-height:150px!important;
-  object-fit:contain!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:calc(100% + 4px)!important;
+  min-height:calc(100% + 4px)!important;
+  top:-2px!important;
+  left:-2px!important;
+  background:var(--pa-agenda-bar-color,#1d2327)!important;
+  background-color:var(--pa-agenda-bar-color,#1d2327)!important;
+  color:#fff!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  padding:14px 12px!important;
+  text-align:center!important;
+  overflow:hidden!important;
+  position:relative!important;
+  z-index:1!important;
+  transform:none!important;
+  transition:none!important;
+  box-shadow:1px 0 0 var(--pa-agenda-bar-color,#1d2327)!important;
 }
-.pa-sponsor-showcase-name{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:150px;
-  min-height:150px;
-  text-align:center;
-  line-height:1.2;
-  font-weight:700;
+.pa-event-card:hover .pa-event-card__datebar,
+.pa-event-card:focus-within .pa-event-card__datebar{
+  clip-path:none!important;
+  transform:none!important;
+  transition:none!important;
 }
-.pa-sponsor-showcase-separator{
-  margin:30px 0;
-  border-top:1px solid currentColor;
-  opacity:.2;
-}
-.pa-single-sponsor .pa-sponsor-hero{
-  display:flex;
-  align-items:center;
-  gap:28px;
-  padding:32px;
-}
-.pa-sponsor-hero-logo{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:250px;
-  min-width:250px;
-  min-height:150px;
-}
-.pa-sponsor-hero-logo-img{
-  display:block!important;
-  width:auto!important;
-  height:auto!important;
-  max-width:250px!important;
-  max-height:150px!important;
-  object-fit:contain!important;
-}
-.pa-sponsor-page-label{
-  margin:0 0 6px!important;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  opacity:.72;
-}
-.pa-sponsor-name{
-  margin:0!important;
-}
-.pa-sponsor-levels{
-  margin:8px 0 0!important;
-}
-.pa-sponsor-content{
-  padding:32px;
-}
-@media (max-width:900px){
-  .pa-sponsor-logo-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
-}
-@media (max-width:640px){
-  .pa-sponsor-logo-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .pa-single-sponsor .pa-sponsor-hero{display:block;}
-  .pa-sponsor-hero-logo{width:100%;min-width:0;margin-bottom:20px;}
-}
-@media (max-width:420px){
-  .pa-sponsor-logo-grid{grid-template-columns:1fr;}
-}
-
-/* v1.15.103 Individual sponsor pages intentionally inherit theme defaults. */
-.pa-theme-sponsor-page{
-  font-family:inherit;
-  color:inherit;
-}
-.pa-theme-sponsor-page .pa-sponsor-logo,
-.pa-theme-sponsor-page .pa-sponsor-levels{
-  margin:0 0 1rem;
-}
-.pa-theme-sponsor-page .pa-sponsor-logo-img{
-  display:block!important;
-  width:auto!important;
-  height:auto!important;
-  max-width:250px!important;
-  max-height:150px!important;
-  object-fit:contain!important;
-}
-.pa-theme-sponsor-page .pa-sponsor-content{
-  padding:0;
-}
-
-/* v1.15.105: keep generated entity pages from showing duplicate theme title/date blocks. */
-body.pa-program-entity-page #page-header-wrap,
-body.pa-program-entity-page .page-header-bg,
-body.pa-program-entity-page .page-header-no-bg,
-body.pa-program-entity-page .heading-title,
-body.pa-program-entity-page .row .col.section-title,
-body.pa-program-entity-page .entry-header,
-body.pa-program-entity-page header.entry-header,
-body.pa-program-entity-page .entry-title,
-body.pa-program-entity-page h1.entry-title,
-body.pa-program-entity-page .post-title,
-body.pa-program-entity-page .post-meta,
-body.pa-program-entity-page .entry-meta,
-body.pa-program-entity-page .single-post-meta,
-body.pa-program-entity-page .posted-on,
-body.pa-program-entity-page .post-date,
-body.pa-program-entity-page .date,
-body.pa-program-entity-page time.entry-date,
-body.pa-program-entity-page .byline{
+.pa-event-card__datebar::before,
+.pa-event-card__datebar::after{
+  content:none!important;
   display:none!important;
 }
-body.pa-program-entity-page .pa-theme-sponsor-page .entry-title,
-body.pa-program-entity-page .pa-theme-event-page .entry-title,
-body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
-  display:revert!important;
+.pa-event-card__date,
+.pa-event-card__time{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:.78rem!important;
+  line-height:1.1!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
 }
-
-.pa-theme-sponsor-page .pa-sponsor-profile-row{
-  display:flex;
-  align-items:flex-start;
-  gap:28px;
-  margin:0 0 1.25rem;
+.pa-event-card__icon{
+  display:grid!important;
+  place-items:center!important;
+  margin-top:8px!important;
+  font-size:1rem!important;
+  line-height:1!important;
+  text-align:center!important;
 }
-.pa-theme-sponsor-page .pa-sponsor-logo{
-  flex:0 0 auto;
-  margin:0;
+.pa-event-card__body{
+  box-sizing:border-box!important;
+  grid-column:2!important;
+  grid-row:1!important;
+  min-width:0!important;
+  width:calc(100% + 4px)!important;
+  max-width:calc(100% + 4px)!important;
+  height:calc(100% + 4px)!important;
+  min-height:calc(100% + 4px)!important;
+  top:-2px!important;
+  right:-2px!important;
+  padding:20px 28px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  text-align:left!important;
+  overflow:hidden!important;
+  position:relative!important;
+  z-index:2!important;
+  background:var(--pa-agenda-card-bg,#fff)!important;
+  background-color:var(--pa-agenda-card-bg,#fff)!important;
+  transform:translateZ(0)!important;
 }
-.pa-theme-sponsor-page .pa-sponsor-profile-info{
-  min-width:0;
+.pa-event-card__summary{
+  box-sizing:border-box!important;
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  text-align:left!important;
 }
-.pa-theme-sponsor-page .pa-sponsor-profile-info h1{
-  margin-top:0;
+.pa-event-card .pa-event-card__title,
+.pa-event-card .pa-event-card__title a{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:1rem!important;
+  line-height:1.15!important;
+  font-weight:600!important;
+  letter-spacing:normal!important;
+  text-transform:none!important;
+  color:var(--pa-agenda-title-color,inherit)!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:break-word!important;
 }
-@media (max-width:640px){
-  .pa-theme-sponsor-page .pa-sponsor-profile-row{
-    display:block;
+.pa-event-card__meta{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:.45rem!important;
+  margin:.5rem 0 0!important;
+  padding:0!important;
+  line-height:1.25!important;
+  color:var(--pa-agenda-location-color,inherit)!important;
+  text-align:left!important;
+}
+.pa-event-card__category{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:.45rem!important;
+  min-width:0!important;
+}
+.pa-event-card__category-text{
+  color:var(--pa-agenda-category-color,var(--pa-agenda-location-color,var(--pa-agenda-title-color,inherit)))!important;
+}
+.pa-event-card__category-icon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  color:currentColor;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  font-style:normal!important;
+  line-height:1!important;
+}
+.pa-event-card__location,
+.pa-event-card__location a,
+.pa-event-card__meta-dot{
+  color:var(--pa-agenda-location-color,inherit)!important;
+}
+.pa-event-card__invite-icon{
+  display:inline-flex!important;
+  width:1em!important;
+  height:1em!important;
+  color:var(--pa-agenda-location-color,inherit)!important;
+  vertical-align:-.12em!important;
+}
+.pa-event-card__invite-icon svg{display:block!important;width:100%!important;height:100%!important;}
+.pa-event-card__description{
+  margin:.75rem 0 0!important;
+  color:var(--pa-agenda-location-color,inherit)!important;
+}
+.pa-event-card__speakers{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin-top:.85rem!important;
+  padding:0!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+}
+.pa-event-card__speakers .pa-speaker-card-list,
+.pa-event-card__speakers .pa-speaker-card-list-agenda{
+  margin:0!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:flex-start!important;
+  gap:.75rem!important;
+}
+.pa-event-card--speakers-inline .pa-event-card__speakers .pa-speaker-card-list-agenda{
+  flex-wrap:nowrap!important;
+  overflow-x:auto!important;
+  padding-bottom:10px!important;
+}
+.pa-event-card--speakers-inline .pa-event-card__speakers .pa-speaker-card{flex:0 0 auto!important;}
+.pa-event-card.pa-event-card--size-full{
+  --pa-event-card-datebar-width:64px!important;
+  min-height:118px!important;
+  grid-template-columns:64px minmax(0,1fr)!important;
+}
+.pa-event-card.pa-event-card--size-full:hover,
+.pa-event-card.pa-event-card--size-full:focus-within{grid-template-columns:64px minmax(0,1fr)!important;}
+.pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card{
+  grid-template-columns:44px max-content!important;
+  column-gap:10px!important;
+}
+.pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-image{
+  width:44px!important;height:44px!important;min-width:44px!important;max-width:44px!important;min-height:44px!important;max-height:44px!important;flex-basis:44px!important;
+}
+.pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text{padding-right:18px!important;}
+.pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text h3,
+.pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text h3 a,
+.pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text p{
+  font-size:.86rem!important;
+  line-height:1.12!important;
+  margin-bottom:1px!important;
+}
+.pa-event-card.pa-event-card--size-thin{
+  --pa-event-card-datebar-width:56px!important;
+  min-height:54px!important;
+  grid-template-columns:56px minmax(0,1fr)!important;
+}
+.pa-event-card.pa-event-card--size-thin:hover,
+.pa-event-card.pa-event-card--size-thin:focus-within{grid-template-columns:56px minmax(0,1fr)!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__datebar{gap:1px!important;padding:6px 8px!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__date,
+.pa-event-card.pa-event-card--size-thin .pa-event-card__time{font-size:.67rem!important;line-height:1.05!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__icon{display:none!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__body{padding:10px 18px!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__title,
+.pa-event-card.pa-event-card--size-thin .pa-event-card__title a{font-size:1rem!important;line-height:1.12!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__meta{margin:.22rem 0 0!important;gap:.35rem!important;font-size:.82rem!important;line-height:1.15!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__speakers,
+.pa-event-card.pa-event-card--size-thin .pa-event-card__description{display:none!important;}
+.pa-speaker-upcoming-events .pa-event-list,
+.pa-schedule .pa-event-list{display:grid!important;gap:1rem!important;}
+@media(max-width:700px){
+  .pa-event-card:hover,.pa-event-card:focus-within{transform:none!important;}
+  .pa-event-card,
+  .pa-event-card.pa-event-card--size-full,
+  .pa-event-card.pa-event-card--size-thin{
+    --pa-event-card-datebar-width:58px!important;
+    grid-template-columns:58px minmax(0,1fr)!important;
   }
-  .pa-theme-sponsor-page .pa-sponsor-logo{
-    margin:0 0 1rem;
-  }
+  .pa-event-card:hover,
+  .pa-event-card:focus-within,
+  .pa-event-card.pa-event-card--size-full:hover,
+  .pa-event-card.pa-event-card--size-full:focus-within,
+  .pa-event-card.pa-event-card--size-thin:hover,
+  .pa-event-card.pa-event-card--size-thin:focus-within{grid-template-columns:58px minmax(0,1fr)!important;}
+  .pa-event-card.pa-event-card--size-full{min-height:112px!important;}
+  .pa-event-card.pa-event-card--size-full .pa-event-card__body{padding:18px!important;}
+  .pa-event-card.pa-event-card--size-thin{min-height:54px!important;}
+  .pa-event-card.pa-event-card--size-thin .pa-event-card__body{padding:10px 14px!important;}
 }
 
-
-/* v1.15.107: sponsor showcase fits three logos across with consistent spacing + subtle hover emphasis. */
+.pa-sponsor-showcase{width:100%;box-sizing:border-box;}
+.pa-sponsor-level-group{margin:0;padding:0;}
+.pa-sponsor-level-group h1,
+.pa-sponsor-level-group h2{margin:0 0 24px!important;}
+.pa-sponsor-level-group + .pa-sponsor-level-group{margin-top:60px!important;}
+.pa-sponsor-showcase-separator{display:none!important;margin:0!important;border:0!important;}
 .pa-sponsor-logo-grid{
-  grid-template-columns:repeat(3, 250px)!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,250px)!important;
   gap:40px 38px!important;
   justify-content:start!important;
   align-items:center!important;
@@ -2452,11 +2508,16 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
   overflow:visible!important;
 }
 .pa-sponsor-showcase-logo{
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
   width:250px!important;
   height:150px!important;
   min-height:150px!important;
   padding:0!important;
   overflow:visible!important;
+  text-decoration:none!important;
   transform:scale(1)!important;
   transform-origin:center center!important;
   transition:transform 160ms ease!important;
@@ -2466,234 +2527,35 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 .pa-sponsor-showcase-logo:focus-visible,
 .pa-event-sponsor-logo:hover,
 .pa-event-sponsor-logo:focus-visible,
-.pa-theme-sponsor-page .pa-sponsor-logo a:hover,
-.pa-theme-sponsor-page .pa-sponsor-logo a:focus-visible{
-  transform:scale(1.035)!important;
-}
-.pa-sponsor-showcase-logo-img{
+.pa-single-sponsor .pa-sponsor-logo a:hover,
+.pa-single-sponsor .pa-sponsor-logo a:focus-visible{transform:scale(1.035)!important;}
+.pa-sponsor-showcase-logo-img,
+.pa-event-sponsor-logo-img{
+  display:block!important;
   max-width:250px!important;
   max-height:150px!important;
   width:auto!important;
   height:auto!important;
   object-fit:contain!important;
 }
-.pa-sponsor-showcase-name{
-  width:250px!important;
-  min-height:150px!important;
-}
-.pa-event-sponsor-logo,
-.pa-theme-sponsor-page .pa-sponsor-logo a{
-  transform:scale(1)!important;
-  transform-origin:center center!important;
-  transition:transform 160ms ease!important;
-  will-change:transform!important;
-}
-.pa-event-sponsor-logo-img,
-.pa-theme-sponsor-page .pa-sponsor-logo-img{
-  max-width:250px!important;
-  max-height:150px!important;
-  width:auto!important;
-  height:auto!important;
-  object-fit:contain!important;
-}
-@media (max-width:900px){
-  .pa-sponsor-logo-grid{
-    grid-template-columns:repeat(2, 250px)!important;
-    max-width:538px!important;
-  }
-}
-@media (max-width:640px){
-  .pa-sponsor-logo-grid{
-    grid-template-columns:repeat(auto-fit, minmax(150px, 250px))!important;
-    justify-content:center!important;
-    max-width:none!important;
-  }
-  .pa-sponsor-showcase-logo,
-  .pa-sponsor-showcase-name{
-    width:min(250px, 100%)!important;
-  }
-  .pa-sponsor-showcase-logo-img{
-    max-width:100%!important;
-  }
-}
-/* Stagecard layout and URL polish */
-.pa-event-card .pa-event-card__title,
-.pa-event-card .pa-event-card__title a{
-  margin:0!important;
-  font-size:1rem!important;
-  line-height:1.15!important;
-  font-weight:600!important;
-  letter-spacing:normal!important;
-  text-transform:none!important;
-}
-.pa-event-sponsor-logos-below{
-  padding:32px 50px 50px;
-  margin:0;
-}
-.pa-event-sponsor-logos-below h4{
-  margin-top:0;
-}
-@media(max-width:700px){
-  .pa-event-sponsor-logos-below{
-    padding:24px 30px 30px;
-  }
-}
-/* v1.15.156: visual-only accent hover and sponsor page layout */
-.pa-agenda-category-bar,.pa-event-card__datebar{position:relative!important;overflow:visible!important;transition:none!important;z-index:2;}
-.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar{width:68px!important;flex:0 0 68px!important;}
-.pa-agenda-category-bar::before,.pa-event-card__datebar::before{content:"";position:absolute;inset:0;background:inherit;transform-origin:left center;transform:scaleX(1);transition:transform .18s ease;z-index:0;pointer-events:none;}
-.pa-agenda-category-bar>*,.pa-event-card__datebar>*{position:relative;z-index:1;}
-.pa-agenda-item:hover .pa-agenda-category-bar,.pa-agenda-item:focus-within .pa-agenda-category-bar,.pa-event-card:hover .pa-event-card__datebar,.pa-event-card:focus-within .pa-event-card__datebar{width:68px!important;flex-basis:68px!important;}
-.pa-agenda-item:hover .pa-agenda-category-bar::before,.pa-agenda-item:focus-within .pa-agenda-category-bar::before,.pa-event-card:hover .pa-event-card__datebar::before,.pa-event-card:focus-within .pa-event-card__datebar::before{transform:scaleX(1.75);}
-.pa-agenda-summary h4,.pa-agenda-summary h4 a,.pa-event-card .pa-event-card__title,.pa-event-card .pa-event-card__title a{margin:0!important;font-size:1rem!important;line-height:1.15!important;font-weight:600!important;letter-spacing:normal!important;text-transform:none!important;}
+.pa-sponsor-showcase-name{display:flex;align-items:center;justify-content:center;width:250px!important;min-height:150px!important;text-align:center;line-height:1.2;font-weight:700;}
+@media(max-width:900px){.pa-sponsor-logo-grid{grid-template-columns:repeat(2,250px)!important;max-width:538px!important;}}
+@media(max-width:640px){.pa-sponsor-logo-grid{grid-template-columns:repeat(auto-fit,minmax(150px,250px))!important;justify-content:center!important;max-width:none!important;}.pa-sponsor-showcase-logo,.pa-sponsor-showcase-name{width:min(250px,100%)!important;}.pa-sponsor-showcase-logo-img{max-width:100%!important;}}
+
 .pa-single-sponsor{width:min(100%,1120px);max-width:1120px;margin-left:auto;margin-right:auto;box-sizing:border-box;}
 .pa-single-sponsor *{box-sizing:border-box;}
-.pa-sponsor-hero-logo{width:250px!important;height:150px!important;flex:0 0 250px!important;padding:30px!important;background:#fff!important;border-radius:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;line-height:0!important;}
-.pa-sponsor-hero-logo a{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;}
-.pa-sponsor-hero-logo-img{display:block!important;max-width:100%!important;max-height:100%!important;width:auto!important;height:auto!important;object-fit:contain!important;border-radius:0!important;margin:0!important;}
-.pa-single-sponsor .pa-sponsor-website a{color:inherit!important;text-decoration:underline;text-underline-offset:.18em;}
-@media(max-width:1180px){.pa-single-sponsor{width:calc(100% - 32px);}}
-@media(max-width:700px){.pa-single-sponsor{width:100%;}.pa-single-sponsor .pa-sponsor-hero{align-items:flex-start;gap:20px;}.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar,.pa-agenda-item:hover .pa-agenda-category-bar,.pa-agenda-item:focus-within .pa-agenda-category-bar{width:100%!important;flex-basis:auto!important;}.pa-agenda-category-bar::before,.pa-event-card__datebar::before{transform:none!important;}}
-/* v1.15.157: remove event card hover animations; use stable whole-card hover scale */
-.pa-event-card,.pa-agenda-item{transition:transform .16s ease, box-shadow .16s ease!important;transform-origin:center center;}
-.pa-event-card:hover,.pa-event-card:focus-within,.pa-agenda-item:hover,.pa-agenda-item:focus-within{transform:scale(1.015)!important;}
-.pa-event-card--hover-default,.pa-event-card--hover-slant{transform:none;}
-.pa-event-card__datebar,.pa-agenda-category-bar{transition:none!important;transform:none!important;}
-.pa-event-card__datebar::before,.pa-agenda-category-bar::before{transform:none!important;transition:none!important;display:none!important;}
-.pa-event-card:hover .pa-event-card__datebar,.pa-event-card:focus-within .pa-event-card__datebar,.pa-agenda-item:hover .pa-agenda-category-bar,.pa-agenda-item:focus-within .pa-agenda-category-bar{width:inherit!important;transform:none!important;}
-.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar{width:68px!important;flex:0 0 68px!important;}
-@media(max-width:700px){.pa-event-card:hover,.pa-event-card:focus-within,.pa-agenda-item:hover,.pa-agenda-item:focus-within{transform:none!important;}.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar,.pa-agenda-item:hover .pa-agenda-category-bar,.pa-agenda-item:focus-within .pa-agenda-category-bar{width:100%!important;flex-basis:auto!important;}}
-/* v1.15.158: final hover lock and sponsor typography/logo sizing */
-.pa-event-card,.pa-agenda-item{transition:transform .16s ease,box-shadow .16s ease!important;transform-origin:center center!important;}
-.pa-event-card:hover,.pa-event-card:focus-within,.pa-agenda-item:hover,.pa-agenda-item:focus-within{transform:scale(1.015)!important;}
-.pa-event-card__datebar,.pa-agenda-category-bar{transition:none!important;transform:none!important;position:relative!important;overflow:hidden!important;}
-.pa-event-card__datebar::before,.pa-event-card__datebar::after,.pa-agenda-category-bar::before,.pa-agenda-category-bar::after{content:none!important;display:none!important;transform:none!important;transition:none!important;}
-.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar,.pa-schedule .pa-agenda-item:hover .pa-agenda-category-bar,.pa-schedule .pa-agenda-item:focus-within .pa-agenda-category-bar,.pa-single .pa-agenda-item:hover .pa-agenda-category-bar,.pa-single .pa-agenda-item:focus-within .pa-agenda-category-bar{width:68px!important;min-width:68px!important;max-width:68px!important;flex:0 0 68px!important;flex-basis:68px!important;}
-.pa-event-card:hover .pa-event-card__datebar,.pa-event-card:focus-within .pa-event-card__datebar{transform:none!important;}
-.pa-event-card--hover-default,.pa-event-card--hover-slant{transform:none!important;}
-.pa-single-sponsor .pa-sponsor-page-label{margin:0 0 .35rem!important;padding:0!important;font-size:inherit!important;line-height:1.2!important;font-weight:700!important;text-transform:none!important;letter-spacing:normal!important;}
-.pa-single-sponsor .pa-sponsor-name{margin:0 0 .25rem!important;padding:0!important;line-height:1.12!important;text-transform:none!important;letter-spacing:normal!important;}
-.pa-single-sponsor .pa-sponsor-website{margin:.12rem 0!important;padding:0!important;font-size:.875rem!important;line-height:1.25!important;font-weight:inherit!important;text-transform:none!important;letter-spacing:normal!important;}
-.pa-single-sponsor .pa-sponsor-website a{color:inherit!important;text-decoration:underline!important;text-underline-offset:.18em!important;}
+.pa-single-sponsor .pa-sponsor-hero{display:flex;align-items:center;gap:28px;padding:32px;}
 .pa-sponsor-hero-logo{background:#fff!important;border-radius:0!important;padding:30px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;line-height:0!important;}
 .pa-sponsor-hero-logo-wide{width:250px!important;height:150px!important;flex:0 0 250px!important;}
 .pa-sponsor-hero-logo-square{width:150px!important;height:150px!important;flex:0 0 150px!important;}
 .pa-sponsor-hero-logo a{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:100%!important;}
 .pa-sponsor-hero-logo-img{display:block!important;max-width:100%!important;max-height:100%!important;width:auto!important;height:auto!important;object-fit:contain!important;border-radius:0!important;margin:0!important;}
-@media(max-width:700px){.pa-event-card:hover,.pa-event-card:focus-within,.pa-agenda-item:hover,.pa-agenda-item:focus-within{transform:none!important;}.pa-schedule .pa-agenda-category-bar,.pa-single .pa-agenda-category-bar,.pa-schedule .pa-agenda-item:hover .pa-agenda-category-bar,.pa-schedule .pa-agenda-item:focus-within .pa-agenda-category-bar,.pa-single .pa-agenda-item:hover .pa-agenda-category-bar,.pa-single .pa-agenda-item:focus-within .pa-agenda-category-bar{width:100%!important;min-width:0!important;max-width:none!important;flex-basis:auto!important;}}
-
-/* v1.15.159: hard-lock event card accent column and sponsor label color */
-.pa-event-card,
-.pa-event-card:hover,
-.pa-event-card:focus-within{
-  --pa-event-card-datebar-hover-width:var(--pa-event-card-datebar-width)!important;
-  grid-template-columns:var(--pa-event-card-datebar-width) minmax(0,1fr)!important;
-  transition:transform .16s ease, box-shadow .16s ease!important;
-}
-.pa-event-card.pa-event-card--size-full,
-.pa-event-card.pa-event-card--size-full:hover,
-.pa-event-card.pa-event-card--size-full:focus-within{
-  --pa-event-card-datebar-width:64px!important;
-  --pa-event-card-datebar-hover-width:64px!important;
-  grid-template-columns:64px minmax(0,1fr)!important;
-}
-.pa-event-card.pa-event-card--size-thin,
-.pa-event-card.pa-event-card--size-thin:hover,
-.pa-event-card.pa-event-card--size-thin:focus-within{
-  --pa-event-card-datebar-width:56px!important;
-  --pa-event-card-datebar-hover-width:56px!important;
-  grid-template-columns:56px minmax(0,1fr)!important;
-}
-.pa-event-card:hover .pa-event-card__datebar,
-.pa-event-card:focus-within .pa-event-card__datebar,
-.pa-event-card.pa-event-card--hover-slant:hover .pa-event-card__datebar,
-.pa-event-card.pa-event-card--hover-slant:focus-within .pa-event-card__datebar,
-.pa-event-card.pa-event-card--size-thin.pa-event-card--hover-slant:hover .pa-event-card__datebar,
-.pa-event-card.pa-event-card--size-thin.pa-event-card--hover-slant:focus-within .pa-event-card__datebar{
-  clip-path:none!important;
-  transform:none!important;
-  width:auto!important;
-  min-width:0!important;
-  max-width:none!important;
-}
-.pa-event-card__datebar::before,
-.pa-event-card__datebar::after,
-.pa-agenda-category-bar::before,
-.pa-agenda-category-bar::after{
-  content:none!important;
-  display:none!important;
-  transform:none!important;
-  transition:none!important;
-}
-.pa-single-sponsor .pa-sponsor-page-label,
-.pa-single-sponsor .pa-sponsor-page-label:visited,
-.pa-single-sponsor .pa-sponsor-page-label:hover,
-.pa-single-sponsor .pa-sponsor-page-label:focus{
-  color:inherit!important;
-  opacity:1!important;
-}
+.pa-single-sponsor .pa-sponsor-page-label{margin:0 0 .35rem!important;padding:0!important;font-size:inherit!important;line-height:1.2!important;font-weight:700!important;text-transform:none!important;letter-spacing:normal!important;color:inherit!important;opacity:1!important;}
+.pa-single-sponsor .pa-sponsor-name{margin:0 0 .25rem!important;padding:0!important;line-height:1.12!important;text-transform:none!important;letter-spacing:normal!important;}
+.pa-single-sponsor .pa-sponsor-website{margin:.12rem 0!important;padding:0!important;font-size:.875rem!important;line-height:1.25!important;font-weight:inherit!important;text-transform:none!important;letter-spacing:normal!important;}
+.pa-single-sponsor .pa-sponsor-website a{color:inherit!important;text-decoration:underline!important;text-underline-offset:.18em!important;}
 .pa-single-sponsor .pa-sponsor-hero-text,
-.pa-single-sponsor .pa-sponsor-hero-text :where(h1,h2,h3,h4,h5,h6,p,span,a,a:visited,a:hover,a:focus){
-  color:inherit!important;
-}
-@media(max-width:700px){
-  .pa-event-card,
-  .pa-event-card:hover,
-  .pa-event-card:focus-within,
-  .pa-event-card.pa-event-card--size-full,
-  .pa-event-card.pa-event-card--size-full:hover,
-  .pa-event-card.pa-event-card--size-full:focus-within,
-  .pa-event-card.pa-event-card--size-thin,
-  .pa-event-card.pa-event-card--size-thin:hover,
-  .pa-event-card.pa-event-card--size-thin:focus-within{
-    --pa-event-card-datebar-width:58px!important;
-    --pa-event-card-datebar-hover-width:58px!important;
-    grid-template-columns:58px minmax(0,1fr)!important;
-  }
-}
-
-/* v1.15.161: sponsor showcase spacing and borderless event cards */
-.pa-sponsor-level-group h1,
-.pa-sponsor-level-group h2{
-  margin:0 0 24px!important;
-}
-.pa-sponsor-level-group + .pa-sponsor-level-group{
-  margin-top:60px!important;
-}
-.pa-sponsor-showcase-separator{
-  display:none!important;
-  margin:0!important;
-  border:0!important;
-}
-.pa-event-card{
-  border-color:var(--pa-event-card-border-color, transparent)!important;
-}
-.pa-event-card::after{
-  border-color:var(--pa-event-card-border-color, transparent)!important;
-}
-
-/* v1.15.162: remove legacy event-card accent hover movement */
-.pa-event-card,
-.pa-event-card:hover,
-.pa-event-card:focus-within{
-  --pa-event-card-datebar-hover-width:var(--pa-event-card-datebar-width)!important;
-  grid-template-columns:var(--pa-event-card-datebar-width) minmax(0,1fr)!important;
-}
-.pa-event-card.pa-event-card--size-full,
-.pa-event-card.pa-event-card--size-full:hover,
-.pa-event-card.pa-event-card--size-full:focus-within{
-  --pa-event-card-datebar-width:64px!important;
-  grid-template-columns:64px minmax(0,1fr)!important;
-}
-.pa-event-card.pa-event-card--size-thin,
-.pa-event-card.pa-event-card--size-thin:hover,
-.pa-event-card.pa-event-card--size-thin:focus-within{
-  --pa-event-card-datebar-width:56px!important;
-  grid-template-columns:56px minmax(0,1fr)!important;
-}
-.pa-event-card:hover .pa-event-card__datebar,
-.pa-event-card:focus-within .pa-event-card__datebar{
-  clip-path:none!important;
-  transform:none!important;
-  transition:none!important;
-}
+.pa-single-sponsor .pa-sponsor-hero-text :where(h1,h2,h3,h4,h5,h6,p,span,a,a:visited,a:hover,a:focus){color:inherit!important;}
+.pa-single-sponsor .pa-sponsor-content{padding:32px;}
+@media(max-width:1180px){.pa-single-sponsor{width:calc(100% - 32px);}}
+@media(max-width:700px){.pa-single-sponsor{width:100%;}.pa-single-sponsor .pa-sponsor-hero{align-items:flex-start;gap:20px;}.pa-sponsor-hero-logo{width:100%;min-width:0;margin-bottom:20px;}}
