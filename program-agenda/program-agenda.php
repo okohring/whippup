@@ -2603,13 +2603,13 @@ final class Program_Agenda_Plugin {
 
 
     public function shortcode_program_pdf($atts) {
-        $atts = shortcode_atts(['id'=>'', 'label'=>'Download Program PDF'], $atts, 'program_pdf');
+        $atts = shortcode_atts(['id'=>'', 'label'=>'Download as PDF'], $atts, 'program_pdf');
         $program_id = $this->resolve_program_shortcode_id($atts['id']);
         $program = get_post($program_id);
         if (!$program || $program->post_type !== 'pa_program') { return ''; }
         $url = add_query_arg('pa_program_pdf', $program_id, home_url('/'));
         $label = trim(wp_strip_all_tags((string)($atts['label'] ?? '')));
-        if ($label === '') { $label = 'Download Program PDF'; }
+        if ($label === '') { $label = 'Download as PDF'; }
         return '<p class="pa-program-pdf-download"><a class="pa-program-pdf-link" href="' . esc_url($url) . '" target="_blank" rel="noopener">' . esc_html($label) . '</a></p>';
     }
 
