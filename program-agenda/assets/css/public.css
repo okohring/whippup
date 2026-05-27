@@ -1914,7 +1914,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
    This is the only CSS path used by agenda event cards and Speaker-page Upcoming Events. */
 .pa-event-card{
   --pa-event-card-datebar-width:64px;
-  --pa-event-card-datebar-hover-width:145px;
   box-sizing:border-box!important;
   display:grid!important;
   grid-template-columns:var(--pa-event-card-datebar-width) minmax(0,1fr)!important;
@@ -1925,11 +1924,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
   background:var(--pa-agenda-card-bg,transparent)!important;
   color:inherit!important;
   border:1px solid color-mix(in srgb,currentColor 18%,transparent);
-  transition:grid-template-columns .18s ease!important;
-}
-.pa-event-card:hover,
-.pa-event-card:focus-within{
-  grid-template-columns:var(--pa-event-card-datebar-hover-width) minmax(0,1fr)!important;
 }
 .pa-event-card__datebar{
   box-sizing:border-box!important;
@@ -2093,60 +2087,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 }
 
 
-/* v1.15.95: Event Card hover animations for the standalone pa-event-card component.
-   Admin preview already used these animation choices; public cards now mirror the saved choice. */
-.pa-event-card{
-  --pa-event-card-datebar-width:64px!important;
-  --pa-event-card-datebar-hover-width:98px!important;
-  position:relative!important;
-  overflow:hidden!important;
-  transition:grid-template-columns .22s ease!important;
-}
-.pa-event-card:hover,
-.pa-event-card:focus-within{
-  grid-template-columns:var(--pa-event-card-datebar-hover-width) minmax(0,1fr)!important;
-}
-.pa-event-card__datebar{
-  position:relative!important;
-  z-index:1!important;
-  overflow:hidden!important;
-  transition:clip-path .22s ease!important;
-}
-.pa-event-card__datebar::before,
-.pa-event-card__datebar::after,
-.pa-event-card__body::before,
-.pa-event-card__body::after,
-.pa-event-card__title::before,
-.pa-event-card__title::after{
-  content:none!important;
-  display:none!important;
-}
-.pa-event-card__body{
-  position:relative!important;
-  z-index:2!important;
-}
-.pa-event-card--hover-default .pa-event-card__datebar{
-  clip-path:none!important;
-}
-.pa-event-card--hover-slant .pa-event-card__datebar{
-  clip-path:polygon(0 0,100% 0,100% 100%,0 100%)!important;
-}
-.pa-event-card--hover-slant:hover .pa-event-card__datebar,
-.pa-event-card--hover-slant:focus-within .pa-event-card__datebar{
-  clip-path:polygon(0 0,100% 0,calc(100% - 18px) 100%,0 100%)!important;
-}
-@media (max-width:700px){
-  .pa-event-card,
-  .pa-event-card:hover,
-  .pa-event-card:focus-within{
-    --pa-event-card-datebar-width:58px!important;
-    --pa-event-card-datebar-hover-width:58px!important;
-    grid-template-columns:58px minmax(0,1fr)!important;
-  }
-  .pa-event-card--hover-slant .pa-event-card__datebar,
-  .pa-event-card--hover-slant:hover .pa-event-card__datebar,
-  .pa-event-card--hover-slant:focus-within .pa-event-card__datebar{clip-path:none!important;}
-}
 
 /* v1.15.96: Event Card size options.
    Thin keeps the same card component but removes speaker/description height.
@@ -2186,7 +2126,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 .pa-event-card.pa-event-card--size-thin{
   min-height:54px!important;
   --pa-event-card-datebar-width:56px!important;
-  --pa-event-card-datebar-hover-width:84px!important;
 }
 .pa-event-card.pa-event-card--size-thin .pa-event-card__datebar{
   gap:1px!important;
@@ -2217,10 +2156,6 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 .pa-event-card.pa-event-card--size-thin .pa-event-card__speakers,
 .pa-event-card.pa-event-card--size-thin .pa-event-card__description{
   display:none!important;
-}
-.pa-event-card.pa-event-card--size-thin.pa-event-card--hover-slant:hover .pa-event-card__datebar,
-.pa-event-card.pa-event-card--size-thin.pa-event-card--hover-slant:focus-within .pa-event-card__datebar{
-  clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%)!important;
 }
 .pa-speaker-upcoming-events .pa-event-list,
 .pa-schedule .pa-event-list{
@@ -2735,4 +2670,30 @@ body.pa-program-entity-page .pa-theme-speaker-page .entry-title{
 }
 .pa-event-card::after{
   border-color:var(--pa-event-card-border-color, transparent)!important;
+}
+
+/* v1.15.162: remove legacy event-card accent hover movement */
+.pa-event-card,
+.pa-event-card:hover,
+.pa-event-card:focus-within{
+  --pa-event-card-datebar-hover-width:var(--pa-event-card-datebar-width)!important;
+  grid-template-columns:var(--pa-event-card-datebar-width) minmax(0,1fr)!important;
+}
+.pa-event-card.pa-event-card--size-full,
+.pa-event-card.pa-event-card--size-full:hover,
+.pa-event-card.pa-event-card--size-full:focus-within{
+  --pa-event-card-datebar-width:64px!important;
+  grid-template-columns:64px minmax(0,1fr)!important;
+}
+.pa-event-card.pa-event-card--size-thin,
+.pa-event-card.pa-event-card--size-thin:hover,
+.pa-event-card.pa-event-card--size-thin:focus-within{
+  --pa-event-card-datebar-width:56px!important;
+  grid-template-columns:56px minmax(0,1fr)!important;
+}
+.pa-event-card:hover .pa-event-card__datebar,
+.pa-event-card:focus-within .pa-event-card__datebar{
+  clip-path:none!important;
+  transform:none!important;
+  transition:none!important;
 }
