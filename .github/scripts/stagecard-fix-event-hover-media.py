@@ -52,14 +52,6 @@ pattern = re.compile(
 )
 text, count = pattern.subn(fixed_mobile_block, text, count=1)
 
-# If a previous malformed mobile block closed much later, remove the orphaned
-# closing brace immediately before the sponsor showcase section.
-text = text.replace(
-    '}\n.pa-sponsor-showcase{width:100%;box-sizing:border-box;}\n',
-    '.pa-sponsor-showcase{width:100%;box-sizing:border-box;}\n',
-    1
-)
-
 # Keep the event hover effect off on smaller screens, including after the later
 # consolidated mobile card rules. This prevents overlap on phones/tablets.
 mobile_safety = '''
