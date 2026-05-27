@@ -18,6 +18,7 @@ jobs:
           python3 .github/scripts/stagecard-full-css-cleanup.py
           python3 .github/scripts/stagecard-admin-preview-css-cleanup.py
           python3 .github/scripts/stagecard-fix-event-hover-media.py
+          python3 .github/scripts/stagecard-sponsor-form-ui-cleanup.py
 
       - name: Commit CSS cleanup
         shell: bash
