@@ -2244,7 +2244,15 @@ body.pa-program-entity-page .byline{
 
 /* Accent bar hover: visual x-axis expansion without changing user color */
 .pa-event-card .pa-event-card__datebar {
+  position: relative !important;
   overflow: visible !important;
+  z-index: 2 !important;
+}
+
+.pa-event-card .pa-event-card__body {
+  position: relative !important;
+  z-index: 1 !important;
+  transition: padding-left .2s ease-in-out !important;
 }
 
 .pa-event-card .pa-event-card__datebar::before {
