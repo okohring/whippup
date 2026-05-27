@@ -2162,6 +2162,10 @@ body.pa-program-entity-page .byline{
 .pa-event-card.pa-event-card--size-thin .pa-event-card__body{
   padding:10px 18px!important;
 }
+.pa-event-card.pa-event-card--size-thin:hover .pa-event-card__body,
+.pa-event-card.pa-event-card--size-thin:focus-within .pa-event-card__body {
+  padding-left: 34px !important;
+}
 .pa-event-card.pa-event-card--size-thin .pa-event-card__title,
 .pa-event-card.pa-event-card--size-thin .pa-event-card__title a{
   font-size:1rem!important;
