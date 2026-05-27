@@ -2255,14 +2255,14 @@ body.pa-program-entity-page .byline{
   background: inherit !important;
   transform: scaleX(1) !important;
   transform-origin: left center !important;
-  transition: transform .18s ease !important;
+  transition: transform .15s linear !important;
   pointer-events: none !important;
   z-index: 0 !important;
 }
 
 .pa-event-card:hover .pa-event-card__datebar::before,
 .pa-event-card:focus-within .pa-event-card__datebar::before {
-  transform: scaleX(1.12) !important;
+  transform: scaleX(1.2) !important;
 }
 
 .pa-event-card .pa-event-card__datebar > * {
@@ -2272,12 +2272,12 @@ body.pa-program-entity-page .byline{
 
 /* Nudge event info away from the accent expansion */
 .pa-event-card .pa-event-card__body {
-  transition: padding-left .18s ease !important;
+  transition: padding-left .15s linear !important;
 }
 
 .pa-event-card:hover .pa-event-card__body,
 .pa-event-card:focus-within .pa-event-card__body {
-  padding-left: 34px !important;
+  padding-left: 40px !important;
 }
 
 .pa-event-card::after{
