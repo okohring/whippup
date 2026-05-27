@@ -2239,8 +2239,47 @@ body.pa-program-entity-page .byline{
 .pa-event-card:hover,
 .pa-event-card:focus-within{
   grid-template-columns:var(--pa-event-card-datebar-width) minmax(0,1fr)!important;
-  transform:scale(1.015)!important;
+  transform:none!important;
 }
+
+/* Accent bar hover: visual x-axis expansion without changing user color */
+.pa-event-card .pa-event-card__datebar {
+  overflow: visible !important;
+}
+
+.pa-event-card .pa-event-card__datebar::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: inherit !important;
+  transform: scaleX(1) !important;
+  transform-origin: left center !important;
+  transition: transform .18s ease !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+.pa-event-card:hover .pa-event-card__datebar::before,
+.pa-event-card:focus-within .pa-event-card__datebar::before {
+  transform: scaleX(1.12) !important;
+}
+
+.pa-event-card .pa-event-card__datebar > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Nudge event info away from the accent expansion */
+.pa-event-card .pa-event-card__body {
+  transition: padding-left .18s ease !important;
+}
+
+.pa-event-card:hover .pa-event-card__body,
+.pa-event-card:focus-within .pa-event-card__body {
+  padding-left: 34px !important;
+}
+
 .pa-event-card::after{
   content:""!important;
   display:block!important;
@@ -2286,7 +2325,7 @@ body.pa-program-entity-page .byline{
   transform:none!important;
   transition:none!important;
 }
-.pa-event-card__datebar::before,
+
 .pa-event-card__datebar::after{
   content:none!important;
   display:none!important;
