@@ -2271,7 +2271,7 @@ body.pa-program-entity-page .byline{
 
 .pa-event-card:hover .pa-event-card__datebar::before,
 .pa-event-card:focus-within .pa-event-card__datebar::before {
-  width: calc(100% + 56px) !important;
+  width: calc(100% + 25px) !important;
 }
 
 .pa-event-card .pa-event-card__datebar > * {
@@ -2286,7 +2286,7 @@ body.pa-program-entity-page .byline{
 
 .pa-event-card:hover .pa-event-card__body,
 .pa-event-card:focus-within .pa-event-card__body {
- padding-left: 56px !important;
+ padding-left: 50px !important;
 }
 
 .pa-event-card::after{
