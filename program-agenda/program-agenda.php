@@ -1320,11 +1320,11 @@ final class Program_Agenda_Plugin {
         echo '<section class="pa-preview-card pa-program-page-preview-card"><div class="pa-preview-title"><h3>Preview</h3></div>';
         echo '<div class="pa-live-preview" data-program-page-preview="' . esc_attr($type) . '">';
         if ($is_speaker) {
-            echo '<div class="pa-preview-header pa-preview-speaker-header" style="' . esc_attr($this->inline_header_style($s)) . '"><span class="pa-preview-image" style="' . esc_attr($this->preview_image_style($s)) . '"></span><div class="pa-preview-speaker-text"><strong>Speaker Name <span>Credentials</span></strong><small class="pa-preview-speaker-role">Role Title</small><small class="pa-preview-speaker-company">Company</small></div><nav class="pa-preview-speaker-icons" aria-label="Preview speaker links"><span class="pa-preview-icon" aria-hidden="true">↗</span><span class="pa-preview-icon" aria-hidden="true">◎</span></nav></div>';
+            echo '<div class="pa-preview-header pa-preview-speaker-header" style="' . esc_attr($this->inline_header_style($s)) . '"><span class="pa-preview-image" style="' . esc_attr($this->preview_image_style($s)) . '"></span><div class="pa-preview-speaker-text"><span class="pa-preview-line pa-preview-line-heading"></span><span class="pa-preview-line pa-preview-line-subheading"></span><span class="pa-preview-line pa-preview-line-subheading"></span></div><nav class="pa-preview-speaker-icons" aria-label="Preview speaker links"><span class="pa-preview-icon" aria-hidden="true">↗</span><span class="pa-preview-icon" aria-hidden="true">◎</span></nav></div>';
         } else {
-            echo '<div class="pa-preview-header" style="' . esc_attr($this->inline_header_style($s)) . '"><strong>Event title</strong><small>Header preview text</small></div>';
+            echo '<div class="pa-preview-header" style="' . esc_attr($this->inline_header_style($s)) . '"><span class="pa-preview-line pa-preview-line-heading"></span><span class="pa-preview-line pa-preview-line-subheading"></span></div>';
         }
-        echo '<div class="pa-preview-content" style="' . esc_attr($this->inline_content_style($s)) . '"><div><strong>Content preview</strong><p>This area inherits the WordPress theme unless custom colors or borders are set.</p></div></div></div></section>';
+        echo '<div class="pa-preview-content" style="' . esc_attr($this->inline_content_style($s)) . '"><span class="pa-preview-line pa-preview-line-content"></span><span class="pa-preview-line pa-preview-line-content"></span><span class="pa-preview-line pa-preview-line-content"></span></div></div></section>';
     }
 
     private function program_page_settings_controls($type, $s, $root) {
