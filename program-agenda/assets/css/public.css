@@ -2215,7 +2215,6 @@ body.pa-program-entity-page .byline{
 .pa-event-card::after{
   border-radius:inherit!important;
 }
-
 /* Stagecard final public layout cleanup: event cards, sponsor showcase, sponsor pages */
 .pa-event-card{
   --pa-event-card-datebar-width:64px;
