@@ -2313,6 +2313,7 @@ body.pa-program-entity-page .byline{
   .pa-event-card:focus-within .pa-event-card__body {
     padding-left: 28px !important;
   }
+}
 
 .pa-event-card::after{
   content:""!important;
@@ -2630,3 +2631,52 @@ body.pa-program-entity-page .byline{
 .pa-single-sponsor .pa-sponsor-content{padding:32px;}
 @media(max-width:1180px){.pa-single-sponsor{width:calc(100% - 32px);}}
 @media(max-width:700px){.pa-single-sponsor{width:100%;}.pa-single-sponsor .pa-sponsor-hero{align-items:flex-start;gap:20px;}.pa-sponsor-hero-logo{width:100%;min-width:0;margin-bottom:20px;}}
+
+/* Stagecard responsive hover safety */
+@media (max-width:768px){
+  .pa-event-card .pa-event-card__datebar::before,
+  .pa-event-card:hover .pa-event-card__datebar::before,
+  .pa-event-card:focus-within .pa-event-card__datebar::before{
+    width:100%!important;
+    transition:none!important;
+  }
+  .pa-event-card .pa-event-card__body,
+  .pa-event-card:hover .pa-event-card__body,
+  .pa-event-card:focus-within .pa-event-card__body{
+    transition:none!important;
+  }
+  .pa-event-card:hover .pa-event-card__body,
+  .pa-event-card:focus-within .pa-event-card__body{
+    padding-left:18px!important;
+  }
+  .pa-event-card.pa-event-card--size-thin:hover .pa-event-card__body,
+  .pa-event-card.pa-event-card--size-thin:focus-within .pa-event-card__body{
+    padding-left:14px!important;
+  }
+}
+
+
+/* Stagecard sponsor logo sizing guard */
+.pa-sponsor-showcase-logo-img,
+.pa-event-sponsor-logo-img{
+  display:block!important;
+  max-width:250px!important;
+  max-height:150px!important;
+  width:auto!important;
+  height:auto!important;
+  object-fit:contain!important;
+}
+.pa-sponsor-showcase-logo,
+.pa-sponsor-showcase-name{
+  width:250px!important;
+  height:150px!important;
+  min-height:150px!important;
+}
+.pa-sponsor-hero-logo-img{
+  display:block!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  width:auto!important;
+  height:auto!important;
+  object-fit:contain!important;
+}
