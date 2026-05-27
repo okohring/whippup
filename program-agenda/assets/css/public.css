@@ -223,7 +223,8 @@
   .pa-single-speaker .pa-speaker-hero {
     display: flex !important;
     flex-direction: column !important;
-    align-items: flex-start !important;
+    align-items: center !important;
+    text-align: center !important;
     gap: 18px !important;
   }
 
@@ -232,27 +233,36 @@
     height: 132px !important;
     max-width: 132px !important;
     max-height: 132px !important;
+    margin: 0 auto !important;
   }
 
   .pa-single-speaker .pa-speaker-hero-text {
     width: 100% !important;
-    min-width: 0 !important;
     max-width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
   }
 
-  .pa-single-speaker .pa-speaker-name {
-    max-width: 100% !important;
-    overflow-wrap: anywhere !important;
-    word-break: normal !important;
-    font-size: clamp(1.6rem, 8vw, 2.4rem) !important;
-    line-height: 1.05 !important;
-  }
+.pa-single-speaker .pa-speaker-name {
+  max-width: 100% !important;
+  font-size: clamp(1.2rem, 5.8vw, 1.9rem) !important;
+  line-height: 1.05 !important;
+  white-space: nowrap !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
 
   .pa-single-speaker .pa-speaker-role-company,
   .pa-single-speaker .pa-speaker-role,
   .pa-single-speaker .pa-speaker-company {
     max-width: 100% !important;
     overflow-wrap: anywhere !important;
+  }
+
+  .pa-single-speaker .pa-speaker-header-links {
+    position: static !important;
+    justify-content: center !important;
+    margin: 8px auto 0 !important;
   }
 }
 
