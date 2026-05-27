@@ -19,6 +19,7 @@ jobs:
           python3 .github/scripts/stagecard-final-hover-lock.py
           python3 .github/scripts/stagecard-preview-polish.py
           python3 .github/scripts/stagecard-showcase-card-preview-polish.py
+          python3 .github/scripts/stagecard-remove-legacy-event-hover.py
 
       - name: Commit final polish
         shell: bash
