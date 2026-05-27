@@ -2263,7 +2263,12 @@ body.pa-program-entity-page .byline{
   left: 0 !important;
   bottom: 0 !important;
   width: 100% !important;
-  background: inherit !important;
+  background: linear-gradient(
+  to right,
+  var(--pa-agenda-bar-color,#1d2327) 0%,
+  var(--pa-agenda-bar-color,#1d2327) 70%,
+  transparent 100%
+) !important;
   transition: width .2s ease-in-out !important;
   pointer-events: none !important;
   z-index: 0 !important;
