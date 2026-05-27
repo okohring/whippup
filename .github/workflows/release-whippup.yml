@@ -7,6 +7,11 @@ on:
         description: 'Version number to release, for example 1.15.149'
         required: true
         type: string
+      release_notes:
+        description: 'Release notes / changelog shown in WordPress plugin details'
+        required: false
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -39,6 +44,17 @@ jobs:
             -x "*/node_modules/*"
           echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
 
+      - name: Create release notes file
+        shell: bash
+        env:
+          RELEASE_NOTES: ${{ inputs.release_notes }}
+        run: |
+          if [ -n "$RELEASE_NOTES" ]; then
+            printf '%s\n' "$RELEASE_NOTES" > release-notes.md
+          else
+            printf 'Stagecard %s\n' '${{ inputs.version }}' > release-notes.md
+          fi
+
       - name: Create GitHub release
         shell: bash
         env:
@@ -48,5 +64,5 @@ jobs:
           TAG="v${VERSION}"
           gh release create "$TAG" "$ZIP_NAME" \
             --title "Stagecard ${VERSION}" \
-            --notes "Stagecard ${VERSION}" \
+            --notes-file release-notes.md \
             --latest
