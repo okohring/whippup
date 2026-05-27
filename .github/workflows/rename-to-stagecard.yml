@@ -16,6 +16,7 @@ jobs:
       - name: Run full CSS cleanup
         run: |
           python3 .github/scripts/stagecard-full-css-cleanup.py
+          python3 .github/scripts/stagecard-admin-preview-css-cleanup.py
 
       - name: Commit CSS cleanup
         shell: bash
