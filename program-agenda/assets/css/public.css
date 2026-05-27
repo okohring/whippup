@@ -256,7 +256,6 @@
   }
 }
 
-
 /* Inline speaker scrollbar: inherit agenda text color and keep track transparent */
 .pa-agenda-speakers-inline .pa-speaker-card-list-agenda{
   scrollbar-color: var(--pa-agenda-scroll-color, currentColor) transparent;
