@@ -2266,7 +2266,7 @@ body.pa-program-entity-page .byline{
   background: linear-gradient(
   to right,
   var(--pa-agenda-bar-color,#1d2327) 0%,
-  var(--pa-agenda-bar-color,#1d2327) 50%,
+  var(--pa-agenda-bar-color,#1d2327) 100%,
   transparent 100%
 ) !important;
   transition: width .2s ease-in-out !important;
@@ -2294,7 +2294,7 @@ body.pa-program-entity-page .byline{
  padding-left: 50px !important;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .pa-event-card .pa-event-card__datebar::before {
     width: 100% !important;
     transition: none !important;
