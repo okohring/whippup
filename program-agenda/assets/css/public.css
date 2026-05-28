@@ -3140,3 +3140,9 @@ body.pa-program-entity-page .byline{
   max-height: 100% !important;
   object-fit: cover !important;
 }
+
+/* Stagecard agenda date/time font */
+.pa-event-card .pa-event-card__date,
+.pa-event-card .pa-event-card__time{
+  font-family: Arial, Helvetica, sans-serif !important;
+}
