@@ -3119,7 +3119,7 @@ body.pa-program-entity-page .byline{
 
 /* Stagecard speaker card sizing source of truth */
 .pa-event-card {
-  --pa-speaker-card-image-size: 40px;
+  --pa-speaker-card-image-size: 44px;
 }
 
 .pa-event-card .pa-speaker-card-image {
@@ -3159,7 +3159,7 @@ body.pa-program-entity-page .byline{
 
 /* Stagecard event info to speaker card spacing */
 .pa-event-card .pa-event-card__speakers{
-  margin-top:12px!important;
+  margin-top:6px!important;
 }
 
 .pa-event-card.pa-event-card--size-thin .pa-event-card__body{
