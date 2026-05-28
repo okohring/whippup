@@ -3186,6 +3186,43 @@ body.pa-program-entity-page .byline{
 }
 
 
+
+/* Stagecard event and speaker card font sizes */
+.pa-event-card .pa-event-card__title,
+.pa-event-card .pa-event-card__title a{
+  font-size:1.2rem!important;
+}
+
+.pa-event-card__meta,
+.pa-event-card__meta *{
+  font-size:.6rem!important;
+}
+
+.pa-event-card__date,
+.pa-event-card__time{
+  font-size:.78rem!important;
+}
+
+.pa-event-card.pa-event-card--size-thin .pa-event-card__date,
+.pa-event-card.pa-event-card--size-thin .pa-event-card__time{
+  font-size:.57rem!important;
+}
+
+.pa-speaker-card .pa-speaker-card-text h3,
+.pa-speaker-card .pa-speaker-card-text h3 a{
+  font-size:6rem!important;
+}
+
+.pa-speaker-card .pa-speaker-card-role,
+.pa-speaker-card .pa-speaker-card-company{
+  font-size:.6rem!important;
+}
+
+.pa-event-card .pa-speaker-card-category-label,
+.pa-single-event-speaker-section-heading{
+  font-size:.82rem!important;
+}
+
 /* Stagecard Event page speaker cards match agenda cards */
 .pa-single-event .pa-single-event-speaker-section .pa-speaker-card,
 .pa-single-event .pa-event-single-speakers .pa-speaker-card{
@@ -3276,40 +3313,4 @@ body.pa-program-entity-page .byline{
 .pa-single-event-speaker-section-heading{
   font-weight:500!important;
   font-variation-settings:"wght" 500!important;
-}
-
-/* Stagecard event and speaker card font sizes */
-.pa-event-card .pa-event-card__title,
-.pa-event-card .pa-event-card__title a{
-  font-size:1.2rem!important;
-}
-
-.pa-event-card__meta,
-.pa-event-card__meta *{
-  font-size:.6rem!important;
-}
-
-.pa-event-card__date,
-.pa-event-card__time{
-  font-size:.78rem!important;
-}
-
-.pa-event-card.pa-event-card--size-thin .pa-event-card__date,
-.pa-event-card.pa-event-card--size-thin .pa-event-card__time{
-  font-size:.57rem!important;
-}
-
-.pa-speaker-card .pa-speaker-card-text h3,
-.pa-speaker-card .pa-speaker-card-text h3 a{
-  font-size:6rem!important;
-}
-
-.pa-speaker-card .pa-speaker-card-role,
-.pa-speaker-card .pa-speaker-card-company{
-  font-size:.6rem!important;
-}
-
-.pa-event-card .pa-speaker-card-category-label,
-.pa-single-event-speaker-section-heading{
-  font-size:.82rem!important;
 }
