@@ -67,19 +67,24 @@ block = '''
   height:100%!important;
 }
 .pa-single-event-speaker-sections{
-  grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:28px!important;
 }
+.pa-single-event-speaker-section-list--categorized,
 .pa-single-event-speaker-section--default{
-  order:1!important;
+  order:initial!important;
   border:0!important;
   border-left:0!important;
-  padding-left:0!important;
+  border-top:0!important;
+  padding:0!important;
+  margin:0!important;
 }
 .pa-single-event-speaker-section-list--categorized{
+  order:1!important;
+}
+.pa-single-event-speaker-section--default{
   order:2!important;
-  border:0!important;
-  border-left:0!important;
-  padding-left:0!important;
 }
 .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
   display:grid!important;
@@ -98,18 +103,6 @@ block = '''
   .pa-single-event-speaker-sections{
     grid-template-columns:1fr!important;
   }
-  .pa-single-event-speaker-section--default,
-  .pa-single-event-speaker-section-list--categorized{
-    order:initial!important;
-    border:0!important;
-    border-left:0!important;
-    border-top:0!important;
-    padding-left:0!important;
-    padding-top:0!important;
-  }
-  .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
-    grid-template-columns:1fr!important;
-  }
   .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card{
     width:min(230px,100%)!important;
     max-width:100%!important;
@@ -119,4 +112,4 @@ block = '''
 css = css.rstrip() + '\n\n' + block.strip() + '\n'
 PUBLIC_CSS.write_text(css)
 
-print('Moved invite icon below time, set Event page columns to 33% speakers/66% moderators, removed divider border, and preserved standardized speaker card width.')
+print('Moved invite icon below time and stacked Event page moderator section above speakers section.')
