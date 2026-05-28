@@ -3167,7 +3167,6 @@ body.pa-program-entity-page .byline{
   padding-bottom:8px!important;
 }
 
-
 /* Stagecard speaker card consistency and compact spacing */
 .pa-event-card .pa-event-card__speakers{margin-top:0!important;}
 .pa-event-card .pa-event-card__speakers .pa-speaker-card-list{margin-top:0!important;}
@@ -3192,4 +3191,28 @@ body.pa-program-entity-page .byline{
 @media (max-width:768px){
   .pa-event-card .pa-event-card__speakers{margin-top:0!important;}
   .pa-event-card .pa-speaker-card-unit{padding-top:0!important;gap:3px!important;}
+}
+
+
+/* Stagecard event page speaker card compact text */
+.pa-single-event-speaker-section .pa-speaker-card,
+.pa-event-single-speakers .pa-speaker-card{
+  font-size:.72rem!important;
+  line-height:1.12!important;
+}
+.pa-single-event-speaker-section .pa-speaker-card-text h3,
+.pa-single-event-speaker-section .pa-speaker-card-text h3 a,
+.pa-event-single-speakers .pa-speaker-card-text h3,
+.pa-event-single-speakers .pa-speaker-card-text h3 a{
+  font-size:.76rem!important;
+  line-height:1.08!important;
+  margin:0 0 1px!important;
+}
+.pa-single-event-speaker-section .pa-speaker-card-role,
+.pa-single-event-speaker-section .pa-speaker-card-company,
+.pa-event-single-speakers .pa-speaker-card-role,
+.pa-event-single-speakers .pa-speaker-card-company{
+  font-size:.68rem!important;
+  line-height:1.12!important;
+  margin:0!important;
 }
