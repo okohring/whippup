@@ -3044,3 +3044,50 @@ body.pa-program-entity-page .byline{
     word-break:normal!important;
   }
 }
+
+/* Stagecard mobile speaker card text wrapping fix */
+@media (max-width:768px){
+  .pa-event-card .pa-speaker-card{
+    display:flex!important;
+    align-items:center!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:visible!important;
+  }
+
+  .pa-event-card .pa-speaker-card-image{
+    flex:0 0 auto!important;
+  }
+
+  .pa-event-card .pa-speaker-card-text{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:visible!important;
+  }
+
+  .pa-event-card .pa-speaker-card-text h3,
+  .pa-event-card .pa-speaker-card-text p,
+  .pa-event-card .pa-speaker-card-text a{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+
+  .pa-event-card .pa-speaker-card-role,
+  .pa-event-card .pa-speaker-card-company{
+    line-height:1.2!important;
+  }
+
+  .pa-event-card .pa-speaker-card-category-label{
+    display:block!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    line-height:1.15!important;
+    margin:0 0 6px!important;
+    padding-top:2px!important;
+  }
+}
