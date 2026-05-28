@@ -30,8 +30,8 @@ old_split = """        if ($categorized_cards && $default_cards) {
 """
 new_split = """        if ($categorized_cards && $default_cards) {
             if ($context === 'event-page') {
-                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\"><h5 class=\"pa-speaker-card-column-heading\">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
-                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\"><h5 class=\"pa-speaker-card-column-heading\">Speakers</h5>' . implode('', $default_cards) . '</div>';
+                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
+                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers\">Speakers</h5>' . implode('', $default_cards) . '</div>';
             } else {
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\">' . implode('', $default_cards) . '</div>';
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\">' . implode('', $categorized_cards) . '</div>';
@@ -42,6 +42,8 @@ new_split = """        if ($categorized_cards && $default_cards) {
 """
 if old_split in php:
     php = php.replace(old_split, new_split, 1)
+php = php.replace('class=\"pa-speaker-card-column-heading\">Speaker Category</h5>', 'class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>')
+php = php.replace('class=\"pa-speaker-card-column-heading\">Speakers</h5>', 'class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers\">Speakers</h5>')
 
 PHP.write_text(php)
 
@@ -89,55 +91,34 @@ public_guard = '''
 .pa-event-card .pa-speaker-card-unit,
 .pa-single-event .pa-speaker-card-list,
 .pa-single-event .pa-speaker-card-column,
-.pa-single-event .pa-speaker-card-unit{
-  overflow:visible!important;
-}
-.pa-event-card .pa-speaker-card-list-has-categories,
-.pa-single-event .pa-speaker-card-list-has-categories{
-  align-items:end!important;
-}
-.pa-event-card .pa-speaker-card-column,
-.pa-single-event .pa-speaker-card-column{
-  align-items:end!important;
-}
-.pa-event-card .pa-speaker-card-unit,
-.pa-single-event .pa-speaker-card-unit{
-  justify-content:flex-end!important;
-  align-self:end!important;
-  padding-top:14px!important;
-}
-.pa-event-card .pa-speaker-card-category-label,
-.pa-single-event .pa-speaker-card-category-label{
-  display:block!important;
-  visibility:visible!important;
-  min-height:1em!important;
-  line-height:1.15!important;
-  margin:0 0 5px!important;
-  overflow:visible!important;
-  white-space:nowrap!important;
-}
+.pa-single-event .pa-speaker-card-unit{overflow:visible!important;}
+.pa-event-card .pa-speaker-card-list-has-categories{align-items:end!important;}
+.pa-event-card .pa-speaker-card-column{align-items:end!important;}
+.pa-event-card .pa-speaker-card-unit{justify-content:flex-end!important;align-self:end!important;padding-top:14px!important;}
+.pa-event-card .pa-speaker-card-category-label{display:block!important;visibility:visible!important;min-height:1em!important;line-height:1.15!important;margin:0 0 5px!important;overflow:visible!important;white-space:nowrap!important;}
 .pa-event-card .pa-speaker-card--categorized,
-.pa-single-event .pa-speaker-card--categorized{
-  border:1px solid var(--pa-agenda-bar-color,var(--pa-agenda-accent-color,currentColor))!important;
-}
-.pa-single-event .pa-speaker-card-list--categorized-split{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
-  gap:24px!important;
-}
-.pa-single-event .pa-speaker-card-column-heading{
-  margin:0 0 10px!important;
-  font-size:.8rem!important;
-  line-height:1.2!important;
-  text-transform:uppercase!important;
-  letter-spacing:.04em!important;
-}
-@media (max-width:900px){
-  .pa-single-event .pa-speaker-card-list--categorized-split{grid-template-columns:1fr!important;}
-}
+.pa-single-event .pa-speaker-card--categorized{border:1px solid var(--pa-agenda-bar-color,var(--pa-agenda-accent-color,currentColor))!important;}
+.pa-single-event .pa-speaker-card-list--categorized-split{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:28px!important;align-items:start!important;}
+.pa-single-event .pa-speaker-card-column{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content))!important;gap:12px!important;align-items:start!important;align-content:start!important;}
+.pa-single-event .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
+.pa-single-event .pa-speaker-card-column-heading{margin:0 0 10px!important;font-size:.8rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;grid-column:1/-1!important;}
+.pa-single-event .pa-speaker-card-column-heading--category{display:none!important;}
+.pa-single-event .pa-speaker-card-category-label{display:block!important;visibility:visible!important;margin:0 0 10px!important;font-size:.8rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;white-space:nowrap!important;overflow:visible!important;}
+@media (max-width:900px){.pa-single-event .pa-speaker-card-list--categorized-split{grid-template-columns:1fr!important;}.pa-single-event .pa-speaker-card-column{grid-template-columns:1fr!important;}}
 '''
 if '/* Stagecard speaker category alignment and visibility guard */' not in public_css:
     public_css += '\n' + public_guard
+
+cleanup = '''
+/* Stagecard single event speaker category cleanup */
+.pa-single-event .pa-speaker-card-column-heading--category{display:none!important;}
+.pa-single-event .pa-speaker-card-list--categorized-split{align-items:start!important;}
+.pa-single-event .pa-speaker-card-column{align-items:start!important;align-content:start!important;}
+.pa-single-event .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
+.pa-single-event .pa-speaker-card-category-label{margin:0 0 10px!important;font-size:.8rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;}
+'''
+if '/* Stagecard single event speaker category cleanup */' not in public_css:
+    public_css += '\n' + cleanup
 PUBLIC_CSS.write_text(public_css)
 
-print('Fixed speaker category alignment, clipping, and event page layout.')
+print('Cleaned up single event speaker category layout.')
