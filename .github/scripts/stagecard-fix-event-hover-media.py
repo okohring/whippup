@@ -4,6 +4,18 @@ import re
 PUBLIC_CSS = Path('program-agenda/assets/css/public.css')
 text = PUBLIC_CSS.read_text()
 
+# Repair a malformed date-tab declaration that can happen during manual CSS
+# edits. The stray `};` closes the .pa-agenda-day-tab rule early and makes the
+# brace-balance check fail.
+text = text.replace(
+    '  font-family: Arial, Helvetica, sans-serif;};\n  line-height:1.1;',
+    '  font-family: Arial, Helvetica, sans-serif;\n  line-height:1.1;',
+)
+text = text.replace(
+    '  font-family:Arial, Helvetica, sans-serif;};\n  line-height:1.1;',
+    '  font-family:Arial, Helvetica, sans-serif;\n  line-height:1.1;',
+)
+
 # The custom event-card hover media query was missing its closing brace, which
 # caused the rest of the event-card rules to be scoped to mobile widths and
 # could also knock sponsor logo sizing out of place. Replace that media block
@@ -151,4 +163,4 @@ if balance != 0:
     raise SystemExit(f'CSS brace balance is {balance}, expected 0.')
 
 PUBLIC_CSS.write_text(text)
-print('Fixed event-card mobile media query, Safari height guard, and sponsor logo sizing guard.')
+print('Fixed malformed agenda tab CSS, event-card mobile media query, Safari height guard, and sponsor logo sizing guard.')
