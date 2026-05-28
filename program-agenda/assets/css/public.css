@@ -303,7 +303,7 @@
   padding:.55rem .9rem;
   border-radius:999px;
   cursor:pointer;
-  font:inherit;
+  font-family: Arial, Helvetica, sans-serif;};
   line-height:1.1;
   display:inline-flex;
   align-items:center;
@@ -2112,7 +2112,7 @@ body.pa-program-entity-page .byline{
    Thin keeps the same card component but removes speaker/description height.
    Full keeps speaker visibility while making the card less oversized. */
 .pa-event-card.pa-event-card--size-full{
-  min-height:118px!important;
+  min-height:110px!important;
 }
 .pa-event-card.pa-event-card--size-full .pa-event-card__body{
   padding:20px 28px!important;
@@ -2125,13 +2125,13 @@ body.pa-program-entity-page .byline{
   column-gap:10px!important;
 }
 .pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-image{
-  width:44px!important;
-  height:44px!important;
-  min-width:44px!important;
-  max-width:44px!important;
-  min-height:44px!important;
-  max-height:44px!important;
-  flex-basis:44px!important;
+  width:40px!important;
+  height:40px!important;
+  min-width:40px!important;
+  max-width:40px!important;
+  min-height:40px!important;
+  max-height:40px!important;
+  flex-basis:40px!important;
 }
 .pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text{
   padding-right:18px!important;
@@ -2186,7 +2186,7 @@ body.pa-program-entity-page .byline{
   gap:1rem!important;
 }
 @media (max-width:700px){
-  .pa-event-card.pa-event-card--size-full{min-height:112px!important;}
+  .pa-event-card.pa-event-card--size-full{min-height:110px!important;}
   .pa-event-card.pa-event-card--size-full .pa-event-card__body{padding:18px!important;}
   .pa-event-card.pa-event-card--size-thin,
   .pa-event-card.pa-event-card--size-thin:hover,
@@ -2589,7 +2589,7 @@ body.pa-program-entity-page .byline{
 .pa-event-card--speakers-inline .pa-event-card__speakers .pa-speaker-card{flex:0 0 auto!important;}
 .pa-event-card.pa-event-card--size-full{
   --pa-event-card-datebar-width:64px!important;
-  min-height:118px!important;
+  min-height:110px!important;
   grid-template-columns:64px minmax(0,1fr)!important;
 }
 .pa-event-card.pa-event-card--size-full:hover,
@@ -2599,15 +2599,22 @@ body.pa-program-entity-page .byline{
   column-gap:10px!important;
 }
 .pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-image{
-  width:44px!important;height:44px!important;min-width:44px!important;max-width:44px!important;min-height:44px!important;max-height:44px!important;flex-basis:44px!important;
+  width:40px!important;
+  height:40px!important;
+  flex:0 0 40px!important;
+}
+.pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-thumb{
+  width:100%!important;
+  height:100%!important;
 }
 .pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text{padding-right:18px!important;}
 .pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text h3,
 .pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text h3 a,
 .pa-event-card.pa-event-card--size-full .pa-event-card__speakers .pa-speaker-card-text p{
-  font-size:.86rem!important;
-  line-height:1.12!important;
-  margin-bottom:1px!important;
+  font-size:.7rem!important;
+  line-height:1.0!important;
+  margin-bottom:2px!important;
+  margin-top:2px!important;
 }
 .pa-event-card.pa-event-card--size-thin{
   --pa-event-card-datebar-width:56px!important;
@@ -2618,12 +2625,12 @@ body.pa-program-entity-page .byline{
 .pa-event-card.pa-event-card--size-thin:focus-within{grid-template-columns:56px minmax(0,1fr)!important;}
 .pa-event-card.pa-event-card--size-thin .pa-event-card__datebar{gap:1px!important;padding:6px 8px!important;}
 .pa-event-card.pa-event-card--size-thin .pa-event-card__date,
-.pa-event-card.pa-event-card--size-thin .pa-event-card__time{font-size:.67rem!important;line-height:1.05!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__time{font-size:.67rem!important;line-height:1.05!important; font-family: Arial, Helvetica, sans-serif;}
 .pa-event-card.pa-event-card--size-thin .pa-event-card__icon{display:none!important;}
 .pa-event-card.pa-event-card--size-thin .pa-event-card__body{padding:10px 18px!important;}
 .pa-event-card.pa-event-card--size-thin .pa-event-card__title,
 .pa-event-card.pa-event-card--size-thin .pa-event-card__title a{font-size:1rem!important;line-height:1.12!important;}
-.pa-event-card.pa-event-card--size-thin .pa-event-card__meta{margin:.22rem 0 0!important;gap:.35rem!important;font-size:.82rem!important;line-height:1.15!important;}
+.pa-event-card.pa-event-card--size-thin .pa-event-card__meta{margin:.22rem 0 0!important;gap:.35rem!important;font-size:.7rem!important;line-height:1.0!important;}
 .pa-event-card.pa-event-card--size-thin .pa-event-card__speakers,
 .pa-event-card.pa-event-card--size-thin .pa-event-card__description{display:none!important;}
 .pa-speaker-upcoming-events .pa-event-list,
@@ -2642,7 +2649,7 @@ body.pa-program-entity-page .byline{
   .pa-event-card.pa-event-card--size-full:focus-within,
   .pa-event-card.pa-event-card--size-thin:hover,
   .pa-event-card.pa-event-card--size-thin:focus-within{grid-template-columns:58px minmax(0,1fr)!important;}
-  .pa-event-card.pa-event-card--size-full{min-height:112px!important;}
+  .pa-event-card.pa-event-card--size-full{min-height:110px!important;}
   .pa-event-card.pa-event-card--size-full .pa-event-card__body{padding:18px!important;}
   .pa-event-card.pa-event-card--size-thin{min-height:54px!important;}
   .pa-event-card.pa-event-card--size-thin .pa-event-card__body{padding:10px 14px!important;}
@@ -3108,4 +3115,28 @@ body.pa-program-entity-page .byline{
 .single-pa_speaker .entry-meta,
 .single-pa_sponsor .entry-meta {
   display: none !important;
+}
+
+/* Stagecard speaker card sizing source of truth */
+.pa-event-card {
+  --pa-speaker-card-image-size: 40px;
+}
+
+.pa-event-card .pa-speaker-card-image {
+  width: var(--pa-speaker-card-image-size) !important;
+  height: var(--pa-speaker-card-image-size) !important;
+  min-width: var(--pa-speaker-card-image-size) !important;
+  max-width: var(--pa-speaker-card-image-size) !important;
+  min-height: var(--pa-speaker-card-image-size) !important;
+  max-height: var(--pa-speaker-card-image-size) !important;
+  flex: 0 0 var(--pa-speaker-card-image-size) !important;
+}
+
+.pa-event-card .pa-speaker-card-thumb,
+.pa-event-card .pa-speaker-card-image img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
 }
