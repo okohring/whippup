@@ -3157,6 +3157,11 @@ body.pa-program-entity-page .byline{
   padding-bottom:12px!important;
 }
 
+/* Stagecard event info to speaker card spacing */
+.pa-event-card .pa-event-card__speakers{
+  margin-top:12px!important;
+}
+
 .pa-event-card.pa-event-card--size-thin .pa-event-card__body{
   padding-top:8px!important;
   padding-bottom:8px!important;
