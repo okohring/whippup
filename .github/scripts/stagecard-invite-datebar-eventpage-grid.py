@@ -76,6 +76,12 @@ block = '''
   align-items:start!important;
   justify-items:start!important;
 }
+.pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card{
+  width:min(230px,100%)!important;
+  max-width:230px!important;
+  min-width:0!important;
+  grid-template-columns:40px minmax(0,1fr)!important;
+}
 .pa-single-event-speaker-section--default{
   padding-left:clamp(22px,4vw,44px)!important;
 }
@@ -86,9 +92,13 @@ block = '''
   .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
     grid-template-columns:1fr!important;
   }
+  .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card{
+    width:min(230px,100%)!important;
+    max-width:100%!important;
+  }
 }
 '''
 css = css.rstrip() + '\n\n' + block.strip() + '\n'
 PUBLIC_CSS.write_text(css)
 
-print('Moved invite icon below time and stacked Event page speakers inside 33/66 columns.')
+print('Moved invite icon below time, stacked Event page speakers inside 33/66 columns, and standardized Event page speaker card width.')
