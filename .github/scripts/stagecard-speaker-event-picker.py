@@ -172,61 +172,34 @@ mobile_css = '''
 /* Stagecard mobile categorized agenda speaker cards */
 @media (max-width:768px){
   .pa-event-card .pa-event-card__body,
-  .pa-event-card.pa-event-card--size-full .pa-event-card__body{
-    min-width:0!important;
-    overflow:hidden!important;
-  }
-  .pa-event-card .pa-event-card__speakers{
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    overflow:hidden!important;
-  }
+  .pa-event-card.pa-event-card--size-full .pa-event-card__body{min-width:0!important;overflow:hidden!important;}
+  .pa-event-card .pa-event-card__speakers{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;}
   .pa-event-card .pa-speaker-card-list,
   .pa-event-card .pa-speaker-card-list--categorized-split,
-  .pa-event-card .pa-speaker-card-column{
-    display:flex!important;
-    flex-direction:column!important;
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    gap:10px!important;
-    align-items:stretch!important;
-    overflow:hidden!important;
-  }
-  .pa-event-card .pa-speaker-card-unit{
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    padding-top:0!important;
-    align-self:stretch!important;
-    overflow:hidden!important;
-  }
-  .pa-event-card .pa-speaker-card-category-label{
-    white-space:normal!important;
-    overflow:visible!important;
-    margin:0 0 4px!important;
-  }
-  .pa-event-card .pa-speaker-card{
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    box-sizing:border-box!important;
-    overflow:hidden!important;
-  }
+  .pa-event-card .pa-speaker-card-column{display:flex!important;flex-direction:column!important;width:100%!important;max-width:100%!important;min-width:0!important;gap:10px!important;align-items:stretch!important;overflow:hidden!important;}
+  .pa-event-card .pa-speaker-card-unit{width:100%!important;max-width:100%!important;min-width:0!important;padding-top:0!important;align-self:stretch!important;overflow:hidden!important;}
+  .pa-event-card .pa-speaker-card-category-label{white-space:normal!important;overflow:visible!important;margin:0 0 4px!important;}
+  .pa-event-card .pa-speaker-card{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;}
   .pa-event-card .pa-speaker-card-text,
   .pa-event-card .pa-speaker-card-text h3,
   .pa-event-card .pa-speaker-card-text p,
-  .pa-event-card .pa-speaker-card-text a{
-    min-width:0!important;
-    max-width:100%!important;
-    overflow-wrap:anywhere!important;
-    word-break:normal!important;
-  }
+  .pa-event-card .pa-speaker-card-text a{min-width:0!important;max-width:100%!important;overflow-wrap:anywhere!important;word-break:normal!important;}
 }
 '''
 if '/* Stagecard mobile categorized agenda speaker cards */' not in public_css:
     public_css += '\n' + mobile_css
+spacing_css = '''
+/* Stagecard event info to speaker card spacing */
+.pa-event-card .pa-event-card__speakers{margin-top:6px!important;}
+.pa-event-card .pa-event-card__speakers .pa-speaker-card-list{margin-top:0!important;}
+.pa-event-card .pa-speaker-card-unit{padding-top:7px!important;}
+@media (max-width:768px){
+  .pa-event-card .pa-event-card__speakers{margin-top:6px!important;}
+  .pa-event-card .pa-speaker-card-unit{padding-top:0!important;}
+}
+'''
+if '/* Stagecard event info to speaker card spacing */' not in public_css:
+    public_css += '\n' + spacing_css
 PUBLIC_CSS.write_text(public_css)
 
-print('Applied root single Event renderer and mobile categorized speaker card fixes.')
+print('Applied root single Event renderer, mobile fixes, and tighter event info/speaker spacing.')
