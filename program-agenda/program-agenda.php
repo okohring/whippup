@@ -3105,10 +3105,7 @@ final class Program_Agenda_Plugin {
         echo '<div class="pa-single-text">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
         $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
         if (is_array($speaker_ids) && $speaker_ids) {
-            $event_speaker_categories = get_post_meta($post->ID, '_pa_event_speaker_categories', true);
-            if (!is_array($event_speaker_categories)) { $event_speaker_categories = []; }
-            $has_speaker_categories = count(array_filter(array_map('trim', $event_speaker_categories))) > 0;
-            echo '<div class="pa-event-single-speakers' . ($has_speaker_categories ? ' pa-event-single-speakers--categorized' : '') . '"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';
+            echo $this->single_event_speaker_sections($speaker_ids, $program_id, $post->ID);
         }
         echo '</div>';
         $sponsor_ids = get_post_meta($post->ID, '_pa_sponsor_ids', true);
@@ -3129,6 +3126,48 @@ final class Program_Agenda_Plugin {
             echo '</div></div>';
         }
         echo '</article>'; return ob_get_clean();
+    }
+
+    private function single_event_speaker_sections($speaker_ids, $program_id, $event_id) {
+        $speaker_ids = array_values(array_filter(array_map('absint', (array)$speaker_ids)));
+        if (!$speaker_ids) { return ''; }
+
+        $event_speaker_categories = get_post_meta(absint($event_id), '_pa_event_speaker_categories', true);
+        if (!is_array($event_speaker_categories)) { $event_speaker_categories = []; }
+
+        $category_groups = [];
+        $default_ids = [];
+        foreach ($speaker_ids as $speaker_id) {
+            $speaker = get_post($speaker_id);
+            if (!$speaker || $speaker->post_type !== 'pa_speaker') { continue; }
+            $category = '';
+            foreach ([$speaker_id, (string)$speaker_id] as $key) {
+                if (isset($event_speaker_categories[$key])) { $category = trim(sanitize_text_field($event_speaker_categories[$key])); break; }
+            }
+            if ($category !== '') {
+                if (!isset($category_groups[$category])) { $category_groups[$category] = []; }
+                $category_groups[$category][] = $speaker_id;
+            } else {
+                $default_ids[] = $speaker_id;
+            }
+        }
+
+        if (!$category_groups) {
+            return '<div class="pa-event-single-speakers"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page-default', 0) . '</div>';
+        }
+
+        ob_start();
+        echo '<div class="pa-single-event-speaker-sections' . (!$default_ids ? ' pa-single-event-speaker-sections--only-categorized' : '') . '">';
+        echo '<div class="pa-single-event-speaker-section-list pa-single-event-speaker-section-list--categorized">';
+        foreach ($category_groups as $category => $ids) {
+            echo '<section class="pa-single-event-speaker-section pa-single-event-speaker-section--categorized"><h4 class="pa-single-event-speaker-section-heading">' . esc_html($category) . '</h4>' . $this->speaker_cards($ids, $program_id, 'event-page-category', $event_id) . '</section>';
+        }
+        echo '</div>';
+        if ($default_ids) {
+            echo '<section class="pa-single-event-speaker-section pa-single-event-speaker-section--default"><h4 class="pa-single-event-speaker-section-heading">Speakers</h4>' . $this->speaker_cards($default_ids, $program_id, 'event-page-default', 0) . '</section>';
+        }
+        echo '</div>';
+        return ob_get_clean();
     }
 
     private function single_speaker($post) {
@@ -3565,13 +3604,8 @@ final class Program_Agenda_Plugin {
         ob_start();
         echo '<div class="' . esc_attr(trim($list_classes)) . '">';
         if ($categorized_cards && $default_cards) {
-            if ($context === 'event-page') {
-                echo '<div class="pa-speaker-card-column pa-speaker-card-column--categorized"><h5 class="pa-speaker-card-column-heading pa-speaker-card-column-heading--category">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
-                echo '<div class="pa-speaker-card-column pa-speaker-card-column--default"><h5 class="pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers">Speakers</h5>' . implode('', $default_cards) . '</div>';
-            } else {
-                echo '<div class="pa-speaker-card-column pa-speaker-card-column--categorized">' . implode('', $categorized_cards) . '</div>';
-                echo '<div class="pa-speaker-card-column pa-speaker-card-column--default">' . implode('', $default_cards) . '</div>';
-            }
+            echo '<div class="pa-speaker-card-column pa-speaker-card-column--categorized">' . implode('', $categorized_cards) . '</div>';
+            echo '<div class="pa-speaker-card-column pa-speaker-card-column--default">' . implode('', $default_cards) . '</div>';
         } else {
             echo implode('', array_merge($categorized_cards, $default_cards));
         }
