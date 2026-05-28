@@ -70,7 +70,8 @@ block = '''
   grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;
 }
 .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
-  grid-template-columns:repeat(3,minmax(0,max-content))!important;
+  display:grid!important;
+  grid-template-columns:1fr!important;
   gap:12px!important;
   align-items:start!important;
   justify-items:start!important;
@@ -90,4 +91,4 @@ block = '''
 css = css.rstrip() + '\n\n' + block.strip() + '\n'
 PUBLIC_CSS.write_text(css)
 
-print('Moved invite icon below time and set Event page speaker columns to 33/66 with three-across speaker rows.')
+print('Moved invite icon below time and stacked Event page speakers inside 33/66 columns.')
