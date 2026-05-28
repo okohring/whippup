@@ -67,7 +67,17 @@ block = '''
   height:100%!important;
 }
 .pa-single-event-speaker-sections{
-  grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;
+  grid-template-columns:minmax(0,2fr) minmax(0,1fr)!important;
+}
+.pa-single-event-speaker-section--default{
+  order:1!important;
+  border-left:0!important;
+  padding-left:0!important;
+}
+.pa-single-event-speaker-section-list--categorized{
+  order:2!important;
+  border-left:1px solid currentColor!important;
+  padding-left:clamp(22px,4vw,44px)!important;
 }
 .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
   display:grid!important;
@@ -82,12 +92,19 @@ block = '''
   min-width:0!important;
   grid-template-columns:40px minmax(0,1fr)!important;
 }
-.pa-single-event-speaker-section--default{
-  padding-left:clamp(22px,4vw,44px)!important;
-}
 @media (max-width:900px){
   .pa-single-event-speaker-sections{
     grid-template-columns:1fr!important;
+  }
+  .pa-single-event-speaker-section--default,
+  .pa-single-event-speaker-section-list--categorized{
+    order:initial!important;
+    border-left:0!important;
+    padding-left:0!important;
+  }
+  .pa-single-event-speaker-section-list--categorized{
+    border-top:1px solid currentColor!important;
+    padding-top:22px!important;
   }
   .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
     grid-template-columns:1fr!important;
@@ -101,4 +118,4 @@ block = '''
 css = css.rstrip() + '\n\n' + block.strip() + '\n'
 PUBLIC_CSS.write_text(css)
 
-print('Moved invite icon below time, stacked Event page speakers inside 33/66 columns, and standardized Event page speaker card width.')
+print('Moved invite icon below time, swapped Event page speakers/moderators, and preserved standardized speaker card width.')
