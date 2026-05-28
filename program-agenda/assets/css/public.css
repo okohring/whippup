@@ -3242,3 +3242,15 @@ body.pa-program-entity-page .byline{
   margin-top:0!important;
   gap:.75rem!important;
 }
+
+/* Stagecard Montserrat event and speaker card font */
+.pa-event-card,
+.pa-event-card :where(h1,h2,h3,h4,h5,h6,p,span,a,button,small,strong,em,li),
+.pa-speaker-card,
+.pa-speaker-card :where(h1,h2,h3,h4,h5,h6,p,span,a,small,strong,em,li),
+.pa-single-event-speaker-sections,
+.pa-single-event-speaker-sections :where(h1,h2,h3,h4,h5,h6,p,span,a,small,strong,em,li),
+.pa-event-single-speakers,
+.pa-event-single-speakers :where(h1,h2,h3,h4,h5,h6,p,span,a,small,strong,em,li){
+  font-family:Montserrat, Arial, Helvetica, sans-serif!important;
+}
