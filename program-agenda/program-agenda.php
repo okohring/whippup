@@ -516,6 +516,7 @@ final class Program_Agenda_Plugin {
         if (!is_singular(['pa_event', 'pa_speaker', 'pa_sponsor']) && !$this->page_has_pa_shortcode()) {
             return;
         }
+        wp_enqueue_style('pa-montserrat', 'https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap', [], null);
         wp_enqueue_style('pa-public', plugin_dir_url(__FILE__) . 'assets/css/public.css', [], self::VERSION);
         wp_add_inline_style('pa-public', $this->public_inline_css());
     }

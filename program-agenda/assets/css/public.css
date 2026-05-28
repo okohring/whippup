@@ -3186,36 +3186,6 @@ body.pa-program-entity-page .byline{
 }
 
 
-/* Stagecard force lighter Montserrat weights */
-.pa-event-card,
-.pa-event-card *,
-.pa-speaker-card,
-.pa-speaker-card *{
-  font-family: Montserrat, Arial, Helvetica, sans-serif !important;
-  font-synthesis-weight: none !important;
-}
-
-/* Normal text */
-.pa-event-card__meta,
-.pa-event-card__meta *,
-.pa-speaker-card .pa-speaker-card-role,
-.pa-speaker-card .pa-speaker-card-company{
-  font-weight:300!important;
-  font-variation-settings:"wght" 300!important;
-}
-
-/* Important text, but not too bold */
-.pa-event-card .pa-event-card__title,
-.pa-event-card .pa-event-card__title a,
-.pa-event-card .pa-event-card__date,
-.pa-event-card .pa-event-card__time,
-.pa-speaker-card .pa-speaker-card-text h3,
-.pa-speaker-card .pa-speaker-card-text h3 a,
-.pa-event-card .pa-speaker-card-category-label{
-  font-weight:400!important;
-  font-variation-settings:"wght" 400!important;
-}
-
 /* Stagecard Event page speaker cards match agenda cards */
 .pa-single-event .pa-single-event-speaker-section .pa-speaker-card,
 .pa-single-event .pa-event-single-speakers .pa-speaker-card{
@@ -3284,4 +3254,26 @@ body.pa-program-entity-page .byline{
 .pa-event-single-speakers,
 .pa-event-single-speakers :where(h1,h2,h3,h4,h5,h6,p,span,a,small,strong,em,li){
   font-family:Montserrat, Arial, Helvetica, sans-serif!important;
+  font-synthesis-weight:none!important;
+}
+.pa-event-card .pa-event-card__title,
+.pa-event-card .pa-event-card__title a,
+.pa-speaker-card .pa-speaker-card-text h3,
+.pa-speaker-card .pa-speaker-card-text h3 a{
+  font-weight:500!important;
+  font-variation-settings:"wght" 500!important;
+}
+.pa-event-card .pa-event-card__meta,
+.pa-event-card .pa-event-card__meta *,
+.pa-speaker-card .pa-speaker-card-role,
+.pa-speaker-card .pa-speaker-card-company{
+  font-weight:400!important;
+  font-variation-settings:"wght" 400!important;
+}
+.pa-event-card .pa-event-card__date,
+.pa-event-card .pa-event-card__time,
+.pa-event-card .pa-speaker-card-category-label,
+.pa-single-event-speaker-section-heading{
+  font-weight:500!important;
+  font-variation-settings:"wght" 500!important;
 }
