@@ -21,6 +21,23 @@ php = php.replace(
     "echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';",
 )
 
+# Add a categorized class to the single Event speaker block so the generic
+# outer Speakers heading can be hidden only when the two-column categorized
+# layout is in use.
+old_single = """        if (is_array($speaker_ids) && $speaker_ids) {
+            echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';
+        }
+"""
+new_single = """        if (is_array($speaker_ids) && $speaker_ids) {
+            $event_speaker_categories = get_post_meta($post->ID, '_pa_event_speaker_categories', true);
+            if (!is_array($event_speaker_categories)) { $event_speaker_categories = []; }
+            $has_speaker_categories = count(array_filter(array_map('trim', $event_speaker_categories))) > 0;
+            echo '<div class=\"pa-event-single-speakers' . ($has_speaker_categories ? ' pa-event-single-speakers--categorized' : '') . '\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';
+        }
+"""
+if old_single in php:
+    php = php.replace(old_single, new_single, 1)
+
 old_split = """        if ($categorized_cards && $default_cards) {
             echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\">' . implode('', $default_cards) . '</div>';
             echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\">' . implode('', $categorized_cards) . '</div>';
@@ -127,14 +144,37 @@ if '/* Stagecard speaker category alignment and visibility guard */' not in publ
 
 cleanup = '''
 /* Stagecard single event speaker category cleanup */
+.pa-event-single-speakers--categorized > h4{display:none!important;}
 .pa-single-event .pa-speaker-card-column-heading--category{display:none!important;}
-.pa-single-event .pa-speaker-card-list--categorized-split{align-items:start!important;}
-.pa-single-event .pa-speaker-card-column{align-items:start!important;align-content:start!important;}
+.pa-single-event .pa-speaker-card-list--categorized-split{align-items:start!important;gap:clamp(28px,6vw,72px)!important;margin-top:0!important;max-width:100%!important;}
+.pa-single-event .pa-speaker-card-column{align-items:start!important;align-content:start!important;justify-items:start!important;}
 .pa-single-event .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
 .pa-single-event .pa-speaker-card-category-label{margin:0 0 10px!important;font-size:.8rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;}
+.pa-single-event .pa-speaker-card-column--default{border-left:1px solid currentColor!important;padding-left:clamp(22px,4vw,44px)!important;}
+.pa-single-event .pa-speaker-card-column-heading--speakers{margin-top:0!important;}
 '''
 if '/* Stagecard single event speaker category cleanup */' not in public_css:
     public_css += '\n' + cleanup
+
+polish = '''
+/* Stagecard event page two-column speaker layout polish */
+.pa-event-single-speakers--categorized{margin-top:2.2rem!important;}
+.pa-event-single-speakers--categorized > h4{display:none!important;}
+.pa-event-single-speakers--categorized .pa-speaker-card-list--categorized-split{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:clamp(28px,6vw,72px)!important;align-items:start!important;}
+.pa-event-single-speakers--categorized .pa-speaker-card-column{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content))!important;gap:12px!important;align-items:start!important;align-content:start!important;justify-items:start!important;}
+.pa-event-single-speakers--categorized .pa-speaker-card-column--default{border-left:1px solid currentColor!important;padding-left:clamp(22px,4vw,44px)!important;}
+.pa-event-single-speakers--categorized .pa-speaker-card-column-heading--category{display:none!important;}
+.pa-event-single-speakers--categorized .pa-speaker-card-column-heading--speakers,
+.pa-event-single-speakers--categorized .pa-speaker-card-category-label{margin:0 0 12px!important;font-size:.82rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;font-weight:700!important;}
+.pa-event-single-speakers--categorized .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
+@media (max-width:900px){
+  .pa-event-single-speakers--categorized .pa-speaker-card-list--categorized-split{grid-template-columns:1fr!important;}
+  .pa-event-single-speakers--categorized .pa-speaker-card-column{grid-template-columns:1fr!important;}
+  .pa-event-single-speakers--categorized .pa-speaker-card-column--default{border-left:0!important;padding-left:0!important;border-top:1px solid currentColor!important;padding-top:22px!important;}
+}
+'''
+if '/* Stagecard event page two-column speaker layout polish */' not in public_css:
+    public_css += '\n' + polish
 PUBLIC_CSS.write_text(public_css)
 
-print('Shows categorized speakers first on event cards and keeps single event layout clean.')
+print('Polished categorized speaker layout on single event pages and event cards.')
