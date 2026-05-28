@@ -6,15 +6,18 @@ text = PUBLIC_CSS.read_text()
 
 # Repair a malformed date-tab declaration that can happen during manual CSS
 # edits. The stray `};` closes the .pa-agenda-day-tab rule early and makes the
-# brace-balance check fail.
+# brace-balance check fail. Also normalize the date-tab/datebar override to
+# Montserrat instead of Arial.
 text = text.replace(
     '  font-family: Arial, Helvetica, sans-serif;};\n  line-height:1.1;',
-    '  font-family: Arial, Helvetica, sans-serif;\n  line-height:1.1;',
+    '  font-family: Montserrat, Arial, Helvetica, sans-serif;\n  line-height:1.1;',
 )
 text = text.replace(
     '  font-family:Arial, Helvetica, sans-serif;};\n  line-height:1.1;',
-    '  font-family:Arial, Helvetica, sans-serif;\n  line-height:1.1;',
+    '  font-family:Montserrat, Arial, Helvetica, sans-serif;\n  line-height:1.1;',
 )
+text = text.replace('font-family: Arial, Helvetica, sans-serif;', 'font-family: Montserrat, Arial, Helvetica, sans-serif;')
+text = text.replace('font-family:Arial, Helvetica, sans-serif;', 'font-family:Montserrat, Arial, Helvetica, sans-serif;')
 
 # The custom event-card hover media query was missing its closing brace, which
 # caused the rest of the event-card rules to be scoped to mobile widths and
@@ -163,4 +166,4 @@ if balance != 0:
     raise SystemExit(f'CSS brace balance is {balance}, expected 0.')
 
 PUBLIC_CSS.write_text(text)
-print('Fixed malformed agenda tab CSS, event-card mobile media query, Safari height guard, and sponsor logo sizing guard.')
+print('Fixed malformed agenda tab CSS, normalized date fonts to Montserrat, event-card mobile media query, Safari height guard, and sponsor logo sizing guard.')
