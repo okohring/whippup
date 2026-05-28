@@ -3398,3 +3398,82 @@ body.pa-program-entity-page .byline{
     max-width:100%!important;
   }
 }
+
+/* Stagecard program speakers shortcode */
+.pa-program-speakers{
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+.pa-program-speaker-grid{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important;
+  gap:36px 44px!important;
+  align-items:start!important;
+  justify-items:center!important;
+}
+.pa-program-speaker-card{
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:240px!important;
+  text-align:center!important;
+  font-family:Montserrat, Arial, Helvetica, sans-serif!important;
+}
+.pa-program-speaker-image-link{
+  display:inline-flex!important;
+  width:150px!important;
+  height:150px!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0 auto 16px!important;
+  text-decoration:none!important;
+}
+.pa-program-speaker-image{
+  display:block!important;
+  width:150px!important;
+  height:150px!important;
+  max-width:150px!important;
+  max-height:150px!important;
+  border-radius:50%!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+}
+.pa-program-speaker-placeholder{
+  background:rgba(0,0,0,.08)!important;
+}
+.pa-program-speaker-name{
+  margin:0 0 7px!important;
+  font-size:.92rem!important;
+  line-height:1.2!important;
+  font-weight:600!important;
+  text-transform:uppercase!important;
+  letter-spacing:.04em!important;
+}
+.pa-program-speaker-name a{
+  color:inherit!important;
+  text-decoration:none!important;
+}
+.pa-program-speaker-name a:hover,
+.pa-program-speaker-name a:focus-visible{
+  text-decoration:underline!important;
+}
+.pa-program-speaker-role,
+.pa-program-speaker-company{
+  margin:0 0 5px!important;
+  font-size:.82rem!important;
+  line-height:1.35!important;
+  font-weight:400!important;
+}
+.pa-program-speakers-empty{
+  margin:0!important;
+}
+@media (max-width:640px){
+  .pa-program-speaker-grid{
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr))!important;
+    gap:30px 24px!important;
+  }
+  .pa-program-speaker-card{
+    max-width:200px!important;
+  }
+}

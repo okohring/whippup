@@ -45,6 +45,7 @@ final class Program_Agenda_Plugin {
         add_action('admin_post_pa_download_import_template', [$this, 'download_import_template']);
         add_shortcode('program_agenda', [$this, 'shortcode_program_agenda']);
         add_shortcode('program_sponsors', [$this, 'shortcode_program_sponsors']);
+        add_shortcode('program_speakers', [$this, 'shortcode_program_speakers']);
         add_shortcode('program_pdf', [$this, 'shortcode_program_pdf']);
         add_action('template_redirect', [$this, 'maybe_render_program_pdf_page']);
         add_filter('the_content', [$this, 'replace_single_content']);
@@ -525,7 +526,7 @@ final class Program_Agenda_Plugin {
         if (!is_singular()) { return false; }
         $post = get_post();
         if (!$post || empty($post->post_content)) { return false; }
-        return has_shortcode($post->post_content, 'program_agenda') || has_shortcode($post->post_content, 'program_sponsors') || has_shortcode($post->post_content, 'program_pdf');
+        return has_shortcode($post->post_content, 'program_agenda') || has_shortcode($post->post_content, 'program_sponsors') || has_shortcode($post->post_content, 'program_speakers') || has_shortcode($post->post_content, 'program_pdf');
     }
 
     private function public_inline_css() {
@@ -1187,9 +1188,10 @@ final class Program_Agenda_Plugin {
         if ($id) {
             echo '<div class="pa-shortcode-box"><h3>Agenda Shortcode</h3><p>Place this shortcode on any page where the schedule should appear.</p><input readonly value="' . esc_attr('[program_agenda id="' . $this->program_shortcode_id($id) . '"]') . '" onclick="this.select();"></div>';
             echo '<div class="pa-shortcode-box"><h3>Sponsor Showcase Shortcode</h3><p>Place this shortcode on the public Sponsors showcase page.</p><input readonly value="' . esc_attr('[program_sponsors id="' . $this->program_shortcode_id($id) . '"]') . '" onclick="this.select();"></div>';
+            echo '<div class="pa-shortcode-box"><h3>Speaker Directory Shortcode</h3><p>Place this shortcode on a public Speakers page to show everyone speaking at this Program.</p><input readonly value="' . esc_attr('[program_speakers id="' . $this->program_shortcode_id($id) . '"]') . '" onclick="this.select();"></div>';
             echo '<div class="pa-shortcode-box"><h3>Program PDF Shortcode</h3><p>Place this shortcode wherever users should download or print the latest Program agenda.</p><input readonly value="' . esc_attr('[program_pdf id="' . $this->program_shortcode_id($id) . '"]') . '" onclick="this.select();"></div>';
         } else {
-            echo '<div class="pa-shortcode-box"><h3>Shortcodes</h3><p>The agenda, sponsor showcase, and Program PDF shortcodes will appear here after the program is saved.</p></div>';
+            echo '<div class="pa-shortcode-box"><h3>Shortcodes</h3><p>The agenda, sponsor showcase, speaker directory, and Program PDF shortcodes will appear here after the program is saved.</p></div>';
         }
         echo $this->form_actions('Save Program') . '</form></div>';
     }
@@ -2680,6 +2682,70 @@ final class Program_Agenda_Plugin {
         return ob_get_clean();
     }
 
+
+    public function shortcode_program_speakers($atts) {
+        $atts = shortcode_atts(['id'=>''], $atts, 'program_speakers');
+        $program_id = $this->resolve_program_shortcode_id($atts['id']);
+        $program = get_post($program_id);
+        if (!$program || $program->post_type !== 'pa_program') { return ''; }
+
+        $events = get_posts([
+            'post_type'=>'pa_event',
+            'post_status'=>'publish',
+            'numberposts'=>-1,
+            'meta_key'=>'_pa_event_date',
+            'orderby'=>'meta_value',
+            'order'=>'ASC',
+            'meta_query'=>[['key'=>'_pa_program_id','value'=>$program_id,'compare'=>'=']],
+        ]);
+
+        $speaker_ids = [];
+        foreach ($events as $event) {
+            $ids = get_post_meta($event->ID, '_pa_speaker_ids', true);
+            if (!is_array($ids)) { continue; }
+            foreach ($ids as $speaker_id) {
+                $speaker_id = absint($speaker_id);
+                if ($speaker_id && get_post_type($speaker_id) === 'pa_speaker' && !in_array($speaker_id, $speaker_ids, true)) {
+                    $speaker_ids[] = $speaker_id;
+                }
+            }
+        }
+
+        if (!$speaker_ids) { return '<p class="pa-program-speakers-empty">No speakers have been added yet.</p>'; }
+
+        $speakers = get_posts([
+            'post_type'=>'pa_speaker',
+            'post_status'=>'publish',
+            'numberposts'=>-1,
+            'post__in'=>$speaker_ids,
+            'orderby'=>'title',
+            'order'=>'ASC',
+        ]);
+
+        ob_start();
+        echo '<section class="pa-program-speakers" aria-label="Program speakers">';
+        echo '<div class="pa-program-speaker-grid">';
+        foreach ($speakers as $speaker) {
+            $image_id = absint(get_post_meta($speaker->ID, '_pa_speaker_image_id', true));
+            $role = get_post_meta($speaker->ID, '_pa_speaker_role_title', true);
+            $company = get_post_meta($speaker->ID, '_pa_speaker_company', true);
+            $permalink = get_permalink($speaker);
+            echo '<article class="pa-program-speaker-card">';
+            echo '<a class="pa-program-speaker-image-link" href="' . esc_url($permalink) . '" aria-label="' . esc_attr($speaker->post_title) . '">';
+            if ($image_id) {
+                echo wp_get_attachment_image($image_id, 'medium', false, ['class'=>'pa-program-speaker-image', 'alt'=>esc_attr($speaker->post_title)]);
+            } else {
+                echo '<span class="pa-program-speaker-image pa-program-speaker-placeholder" aria-hidden="true"></span>';
+            }
+            echo '</a>';
+            echo '<h3 class="pa-program-speaker-name"><a href="' . esc_url($permalink) . '">' . esc_html($speaker->post_title) . '</a></h3>';
+            if ($role) { echo '<p class="pa-program-speaker-role">' . esc_html($role) . '</p>'; }
+            if ($company) { echo '<p class="pa-program-speaker-company">' . esc_html($company) . '</p>'; }
+            echo '</article>';
+        }
+        echo '</div></section>';
+        return ob_get_clean();
+    }
 
     public function shortcode_program_pdf($atts) {
         $atts = shortcode_atts(['id'=>'', 'label'=>'Download as PDF'], $atts, 'program_pdf');
