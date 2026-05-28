@@ -3312,3 +3312,36 @@ body.pa-program-entity-page .byline{
   font-weight:500!important;
   font-variation-settings:"wght" 500!important;
 }
+
+/* Stagecard invite icon datebar and Event page speaker grid */
+.pa-event-card__datebar .pa-event-card__datebar-invite-wrap{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1!important;
+  position:relative!important;
+}
+.pa-event-card__datebar .pa-event-card__invite-icon{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:1em!important;
+  height:1em!important;
+  color:inherit!important;
+  line-height:1!important;
+}
+.pa-event-card__datebar .pa-event-card__invite-icon svg{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+}
+.pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
+  grid-template-columns:repeat(3,minmax(0,max-content))!important;
+}
+@media (max-width:900px){
+  .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
+    grid-template-columns:1fr!important;
+  }
+}

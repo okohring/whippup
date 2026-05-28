@@ -3345,18 +3345,18 @@ final class Program_Agenda_Plugin {
             'pa-event-card--size-' . $card_size,
         ];
 
+        $invite_icon_html = $invite_only ? '<span class="pa-event-card__invite-wrap pa-event-card__datebar-invite-wrap"><span class="pa-event-card__invite-icon" aria-label="Invite only" tabindex="0"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.75 6.75h16.5v10.5H3.75V6.75Zm1.5 1.4v7.7h13.5v-7.7L12 12.9 5.25 8.15Zm12.38.1H6.37L12 12.1l5.63-3.85Z" fill="currentColor"/></svg></span><span class="pa-invite-tooltip" role="tooltip"><span class="pa-invite-tooltip-inner"><span>Invite only</span></span></span></span>' : '';
+
         ob_start();
         echo '<article class="' . esc_attr(implode(' ', $card_classes)) . '" style="' . esc_attr($item_style) . '">';
-        echo '<div class="pa-event-card__datebar"><span class="pa-event-card__date">' . esc_html($date_text ?: 'Date') . '</span><span class="pa-event-card__time">' . esc_html($time_text ?: 'Time') . '</span></div>';
+        echo '<div class="pa-event-card__datebar"><span class="pa-event-card__date">' . esc_html($date_text ?: 'Date') . '</span>' . $invite_icon_html . '<span class="pa-event-card__time">' . esc_html($time_text ?: 'Time') . '</span></div>';
         echo '<div class="pa-event-card__body"><div class="pa-event-card__summary"><h4 class="pa-event-card__title"><a href="' . esc_url(get_permalink($event)) . '">' . esc_html($event->post_title) . '</a></h4>';
 
-        if ($cat || $loc || $invite_only) {
+        if ($cat || $loc) {
             echo '<p class="pa-event-card__meta">';
             if ($cat) { echo '<span class="pa-event-card__category"><span class="pa-event-card__category-icon" style="color:' . esc_attr($cat_color) . '">' . esc_html($this->icon_char($c['icon'] ?? 'none')) . '</span><span class="pa-event-card__category-text">' . esc_html($cat) . '</span></span>'; }
             if ($cat && $loc) { echo '<span class="pa-event-card__meta-dot" aria-hidden="true">•</span>'; }
             if ($loc) { echo '<span class="pa-event-card__location">' . ($link ? '<a href="' . esc_url($link) . '" target="_blank" rel="noopener noreferrer">' . esc_html($loc) . '</a>' : esc_html($loc)) . '</span>'; }
-            if (($cat || $loc) && $invite_only) { echo '<span class="pa-event-card__meta-dot" aria-hidden="true">•</span>'; }
-            if ($invite_only) { echo '<span class="pa-event-card__invite-wrap"><span class="pa-event-card__invite-icon" aria-label="Invite only" tabindex="0"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.75 6.75h16.5v10.5H3.75V6.75Zm1.5 1.4v7.7h13.5v-7.7L12 12.9 5.25 8.15Zm12.38.1H6.37L12 12.1l5.63-3.85Z" fill="currentColor"/></svg></span><span class="pa-invite-tooltip" role="tooltip"><span class="pa-invite-tooltip-inner"><span>Invite only</span></span></span></span>'; }
             echo '</p>';
         }
         if ($card_size !== 'thin' && $show_desc && $event->post_content) { echo '<div class="pa-event-card__description">' . wp_kses_post(wpautop($event->post_content)) . '</div>'; }
