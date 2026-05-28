@@ -3198,13 +3198,13 @@ body.pa-program-entity-page .byline{
 /* Event title */
 .pa-event-card .pa-event-card__title,
 .pa-event-card .pa-event-card__title a{
-  font-weight:400!important;
+  font-weight:200!important;
 }
 
 /* Event meta: category, location, invite icon area */
 .pa-event-card .pa-event-card__meta,
 .pa-event-card .pa-event-card__meta *{
-  font-weight:300!important;
+  font-weight:200!important;
 }
 
 /* Date/time bar */
@@ -3216,19 +3216,19 @@ body.pa-program-entity-page .byline{
 /* Speaker name */
 .pa-speaker-card .pa-speaker-card-text h3,
 .pa-speaker-card .pa-speaker-card-text h3 a{
-  font-weight:400!important;
+  font-weight:200!important;
 }
 
 /* Speaker role/company */
 .pa-speaker-card .pa-speaker-card-role,
 .pa-speaker-card .pa-speaker-card-company{
-  font-weight:200!important;
+  font-weight:100!important;
 }
 
 /* Speaker category label, like MODERATOR */
 .pa-event-card .pa-speaker-card-category-label,
 .pa-single-event-speaker-section-heading{
-  font-weight:500!important;
+  font-weight:400!important;
 }
 
 /* Stagecard Event page speaker cards match agenda cards */
