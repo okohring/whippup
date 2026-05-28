@@ -11,6 +11,7 @@ markers_to_remove = [
     'Stagecard speaker card consistency and compact spacing',
     'Stagecard universal speaker card component source of truth',
     'Stagecard Event page speaker cards match agenda cards',
+    'Stagecard Montserrat event and speaker card font',
 ]
 for marker in markers_to_remove:
     text = re.sub(r'\n?/\* ' + re.escape(marker) + r' \*/.*?(?=\n/\* Stagecard |\Z)', '\n', text, flags=re.S)
@@ -77,6 +78,20 @@ css = '''
 }
 '''
 
-text = text.rstrip() + '\n\n' + css.strip() + '\n'
+font_css = '''
+/* Stagecard Montserrat event and speaker card font */
+.pa-event-card,
+.pa-event-card :where(h1,h2,h3,h4,h5,h6,p,span,a,button,small,strong,em,li),
+.pa-speaker-card,
+.pa-speaker-card :where(h1,h2,h3,h4,h5,h6,p,span,a,small,strong,em,li),
+.pa-single-event-speaker-sections,
+.pa-single-event-speaker-sections :where(h1,h2,h3,h4,h5,h6,p,span,a,small,strong,em,li),
+.pa-event-single-speakers,
+.pa-event-single-speakers :where(h1,h2,h3,h4,h5,h6,p,span,a,small,strong,em,li){
+  font-family:Montserrat, Arial, Helvetica, sans-serif!important;
+}
+'''
+
+text = text.rstrip() + '\n\n' + css.strip() + '\n\n' + font_css.strip() + '\n'
 PUBLIC_CSS.write_text(text)
-print('Made individual Event page speaker cards match agenda-card speaker styling without changing agenda cards.')
+print('Made individual Event page speaker cards match agenda-card speaker styling and applied Montserrat to event/speaker cards.')
