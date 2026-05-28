@@ -3105,7 +3105,7 @@ final class Program_Agenda_Plugin {
         echo '<div class="pa-single-text">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
         $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
         if (is_array($speaker_ids) && $speaker_ids) {
-            echo '<div class="pa-event-single-speakers"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $event->ID) . '</div>';
+            echo '<div class="pa-event-single-speakers"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';
         }
         echo '</div>';
         $sponsor_ids = get_post_meta($post->ID, '_pa_sponsor_ids', true);
@@ -3562,8 +3562,13 @@ final class Program_Agenda_Plugin {
         ob_start();
         echo '<div class="' . esc_attr(trim($list_classes)) . '">';
         if ($categorized_cards && $default_cards) {
-            echo '<div class="pa-speaker-card-column pa-speaker-card-column--default">' . implode('', $default_cards) . '</div>';
-            echo '<div class="pa-speaker-card-column pa-speaker-card-column--categorized">' . implode('', $categorized_cards) . '</div>';
+            if ($context === 'event-page') {
+                echo '<div class="pa-speaker-card-column pa-speaker-card-column--categorized"><h5 class="pa-speaker-card-column-heading">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
+                echo '<div class="pa-speaker-card-column pa-speaker-card-column--default"><h5 class="pa-speaker-card-column-heading">Speakers</h5>' . implode('', $default_cards) . '</div>';
+            } else {
+                echo '<div class="pa-speaker-card-column pa-speaker-card-column--default">' . implode('', $default_cards) . '</div>';
+                echo '<div class="pa-speaker-card-column pa-speaker-card-column--categorized">' . implode('', $categorized_cards) . '</div>';
+            }
         } else {
             echo implode('', array_merge($default_cards, $categorized_cards));
         }

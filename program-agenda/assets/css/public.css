@@ -2864,7 +2864,6 @@ body.pa-program-entity-page .byline{
 .pa-speaker-card-list-has-categories:not(.pa-speaker-card-list--categorized-split){gap:14px!important;}
 @media (max-width:900px){.pa-speaker-card-list--categorized-split{grid-template-columns:1fr!important;}.pa-speaker-card-column{grid-template-columns:1fr!important;}}
 
-
 /* Stagecard speaker category public visibility guard */
 .pa-event-card .pa-speaker-card-category-label,
 .pa-single-event .pa-speaker-card-category-label{
@@ -2874,4 +2873,59 @@ body.pa-program-entity-page .byline{
 .pa-event-card .pa-speaker-card--categorized,
 .pa-single-event .pa-speaker-card--categorized{
   border:1px solid var(--pa-agenda-bar-color,var(--pa-agenda-accent-color,currentColor))!important;
+}
+
+
+/* Stagecard speaker category alignment and visibility guard */
+.pa-event-card .pa-event-card__speakers,
+.pa-event-card .pa-speaker-card-list,
+.pa-event-card .pa-speaker-card-column,
+.pa-event-card .pa-speaker-card-unit,
+.pa-single-event .pa-speaker-card-list,
+.pa-single-event .pa-speaker-card-column,
+.pa-single-event .pa-speaker-card-unit{
+  overflow:visible!important;
+}
+.pa-event-card .pa-speaker-card-list-has-categories,
+.pa-single-event .pa-speaker-card-list-has-categories{
+  align-items:end!important;
+}
+.pa-event-card .pa-speaker-card-column,
+.pa-single-event .pa-speaker-card-column{
+  align-items:end!important;
+}
+.pa-event-card .pa-speaker-card-unit,
+.pa-single-event .pa-speaker-card-unit{
+  justify-content:flex-end!important;
+  align-self:end!important;
+  padding-top:14px!important;
+}
+.pa-event-card .pa-speaker-card-category-label,
+.pa-single-event .pa-speaker-card-category-label{
+  display:block!important;
+  visibility:visible!important;
+  min-height:1em!important;
+  line-height:1.15!important;
+  margin:0 0 5px!important;
+  overflow:visible!important;
+  white-space:nowrap!important;
+}
+.pa-event-card .pa-speaker-card--categorized,
+.pa-single-event .pa-speaker-card--categorized{
+  border:1px solid var(--pa-agenda-bar-color,var(--pa-agenda-accent-color,currentColor))!important;
+}
+.pa-single-event .pa-speaker-card-list--categorized-split{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:24px!important;
+}
+.pa-single-event .pa-speaker-card-column-heading{
+  margin:0 0 10px!important;
+  font-size:.8rem!important;
+  line-height:1.2!important;
+  text-transform:uppercase!important;
+  letter-spacing:.04em!important;
+}
+@media (max-width:900px){
+  .pa-single-event .pa-speaker-card-list--categorized-split{grid-template-columns:1fr!important;}
 }
