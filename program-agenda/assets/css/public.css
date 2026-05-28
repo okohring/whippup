@@ -3344,7 +3344,8 @@ body.pa-program-entity-page .byline{
   grid-template-columns:minmax(0,1fr) minmax(0,2fr)!important;
 }
 .pa-single-event-speaker-sections .pa-single-event-speaker-section .pa-speaker-card-list{
-  grid-template-columns:repeat(3,minmax(0,max-content))!important;
+  display:grid!important;
+  grid-template-columns:1fr!important;
   gap:12px!important;
   align-items:start!important;
   justify-items:start!important;
