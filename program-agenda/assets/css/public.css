@@ -3146,3 +3146,18 @@ body.pa-program-entity-page .byline{
 .pa-event-card .pa-event-card__time{
   font-family: Arial, Helvetica, sans-serif !important;
 }
+
+/* Stagecard event card spacing */
+.pa-event-list{
+  gap:1.25rem!important;
+}
+
+.pa-event-card.pa-event-card--size-full .pa-event-card__body{
+  padding-top:16px!important;
+  padding-bottom:16px!important;
+}
+
+.pa-event-card.pa-event-card--size-thin .pa-event-card__body{
+  padding-top:8px!important;
+  padding-bottom:8px!important;
+}
