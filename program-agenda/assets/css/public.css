@@ -2833,3 +2833,24 @@ body.pa-program-entity-page .byline{
   text-decoration:underline!important;
   text-underline-offset:.18em!important;
 }
+
+
+/* Stagecard Safari event card height guard */
+.pa-event-card .pa-event-card__datebar,
+.pa-event-card .pa-event-card__body{
+  height:auto!important;
+  min-height:0!important;
+  top:auto!important;
+  bottom:auto!important;
+  align-self:stretch!important;
+}
+.pa-event-card .pa-event-card__datebar{
+  left:0!important;
+  right:auto!important;
+  width:calc(100% + 4px)!important;
+}
+.pa-event-card .pa-event-card__body{
+  right:auto!important;
+  width:100%!important;
+  max-width:100%!important;
+}
