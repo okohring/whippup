@@ -3090,3 +3090,22 @@ body.pa-program-entity-page .byline{
     padding-top:2px!important;
   }
 }
+
+/* Hide theme-generated title/date on Stagecard individual pages */
+.single-pa_event .entry-header,
+.single-pa_speaker .entry-header,
+.single-pa_sponsor .entry-header,
+.single-pa_event .wp-block-post-title,
+.single-pa_speaker .wp-block-post-title,
+.single-pa_sponsor .wp-block-post-title,
+.single-pa_event .wp-block-post-date,
+.single-pa_speaker .wp-block-post-date,
+.single-pa_sponsor .wp-block-post-date,
+.single-pa_event .entry-title,
+.single-pa_speaker .entry-title,
+.single-pa_sponsor .entry-title,
+.single-pa_event .entry-meta,
+.single-pa_speaker .entry-meta,
+.single-pa_sponsor .entry-meta {
+  display: none !important;
+}
