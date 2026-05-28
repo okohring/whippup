@@ -3167,6 +3167,25 @@ body.pa-program-entity-page .byline{
   padding-bottom:8px!important;
 }
 
+
+/* Stagecard categorized inline agenda speakers stay inline */
+.pa-event-card--speakers-inline .pa-event-card__speakers .pa-speaker-card-list,
+.pa-event-card--speakers-inline .pa-event-card__speakers .pa-speaker-card-list-agenda,
+.pa-event-card--speakers-inline .pa-event-card__speakers .pa-speaker-card-list--categorized-split{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:flex-end!important;
+  gap:.75rem!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+}
+.pa-event-card--speakers-inline .pa-event-card__speakers .pa-speaker-card-unit{
+  flex:0 0 auto!important;
+  width:auto!important;
+  max-width:none!important;
+}
+
 /* Stagecard Event page speaker cards match agenda cards */
 .pa-single-event .pa-single-event-speaker-section .pa-speaker-card,
 .pa-single-event .pa-event-single-speakers .pa-speaker-card{
