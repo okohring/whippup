@@ -3318,7 +3318,7 @@ final class Program_Agenda_Plugin {
         }
         if ($card_size !== 'thin' && $show_desc && $event->post_content) { echo '<div class="pa-event-card__description">' . wp_kses_post(wpautop($event->post_content)) . '</div>'; }
         echo '</div>';
-        if ($card_size !== 'thin' && $speaker_ids) { echo '<div class="pa-event-card__speakers">' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $post->ID) . '</div>'; }
+        if ($card_size !== 'thin' && $speaker_ids) { echo '<div class="pa-event-card__speakers">' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $event->ID) . '</div>'; }
         echo '</div></article>';
         return ob_get_clean();
     }
