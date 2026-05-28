@@ -2988,7 +2988,6 @@ body.pa-program-entity-page .byline{
 .pa-event-card .pa-speaker-card-category-label{display:block!important;visibility:visible!important;min-height:1em!important;line-height:1.15!important;margin:0 0 5px!important;overflow:visible!important;white-space:nowrap!important;}
 .pa-event-card .pa-speaker-card--categorized{border:1px solid var(--pa-agenda-bar-color,var(--pa-agenda-accent-color,currentColor))!important;}
 
-
 /* Stagecard mobile categorized agenda speaker cards */
 @media (max-width:768px){
   .pa-event-card .pa-event-card__body,
