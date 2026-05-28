@@ -3349,7 +3349,7 @@ final class Program_Agenda_Plugin {
 
         ob_start();
         echo '<article class="' . esc_attr(implode(' ', $card_classes)) . '" style="' . esc_attr($item_style) . '">';
-        echo '<div class="pa-event-card__datebar"><span class="pa-event-card__date">' . esc_html($date_text ?: 'Date') . '</span>' . $invite_icon_html . '<span class="pa-event-card__time">' . esc_html($time_text ?: 'Time') . '</span></div>';
+        echo '<div class="pa-event-card__datebar"><span class="pa-event-card__date">' . esc_html($date_text ?: 'Date') . '</span><span class="pa-event-card__time">' . esc_html($time_text ?: 'Time') . '</span>' . $invite_icon_html . '</div>';
         echo '<div class="pa-event-card__body"><div class="pa-event-card__summary"><h4 class="pa-event-card__title"><a href="' . esc_url(get_permalink($event)) . '">' . esc_html($event->post_title) . '</a></h4>';
 
         if ($cat || $loc) {
