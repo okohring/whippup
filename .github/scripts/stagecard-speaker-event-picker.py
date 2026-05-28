@@ -7,7 +7,7 @@ PUBLIC_CSS = Path('program-agenda/assets/css/public.css')
 
 php = PHP.read_text()
 
-# Agenda cards are rendered from $event. Single event pages are rendered from $post.
+# Agenda cards use $event. Single event pages use $post.
 php = php.replace(
     "if ($card_size !== 'thin' && $speaker_ids) { echo '<div class=\"pa-event-card__speakers\">' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $post->ID) . '</div>'; }",
     "if ($card_size !== 'thin' && $speaker_ids) { echo '<div class=\"pa-event-card__speakers\">' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $event->ID) . '</div>'; }",
@@ -16,36 +16,79 @@ php = php.replace(
     "echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $event->ID) . '</div>';",
     "echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';",
 )
-php = php.replace(
-    "echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $post->ID) . '</div>';",
-    "echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';",
-)
 
-# Add a categorized class to the single Event speaker block so the generic
-# outer Speakers heading can be hidden only when the two-column categorized
-# layout is in use.
-old_single = """        if (is_array($speaker_ids) && $speaker_ids) {
-            echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';
-        }
-"""
-new_single = """        if (is_array($speaker_ids) && $speaker_ids) {
+old_single = """        $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
+        if (is_array($speaker_ids) && $speaker_ids) {
             $event_speaker_categories = get_post_meta($post->ID, '_pa_event_speaker_categories', true);
             if (!is_array($event_speaker_categories)) { $event_speaker_categories = []; }
             $has_speaker_categories = count(array_filter(array_map('trim', $event_speaker_categories))) > 0;
             echo '<div class=\"pa-event-single-speakers' . ($has_speaker_categories ? ' pa-event-single-speakers--categorized' : '') . '\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page', $post->ID) . '</div>';
         }
 """
+new_single = """        $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
+        if (is_array($speaker_ids) && $speaker_ids) {
+            echo $this->single_event_speaker_sections($speaker_ids, $program_id, $post->ID);
+        }
+"""
 if old_single in php:
     php = php.replace(old_single, new_single, 1)
 
-old_split = """        if ($categorized_cards && $default_cards) {
-            echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\">' . implode('', $default_cards) . '</div>';
-            echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\">' . implode('', $categorized_cards) . '</div>';
-        } else {
-            echo implode('', array_merge($default_cards, $categorized_cards));
+old_single_2 = """        $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
+        if (is_array($speaker_ids) && $speaker_ids) {
+            echo '<div class=\"pa-event-single-speakers\"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $post->ID) . '</div>';
         }
 """
-new_split = """        if ($categorized_cards && $default_cards) {
+if old_single_2 in php:
+    php = php.replace(old_single_2, new_single, 1)
+
+section_method = r'''    private function single_event_speaker_sections($speaker_ids, $program_id, $event_id) {
+        $speaker_ids = array_values(array_filter(array_map('absint', (array)$speaker_ids)));
+        if (!$speaker_ids) { return ''; }
+
+        $event_speaker_categories = get_post_meta(absint($event_id), '_pa_event_speaker_categories', true);
+        if (!is_array($event_speaker_categories)) { $event_speaker_categories = []; }
+
+        $category_groups = [];
+        $default_ids = [];
+        foreach ($speaker_ids as $speaker_id) {
+            $speaker = get_post($speaker_id);
+            if (!$speaker || $speaker->post_type !== 'pa_speaker') { continue; }
+            $category = '';
+            foreach ([$speaker_id, (string)$speaker_id] as $key) {
+                if (isset($event_speaker_categories[$key])) { $category = trim(sanitize_text_field($event_speaker_categories[$key])); break; }
+            }
+            if ($category !== '') {
+                if (!isset($category_groups[$category])) { $category_groups[$category] = []; }
+                $category_groups[$category][] = $speaker_id;
+            } else {
+                $default_ids[] = $speaker_id;
+            }
+        }
+
+        if (!$category_groups) {
+            return '<div class="pa-event-single-speakers"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'event-page-default', 0) . '</div>';
+        }
+
+        ob_start();
+        echo '<div class="pa-single-event-speaker-sections' . (!$default_ids ? ' pa-single-event-speaker-sections--only-categorized' : '') . '">';
+        echo '<div class="pa-single-event-speaker-section-list pa-single-event-speaker-section-list--categorized">';
+        foreach ($category_groups as $category => $ids) {
+            echo '<section class="pa-single-event-speaker-section pa-single-event-speaker-section--categorized"><h4 class="pa-single-event-speaker-section-heading">' . esc_html($category) . '</h4>' . $this->speaker_cards($ids, $program_id, 'event-page-category', $event_id) . '</section>';
+        }
+        echo '</div>';
+        if ($default_ids) {
+            echo '<section class="pa-single-event-speaker-section pa-single-event-speaker-section--default"><h4 class="pa-single-event-speaker-section-heading">Speakers</h4>' . $this->speaker_cards($default_ids, $program_id, 'event-page-default', 0) . '</section>';
+        }
+        echo '</div>';
+        return ob_get_clean();
+    }
+
+'''
+if 'private function single_event_speaker_sections(' not in php:
+    php = php.replace('    private function single_speaker($post) {\n', section_method + '    private function single_speaker($post) {\n', 1)
+
+# Speaker card split is only for agenda/event-card contexts now. Categorized first.
+old_split_1 = """        if ($categorized_cards && $default_cards) {
             if ($context === 'event-page') {
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers\">Speakers</h5>' . implode('', $default_cards) . '</div>';
@@ -57,30 +100,23 @@ new_split = """        if ($categorized_cards && $default_cards) {
             echo implode('', array_merge($categorized_cards, $default_cards));
         }
 """
-if old_split in php:
-    php = php.replace(old_split, new_split, 1)
-
-old_existing_split = """        if ($categorized_cards && $default_cards) {
-            if ($context === 'event-page') {
-                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
-                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers\">Speakers</h5>' . implode('', $default_cards) . '</div>';
-            } else {
-                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\">' . implode('', $default_cards) . '</div>';
-                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\">' . implode('', $categorized_cards) . '</div>';
-            }
+new_split = """        if ($categorized_cards && $default_cards) {
+            echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\">' . implode('', $categorized_cards) . '</div>';
+            echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\">' . implode('', $default_cards) . '</div>';
         } else {
-            echo implode('', array_merge($default_cards, $categorized_cards));
+            echo implode('', array_merge($categorized_cards, $default_cards));
         }
 """
-if old_existing_split in php:
-    php = php.replace(old_existing_split, new_split, 1)
-
-php = php.replace('class=\"pa-speaker-card-column-heading\">Speaker Category</h5>', 'class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>')
-php = php.replace('class=\"pa-speaker-card-column-heading\">Speakers</h5>', 'class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers\">Speakers</h5>')
+if old_split_1 in php:
+    php = php.replace(old_split_1, new_split, 1)
 
 PHP.write_text(php)
 
+# Ensure dynamically added speakers get category dropdown.
 js = JS.read_text()
+if 'function speakerCategorySelectHtml' not in js:
+    marker = "  function updateSpeakerOrder(){var ids=[];$('.pa-selected-speakers li').each(function(){ids.push($(this).data('id'));});$('.pa-speaker-order').val(ids.join(','));}\n"
+    js = js.replace(marker, marker + "  function speakerCategorySelectHtml(id){var html=$('#pa-speaker-category-select-template').html()||''; return html.replace(/__SPEAKER_ID__/g,id);}\n", 1)
 old_handler = """  $(document).on('change','.pa-speaker-check',function(){
     var id=$(this).val(), name=$(this).closest('label').text().trim(), $list=$('.pa-selected-speakers');
     if(this.checked){ if(!$list.find('li[data-id="'+id+'"]').length){$list.append('<li data-id="'+id+'"><span class="pa-selected-speaker-name">'+name+'</span><span class="pa-selected-speaker-actions"><button type="button" class="button-link pa-move-speaker-up" aria-label="Move up" title="Move up"><span aria-hidden="true">▲</span><span class="screen-reader-text">Move up</span></button> <button type="button" class="button-link pa-move-speaker-down" aria-label="Move down" title="Move down"><span aria-hidden="true">▼</span><span class="screen-reader-text">Move down</span></button> <button type="button" class="button-link pa-remove-speaker">Remove</button></span></li>');} }
@@ -104,77 +140,37 @@ if old_handler in js:
 JS.write_text(js)
 
 admin_css = ADMIN_CSS.read_text()
-stacked_admin = '''
-/* Stagecard speaker category stacked admin layout */
-.pa-program-category-columns{display:block!important;margin:20px 0 26px!important;}
-.pa-program-category-column{box-sizing:border-box!important;width:100%!important;max-width:none!important;margin:0 0 24px!important;}
-.pa-speaker-categories-column{max-width:760px!important;}
-.pa-speaker-category-row{max-width:620px!important;}
-'''
 if '/* Stagecard speaker category stacked admin layout */' not in admin_css:
-    admin_css += '\n' + stacked_admin
+    admin_css += '\n/* Stagecard speaker category stacked admin layout */\n.pa-program-category-columns{display:block!important;margin:20px 0 26px!important;}\n.pa-program-category-column{box-sizing:border-box!important;width:100%!important;max-width:none!important;margin:0 0 24px!important;}\n.pa-speaker-categories-column{max-width:760px!important;}\n.pa-speaker-category-row{max-width:620px!important;}\n'
 ADMIN_CSS.write_text(admin_css)
 
 public_css = PUBLIC_CSS.read_text()
-public_guard = '''
-/* Stagecard speaker category alignment and visibility guard */
-.pa-event-card .pa-event-card__speakers,
-.pa-event-card .pa-speaker-card-list,
-.pa-event-card .pa-speaker-card-column,
-.pa-event-card .pa-speaker-card-unit,
-.pa-single-event .pa-speaker-card-list,
-.pa-single-event .pa-speaker-card-column,
-.pa-single-event .pa-speaker-card-unit{overflow:visible!important;}
+root_css = '''
+/* Stagecard root single Event speaker section layout */
+.pa-single-event-speaker-sections{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:clamp(28px,6vw,72px)!important;align-items:start!important;margin-top:2.2rem!important;}
+.pa-single-event-speaker-sections--only-categorized{grid-template-columns:1fr!important;}
+.pa-single-event-speaker-section-list--categorized{display:flex!important;flex-direction:column!important;gap:28px!important;min-width:0!important;}
+.pa-single-event-speaker-section{min-width:0!important;}
+.pa-single-event-speaker-section--default{border-left:1px solid currentColor!important;padding-left:clamp(22px,4vw,44px)!important;}
+.pa-single-event-speaker-section-heading{display:block!important;width:100%!important;margin:0 0 12px!important;font-size:.82rem!important;line-height:1.2!important;font-weight:700!important;text-transform:uppercase!important;letter-spacing:.04em!important;color:inherit!important;}
+.pa-single-event-speaker-section .pa-speaker-card-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content))!important;gap:12px!important;align-items:start!important;justify-items:start!important;overflow:visible!important;}
+.pa-single-event-speaker-section .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;overflow:visible!important;}
+.pa-single-event-speaker-section .pa-speaker-card-category-label{display:none!important;}
+@media (max-width:900px){.pa-single-event-speaker-sections{grid-template-columns:1fr!important;}.pa-single-event-speaker-section--default{border-left:0!important;padding-left:0!important;border-top:1px solid currentColor!important;padding-top:22px!important;}.pa-single-event-speaker-section .pa-speaker-card-list{grid-template-columns:1fr!important;}}
+'''
+if '/* Stagecard root single Event speaker section layout */' not in public_css:
+    public_css += '\n' + root_css
+agenda_css = '''
+/* Stagecard categorized agenda speaker card order */
+.pa-event-card .pa-event-card__speakers,.pa-event-card .pa-speaker-card-list,.pa-event-card .pa-speaker-card-column,.pa-event-card .pa-speaker-card-unit{overflow:visible!important;}
 .pa-event-card .pa-speaker-card-list-has-categories{align-items:end!important;}
 .pa-event-card .pa-speaker-card-column{align-items:end!important;}
 .pa-event-card .pa-speaker-card-unit{justify-content:flex-end!important;align-self:end!important;padding-top:14px!important;}
 .pa-event-card .pa-speaker-card-category-label{display:block!important;visibility:visible!important;min-height:1em!important;line-height:1.15!important;margin:0 0 5px!important;overflow:visible!important;white-space:nowrap!important;}
-.pa-event-card .pa-speaker-card--categorized,
-.pa-single-event .pa-speaker-card--categorized{border:1px solid var(--pa-agenda-bar-color,var(--pa-agenda-accent-color,currentColor))!important;}
-.pa-single-event .pa-speaker-card-list--categorized-split{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:28px!important;align-items:start!important;}
-.pa-single-event .pa-speaker-card-column{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content))!important;gap:12px!important;align-items:start!important;align-content:start!important;}
-.pa-single-event .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
-.pa-single-event .pa-speaker-card-column-heading{margin:0 0 10px!important;font-size:.8rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;grid-column:1/-1!important;}
-.pa-single-event .pa-speaker-card-column-heading--category{display:none!important;}
-.pa-single-event .pa-speaker-card-category-label{display:block!important;visibility:visible!important;margin:0 0 10px!important;font-size:.8rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;white-space:nowrap!important;overflow:visible!important;}
-@media (max-width:900px){.pa-single-event .pa-speaker-card-list--categorized-split{grid-template-columns:1fr!important;}.pa-single-event .pa-speaker-card-column{grid-template-columns:1fr!important;}}
+.pa-event-card .pa-speaker-card--categorized{border:1px solid var(--pa-agenda-bar-color,var(--pa-agenda-accent-color,currentColor))!important;}
 '''
-if '/* Stagecard speaker category alignment and visibility guard */' not in public_css:
-    public_css += '\n' + public_guard
-
-cleanup = '''
-/* Stagecard single event speaker category cleanup */
-.pa-event-single-speakers--categorized > h4{display:none!important;}
-.pa-single-event .pa-speaker-card-column-heading--category{display:none!important;}
-.pa-single-event .pa-speaker-card-list--categorized-split{align-items:start!important;gap:clamp(28px,6vw,72px)!important;margin-top:0!important;max-width:100%!important;}
-.pa-single-event .pa-speaker-card-column{align-items:start!important;align-content:start!important;justify-items:start!important;}
-.pa-single-event .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
-.pa-single-event .pa-speaker-card-category-label{margin:0 0 10px!important;font-size:.8rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;}
-.pa-single-event .pa-speaker-card-column--default{border-left:1px solid currentColor!important;padding-left:clamp(22px,4vw,44px)!important;}
-.pa-single-event .pa-speaker-card-column-heading--speakers{margin-top:0!important;}
-'''
-if '/* Stagecard single event speaker category cleanup */' not in public_css:
-    public_css += '\n' + cleanup
-
-polish = '''
-/* Stagecard event page two-column speaker layout polish */
-.pa-event-single-speakers--categorized{margin-top:2.2rem!important;}
-.pa-event-single-speakers--categorized > h4{display:none!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-list--categorized-split{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:clamp(28px,6vw,72px)!important;align-items:start!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-column{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content))!important;gap:12px!important;align-items:start!important;align-content:start!important;justify-items:start!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-column--default{border-left:1px solid currentColor!important;padding-left:clamp(22px,4vw,44px)!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-column-heading--category{display:none!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-column-heading--speakers,
-.pa-event-single-speakers--categorized .pa-speaker-card-category-label{margin:0 0 12px!important;font-size:.82rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;font-weight:700!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
-@media (max-width:900px){
-  .pa-event-single-speakers--categorized .pa-speaker-card-list--categorized-split{grid-template-columns:1fr!important;}
-  .pa-event-single-speakers--categorized .pa-speaker-card-column{grid-template-columns:1fr!important;}
-  .pa-event-single-speakers--categorized .pa-speaker-card-column--default{border-left:0!important;padding-left:0!important;border-top:1px solid currentColor!important;padding-top:22px!important;}
-}
-'''
-if '/* Stagecard event page two-column speaker layout polish */' not in public_css:
-    public_css += '\n' + polish
+if '/* Stagecard categorized agenda speaker card order */' not in public_css:
+    public_css += '\n' + agenda_css
 PUBLIC_CSS.write_text(public_css)
 
-print('Polished categorized speaker layout on single event pages and event cards.')
+print('Applied root single Event speaker section renderer and layout.')
