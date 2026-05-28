@@ -33,6 +33,21 @@ new_split = """        if ($categorized_cards && $default_cards) {
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers\">Speakers</h5>' . implode('', $default_cards) . '</div>';
             } else {
+                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\">' . implode('', $categorized_cards) . '</div>';
+                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\">' . implode('', $default_cards) . '</div>';
+            }
+        } else {
+            echo implode('', array_merge($categorized_cards, $default_cards));
+        }
+"""
+if old_split in php:
+    php = php.replace(old_split, new_split, 1)
+
+old_existing_split = """        if ($categorized_cards && $default_cards) {
+            if ($context === 'event-page') {
+                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
+                echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers\">Speakers</h5>' . implode('', $default_cards) . '</div>';
+            } else {
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--default\">' . implode('', $default_cards) . '</div>';
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\">' . implode('', $categorized_cards) . '</div>';
             }
@@ -40,8 +55,9 @@ new_split = """        if ($categorized_cards && $default_cards) {
             echo implode('', array_merge($default_cards, $categorized_cards));
         }
 """
-if old_split in php:
-    php = php.replace(old_split, new_split, 1)
+if old_existing_split in php:
+    php = php.replace(old_existing_split, new_split, 1)
+
 php = php.replace('class=\"pa-speaker-card-column-heading\">Speaker Category</h5>', 'class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>')
 php = php.replace('class=\"pa-speaker-card-column-heading\">Speakers</h5>', 'class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--speakers\">Speakers</h5>')
 
@@ -121,4 +137,4 @@ if '/* Stagecard single event speaker category cleanup */' not in public_css:
     public_css += '\n' + cleanup
 PUBLIC_CSS.write_text(public_css)
 
-print('Cleaned up single event speaker category layout.')
+print('Shows categorized speakers first on event cards and keeps single event layout clean.')
