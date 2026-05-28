@@ -3195,7 +3195,7 @@ body.pa-program-entity-page .byline{
 
 .pa-event-card__meta,
 .pa-event-card__meta *{
-  font-size:.6rem!important;
+  font-size:.78rem!important;
 }
 
 .pa-event-card__date,
@@ -3210,7 +3210,7 @@ body.pa-program-entity-page .byline{
 
 .pa-speaker-card .pa-speaker-card-text h3,
 .pa-speaker-card .pa-speaker-card-text h3 a{
-  font-size:6rem!important;
+  font-size:78rem!important;
 }
 
 .pa-speaker-card .pa-speaker-card-role,
@@ -3220,7 +3220,7 @@ body.pa-program-entity-page .byline{
 
 .pa-event-card .pa-speaker-card-category-label,
 .pa-single-event-speaker-section-heading{
-  font-size:.82rem!important;
+  font-size:.78rem!important;
 }
 
 /* Stagecard Event page speaker cards match agenda cards */
