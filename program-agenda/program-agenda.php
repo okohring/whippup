@@ -1138,6 +1138,8 @@ final class Program_Agenda_Plugin {
         $categories = $id ? get_post_meta($id, '_pa_categories', true) : [];
         $all_categories_same = $id ? get_post_meta($id, '_pa_categories_all_same', true) : '';
         if (!is_array($categories)) { $categories = []; }
+        $speaker_categories = $id ? get_post_meta($id, '_pa_speaker_categories', true) : [];
+        if (!is_array($speaker_categories)) { $speaker_categories = []; }
         $speaker_card = $id ? get_post_meta($id, '_pa_speaker_card_settings', true) : [];
         if (!is_array($speaker_card)) { $speaker_card = []; }
         $agenda = $id ? get_post_meta($id, '_pa_agenda_settings', true) : [];
@@ -1160,13 +1162,18 @@ final class Program_Agenda_Plugin {
         foreach ($additional_dates as $i => $range) { $this->additional_date_row($i, $range); }
         echo '</div><template id="pa-additional-date-template">'; $this->additional_date_row('__INDEX__', ['start'=>'','end'=>'']); echo '</template></div>';
         echo '<label class="pa-field">Back to link <span>*</span><input required type="url" name="back_to_link" value="' . esc_attr($back_to_link) . '" placeholder="https://example.com/program"><small>This is where the “Back to Program” link on individual Event and Speaker pages will send users.</small></label>';
-        echo '<h3>Categories</h3><p class="description">Category colors and icons are intentional design settings. If no color is chosen, black is used.</p>';
-        echo '<label class="pa-field pa-checkbox-field pa-all-categories-same-field"><input type="checkbox" name="categories_all_same" value="1" class="pa-all-categories-same" ' . checked($all_categories_same, '1', false) . '> All categories have same settings</label>';
+        echo '<section class="pa-program-category-columns"><div class="pa-program-category-column pa-event-categories-column"><h3>Event Categories</h3><p class="description">Category colors and icons are intentional design settings. If no color is chosen, black is used.</p>';
+        echo '<label class="pa-field pa-checkbox-field pa-all-categories-same-field"><input type="checkbox" name="categories_all_same" value="1" class="pa-all-categories-same" ' . checked($all_categories_same, '1', false) . '> All event categories have same settings</label>';
         echo '<div id="pa-categories">';
         if (!$categories) { $categories = [['name'=>'','color'=>'#000000','icon'=>'none']]; }
         foreach ($categories as $i => $cat) { $this->category_row($i, $cat); }
-        echo '</div><button type="button" class="button pa-add-category">Add category</button>';
-        echo '<template id="pa-category-template">'; $this->category_row('__INDEX__', ['name'=>'','color'=>'#000000','icon'=>'none']); echo '</template>';
+        echo '</div><button type="button" class="button pa-add-category">Add event category</button>';
+        echo '<template id="pa-category-template">'; $this->category_row('__INDEX__', ['name'=>'','color'=>'#000000','icon'=>'none']); echo '</template></div>';
+        echo '<div class="pa-program-category-column pa-speaker-categories-column"><h3>Speaker Categories</h3><p class="description">Optional labels such as Moderator, Host, Panelist, or Featured Speaker. These appear above selected speaker cards.</p><div id="pa-speaker-categories">';
+        if (!$speaker_categories) { $speaker_categories = [['name'=>'']]; }
+        foreach ($speaker_categories as $i => $speaker_category) { $this->speaker_category_row($i, $speaker_category); }
+        echo '</div><button type="button" class="button pa-add-speaker-category">Add speaker category</button>';
+        echo '<template id="pa-speaker-category-template">'; $this->speaker_category_row('__INDEX__', ['name'=>'']); echo '</template></div></section>';
         $sponsor_levels = $id ? get_post_meta($id, '_pa_sponsor_levels', true) : [];
         if (!is_array($sponsor_levels)) { $sponsor_levels = []; }
         echo '<section class="pa-sponsor-levels-section"><h3>Sponsor Levels</h3><p class="description">Add sponsor levels for this Program. Sponsors can be assigned to one or more levels. Drag, or use the arrows, to reorder how levels appear on sponsor showcase pages.</p><div id="pa-sponsor-levels">';
@@ -1230,6 +1237,55 @@ final class Program_Agenda_Plugin {
         echo '<a href="#" class="pa-remove-row pa-remove-category-link">Remove category</a>';
         echo '<div class="pa-category-remove-warning" hidden><p>This will remove this category from all events that use it.</p><label><input type="checkbox" class="pa-hide-category-warning"> Don&rsquo;t show this warning again</label><button type="button" class="button button-link-delete pa-confirm-remove-category">Remove</button></div>';
         echo '</div>';
+    }
+
+    private function speaker_category_row($i, $category) {
+        $name = is_array($category) ? ($category['name'] ?? '') : (string)$category;
+        echo '<div class="pa-speaker-category-row"><input type="text" name="speaker_categories[' . esc_attr($i) . '][name]" placeholder="Speaker category" value="' . esc_attr($name) . '"><a href="#" class="pa-remove-row pa-remove-speaker-category-link">Remove category</a></div>';
+    }
+
+    private function normalize_speaker_categories($categories) {
+        $normalized = [];
+        foreach ((array)$categories as $category) {
+            $name = is_array($category) ? ($category['name'] ?? '') : $category;
+            $name = sanitize_text_field($name);
+            if ($name !== '' && !in_array($name, $normalized, true)) { $normalized[] = $name; }
+        }
+        return $normalized;
+    }
+
+    private function speaker_categories_for_program($program_id = 0) {
+        $program_id = absint($program_id);
+        if ($program_id) { return $this->normalize_speaker_categories(get_post_meta($program_id, '_pa_speaker_categories', true)); }
+        $categories = [];
+        $programs = get_posts(['post_type'=>'pa_program','post_status'=>['publish','draft'],'numberposts'=>-1,'orderby'=>'title','order'=>'ASC']);
+        foreach ($programs as $program) {
+            foreach ($this->normalize_speaker_categories(get_post_meta($program->ID, '_pa_speaker_categories', true)) as $category) {
+                if (!in_array($category, $categories, true)) { $categories[] = $category; }
+            }
+        }
+        return $categories;
+    }
+
+    private function speaker_category_options_html($categories, $selected = '') {
+        $selected = sanitize_text_field($selected);
+        ob_start();
+        echo '<option value="">Default speaker</option>';
+        foreach ($this->normalize_speaker_categories($categories) as $category) {
+            echo '<option value="' . esc_attr($category) . '" ' . selected($selected, $category, false) . '>' . esc_html($category) . '</option>';
+        }
+        return ob_get_clean();
+    }
+
+    private function selected_speaker_admin_row($speaker_id, $event_speaker_categories = [], $speaker_categories = []) {
+        $speaker_id = absint($speaker_id);
+        $sp = get_post($speaker_id);
+        if (!$sp || $sp->post_type !== 'pa_speaker') { return ''; }
+        $selected_category = '';
+        foreach ([$speaker_id, (string)$speaker_id] as $key) {
+            if (isset($event_speaker_categories[$key])) { $selected_category = sanitize_text_field($event_speaker_categories[$key]); break; }
+        }
+        return '<li data-id="' . esc_attr($speaker_id) . '"><span class="pa-selected-speaker-name">' . esc_html($sp->post_title) . '</span><span class="pa-selected-speaker-category-wrap"><label><span class="screen-reader-text">Speaker category</span><select class="pa-selected-speaker-category" name="speaker_categories[' . esc_attr($speaker_id) . ']">' . $this->speaker_category_options_html($speaker_categories, $selected_category) . '</select></label></span><span class="pa-selected-speaker-actions"><button type="button" class="button-link pa-move-speaker-up" aria-label="Move up" title="Move up"><span aria-hidden="true">▲</span><span class="screen-reader-text">Move up</span></button> <button type="button" class="button-link pa-move-speaker-down" aria-label="Move down" title="Move down"><span aria-hidden="true">▼</span><span class="screen-reader-text">Move down</span></button> <button type="button" class="button-link pa-remove-speaker">Remove</button></span></li>';
     }
 
     private function sponsor_level_row($i, $level) {
@@ -1453,6 +1509,9 @@ final class Program_Agenda_Plugin {
         $program_id = $id ? absint(get_post_meta($id, '_pa_program_id', true)) : 0;
         $speaker_ids = $id ? get_post_meta($id, '_pa_speaker_ids', true) : [];
         if (!is_array($speaker_ids)) { $speaker_ids = []; }
+        $event_speaker_categories = $id ? get_post_meta($id, '_pa_event_speaker_categories', true) : [];
+        if (!is_array($event_speaker_categories)) { $event_speaker_categories = []; }
+        $speaker_categories = $this->speaker_categories_for_program($program_id);
         $programs = get_posts(['post_type'=>'pa_program','post_status'=>['publish','draft'],'numberposts'=>-1,'orderby'=>'title','order'=>'ASC']);
         $speakers = get_posts(['post_type'=>'pa_speaker','post_status'=>['publish','draft'],'numberposts'=>-1,'orderby'=>'title','order'=>'ASC']);
         $sponsors = get_posts(['post_type'=>'pa_sponsor','post_status'=>['publish','draft'],'numberposts'=>-1,'orderby'=>'title','order'=>'ASC']);
@@ -1530,9 +1589,9 @@ final class Program_Agenda_Plugin {
             $speaker_search_terms = strtolower(trim($sp->post_title . ' ' . $speaker_company . ' ' . $speaker_role . ' ' . $speaker_credentials));
             echo '<label data-name="' . esc_attr($speaker_search_terms) . '"><input type="checkbox" class="pa-speaker-check" value="' . esc_attr($sp->ID) . '" ' . checked(in_array($sp->ID, array_map('intval', $speaker_ids), true), true, false) . '> ' . esc_html($sp->post_title) . '</label>';
         }
-        echo '</div><ul class="pa-selected-speakers" data-empty="No speakers selected.">';
-        foreach ($speaker_ids as $sid) { $sp = get_post($sid); if ($sp) { echo '<li data-id="' . esc_attr($sid) . '"><span class="pa-selected-speaker-name">' . esc_html($sp->post_title) . '</span><span class="pa-selected-speaker-actions"><button type="button" class="button-link pa-move-speaker-up" aria-label="Move up" title="Move up"><span aria-hidden="true">▲</span><span class="screen-reader-text">Move up</span></button> <button type="button" class="button-link pa-move-speaker-down" aria-label="Move down" title="Move down"><span aria-hidden="true">▼</span><span class="screen-reader-text">Move down</span></button> <button type="button" class="button-link pa-remove-speaker">Remove</button></span></li>'; } }
-        echo '</ul><input type="hidden" name="speaker_order" class="pa-speaker-order" value="' . esc_attr(implode(',', array_map('intval', $speaker_ids))) . '"></section>';
+        echo '</div><ul class="pa-selected-speakers pa-selected-speakers-with-categories" data-empty="No speakers selected.">';
+        foreach ($speaker_ids as $sid) { echo $this->selected_speaker_admin_row($sid, $event_speaker_categories, $speaker_categories); }
+        echo '</ul><template id="pa-speaker-category-select-template"><span class="pa-selected-speaker-category-wrap"><label><span class="screen-reader-text">Speaker category</span><select class="pa-selected-speaker-category" name="speaker_categories[__SPEAKER_ID__]">' . $this->speaker_category_options_html($speaker_categories) . '</select></label></span></template><input type="hidden" name="speaker_order" class="pa-speaker-order" value="' . esc_attr(implode(',', array_map('intval', $speaker_ids))) . '"></section>';
 
         echo '<section class="pa-field pa-sponsors-field pa-event-half"><h3 class="pa-field-heading">Sponsors</h3><p class="description">Searchable and multi-selectable. Choose from sponsors created in the Sponsors tab.</p><div class="pa-sponsor-toolbar"><input type="search" class="pa-sponsor-search" placeholder="Search sponsors by company, program, level, or bio"><button type="button" class="button pa-select-all-sponsors">Select all visible</button></div><div class="pa-sponsor-picker">';
         foreach ($sponsors as $sponsor) {
@@ -1762,6 +1821,14 @@ final class Program_Agenda_Plugin {
             unset($cat);
         }
         update_post_meta($new_id, '_pa_categories', $cats);
+        $speaker_categories = [];
+        foreach ((array)($_POST['speaker_categories'] ?? []) as $speaker_category) {
+            $speaker_category_name = sanitize_text_field($speaker_category['name'] ?? '');
+            if ($speaker_category_name !== '' && !in_array($speaker_category_name, array_column($speaker_categories, 'name'), true)) {
+                $speaker_categories[] = ['name' => $speaker_category_name];
+            }
+        }
+        update_post_meta($new_id, '_pa_speaker_categories', $speaker_categories);
         $sponsor_levels = [];
         foreach ((array)($_POST['sponsor_levels'] ?? []) as $level) {
             $level = sanitize_text_field($level);
@@ -1830,6 +1897,17 @@ final class Program_Agenda_Plugin {
         }
         $order = array_filter(array_map('absint', explode(',', sanitize_text_field($_POST['speaker_order'] ?? ''))));
         update_post_meta($new_id, '_pa_speaker_ids', $order);
+        $raw_speaker_categories = (array)($_POST['speaker_categories'] ?? []);
+        $event_speaker_categories = [];
+        foreach ($order as $speaker_id) {
+            $speaker_id = absint($speaker_id);
+            $speaker_category = '';
+            foreach ([$speaker_id, (string)$speaker_id] as $speaker_category_key) {
+                if (isset($raw_speaker_categories[$speaker_category_key])) { $speaker_category = sanitize_text_field($raw_speaker_categories[$speaker_category_key]); break; }
+            }
+            if ($speaker_category !== '') { $event_speaker_categories[(string)$speaker_id] = $speaker_category; }
+        }
+        update_post_meta($new_id, '_pa_event_speaker_categories', $event_speaker_categories);
         wp_safe_redirect(admin_url('admin.php?page=program-edit-event&id=' . $new_id . '&saved=1')); exit;
     }
 
@@ -3027,7 +3105,7 @@ final class Program_Agenda_Plugin {
         echo '<div class="pa-single-text">' . wp_kses_post(wpautop($post->post_content)) . '</div>';
         $speaker_ids = get_post_meta($post->ID, '_pa_speaker_ids', true);
         if (is_array($speaker_ids) && $speaker_ids) {
-            echo '<div class="pa-event-single-speakers"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda') . '</div>';
+            echo '<div class="pa-event-single-speakers"><h4>Speakers</h4>' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $event->ID) . '</div>';
         }
         echo '</div>';
         $sponsor_ids = get_post_meta($post->ID, '_pa_sponsor_ids', true);
@@ -3240,7 +3318,7 @@ final class Program_Agenda_Plugin {
         }
         if ($card_size !== 'thin' && $show_desc && $event->post_content) { echo '<div class="pa-event-card__description">' . wp_kses_post(wpautop($event->post_content)) . '</div>'; }
         echo '</div>';
-        if ($card_size !== 'thin' && $speaker_ids) { echo '<div class="pa-event-card__speakers">' . $this->speaker_cards($speaker_ids, $program_id, 'agenda') . '</div>'; }
+        if ($card_size !== 'thin' && $speaker_ids) { echo '<div class="pa-event-card__speakers">' . $this->speaker_cards($speaker_ids, $program_id, 'agenda', $post->ID) . '</div>'; }
         echo '</div></article>';
         return ob_get_clean();
     }
@@ -3432,7 +3510,7 @@ final class Program_Agenda_Plugin {
         return $release;
     }
 
-    private function speaker_cards($speaker_ids, $program_id = 0, $context = '') {
+    private function speaker_cards($speaker_ids, $program_id = 0, $context = '', $event_id = 0) {
         $settings = $program_id ? get_post_meta($program_id, '_pa_speaker_card_settings', true) : [];
         if (!is_array($settings)) { $settings = []; }
         $show_thumb = ($settings['show_thumbnail'] ?? '1') !== '0';
@@ -3447,16 +3525,24 @@ final class Program_Agenda_Plugin {
         $img_class = 'pa-speaker-card-thumb';
         if (($settings['thumbnail_shape'] ?? '') === 'circle') { $img_class .= ' is-circle'; }
         if (($settings['thumbnail_shape'] ?? '') === 'square') { $img_class .= ' is-square'; }
-        ob_start();
-        echo '<div class="pa-speaker-card-list ' . ($context === 'agenda' ? 'pa-speaker-card-list-agenda' : '') . '">';
-        foreach ($speaker_ids as $sid) {
-            $sp = get_post(absint($sid));
+        $event_speaker_categories = $event_id ? get_post_meta(absint($event_id), '_pa_event_speaker_categories', true) : [];
+        if (!is_array($event_speaker_categories)) { $event_speaker_categories = []; }
+        $default_cards = [];
+        $categorized_cards = [];
+        foreach ((array)$speaker_ids as $sid) {
+            $sid = absint($sid);
+            $sp = get_post($sid);
             if (!$sp || $sp->post_type !== 'pa_speaker') { continue; }
+            $category = '';
+            foreach ([$sid, (string)$sid] as $key) { if (isset($event_speaker_categories[$key])) { $category = sanitize_text_field($event_speaker_categories[$key]); break; } }
             $role = get_post_meta($sp->ID, '_pa_speaker_role_title', true);
             if (!$role) { $role = get_post_meta($sp->ID, '_pa_speaker_credentials', true); }
             $company = get_post_meta($sp->ID, '_pa_speaker_company', true);
             $img = absint(get_post_meta($sp->ID, '_pa_speaker_image_id', true));
-            echo '<article class="pa-speaker-card" style="' . esc_attr($style) . '">';
+            ob_start();
+            echo '<div class="pa-speaker-card-unit' . ($category ? ' pa-speaker-card-unit--categorized' : '') . '">';
+            if ($category) { echo '<span class="pa-speaker-card-category-label">' . esc_html($category) . '</span>'; }
+            echo '<article class="pa-speaker-card' . ($category ? ' pa-speaker-card--categorized' : '') . '" style="' . esc_attr($style) . '">';
             if ($show_thumb) {
                 echo '<a class="pa-speaker-card-image" href="' . esc_url(get_permalink($sp)) . '">';
                 if ($img) { echo wp_get_attachment_image($img, 'medium', false, ['class'=>$img_class]); }
@@ -3466,7 +3552,20 @@ final class Program_Agenda_Plugin {
             echo '<div class="pa-speaker-card-text"><h3><a style="' . esc_attr($text_style) . '" href="' . esc_url(get_permalink($sp)) . '">' . esc_html($sp->post_title) . '</a></h3>';
             if ($role) { echo '<p class="pa-speaker-card-role" style="' . esc_attr($text_style) . '">' . esc_html($role) . '</p>'; }
             if ($company) { echo '<p class="pa-speaker-card-company" style="' . esc_attr($text_style) . '">' . esc_html($company) . '</p>'; }
-            echo '</div></article>';
+            echo '</div></article></div>';
+            $card_html = ob_get_clean();
+            if ($category) { $categorized_cards[] = $card_html; } else { $default_cards[] = $card_html; }
+        }
+        $list_classes = 'pa-speaker-card-list ' . ($context === 'agenda' ? 'pa-speaker-card-list-agenda' : '');
+        if ($categorized_cards) { $list_classes .= ' pa-speaker-card-list-has-categories'; }
+        if ($categorized_cards && $default_cards) { $list_classes .= ' pa-speaker-card-list--categorized-split'; }
+        ob_start();
+        echo '<div class="' . esc_attr(trim($list_classes)) . '">';
+        if ($categorized_cards && $default_cards) {
+            echo '<div class="pa-speaker-card-column pa-speaker-card-column--default">' . implode('', $default_cards) . '</div>';
+            echo '<div class="pa-speaker-card-column pa-speaker-card-column--categorized">' . implode('', $categorized_cards) . '</div>';
+        } else {
+            echo implode('', array_merge($default_cards, $categorized_cards));
         }
         echo '</div>';
         return ob_get_clean();

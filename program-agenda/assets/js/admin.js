@@ -45,6 +45,7 @@ jQuery(function($){
   $(document).on('click','.pa-remove-image',function(e){e.preventDefault();var $f=$(this).closest('.pa-image-field');$f.find('input[type=hidden]').val('');$f.find('.pa-image-preview').empty();});
 
   function updateSpeakerOrder(){var ids=[];$('.pa-selected-speakers li').each(function(){ids.push($(this).data('id'));});$('.pa-speaker-order').val(ids.join(','));}
+  function speakerCategorySelectHtml(id){var html=$('#pa-speaker-category-select-template').html()||''; return html.replace(/__SPEAKER_ID__/g,id);}
   $('.pa-selected-speakers').sortable({update:updateSpeakerOrder});
   $(document).on('input','.pa-speaker-search',function(){var q=String($(this).val()||'').toLowerCase();$('.pa-speaker-picker label').each(function(){var terms=String($(this).data('name')||'').toLowerCase();$(this).toggle(terms.indexOf(q)!==-1);});});
 
@@ -203,6 +204,8 @@ jQuery(function($){
     $wrap.append($row);
     refreshCategoryIcon($row);
   });
+  $(document).on('click','.pa-add-speaker-category',function(e){e.preventDefault();var $wrap=$('#pa-speaker-categories'), tpl=$('#pa-speaker-category-template').html(), i=$wrap.children('.pa-speaker-category-row').length;$wrap.append($(tpl.replaceAll('__INDEX__',i)));});
+  $(document).on('click','.pa-remove-speaker-category-link',function(e){e.preventDefault();$(this).closest('.pa-speaker-category-row').remove();});
   $(document).on('change','.pa-category-icon-select',function(){refreshCategoryIcon($(this).closest('.pa-category-row'));});
   $('.pa-category-row').each(function(){refreshCategoryIcon($(this));});
   function syncAllCategoriesSame(){
