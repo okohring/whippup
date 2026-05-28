@@ -87,7 +87,6 @@ section_method = r'''    private function single_event_speaker_sections($speaker
 if 'private function single_event_speaker_sections(' not in php:
     php = php.replace('    private function single_speaker($post) {\n', section_method + '    private function single_speaker($post) {\n', 1)
 
-# Speaker card split is only for agenda/event-card contexts now. Categorized first.
 old_split_1 = """        if ($categorized_cards && $default_cards) {
             if ($context === 'event-page') {
                 echo '<div class=\"pa-speaker-card-column pa-speaker-card-column--categorized\"><h5 class=\"pa-speaker-card-column-heading pa-speaker-card-column-heading--category\">Speaker Category</h5>' . implode('', $categorized_cards) . '</div>';
@@ -109,10 +108,8 @@ new_split = """        if ($categorized_cards && $default_cards) {
 """
 if old_split_1 in php:
     php = php.replace(old_split_1, new_split, 1)
-
 PHP.write_text(php)
 
-# Ensure dynamically added speakers get category dropdown.
 js = JS.read_text()
 if 'function speakerCategorySelectHtml' not in js:
     marker = "  function updateSpeakerOrder(){var ids=[];$('.pa-selected-speakers li').each(function(){ids.push($(this).data('id'));});$('.pa-speaker-order').val(ids.join(','));}\n"
@@ -171,6 +168,65 @@ agenda_css = '''
 '''
 if '/* Stagecard categorized agenda speaker card order */' not in public_css:
     public_css += '\n' + agenda_css
+mobile_css = '''
+/* Stagecard mobile categorized agenda speaker cards */
+@media (max-width:768px){
+  .pa-event-card .pa-event-card__body,
+  .pa-event-card.pa-event-card--size-full .pa-event-card__body{
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  .pa-event-card .pa-event-card__speakers{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  .pa-event-card .pa-speaker-card-list,
+  .pa-event-card .pa-speaker-card-list--categorized-split,
+  .pa-event-card .pa-speaker-card-column{
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    gap:10px!important;
+    align-items:stretch!important;
+    overflow:hidden!important;
+  }
+  .pa-event-card .pa-speaker-card-unit{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    padding-top:0!important;
+    align-self:stretch!important;
+    overflow:hidden!important;
+  }
+  .pa-event-card .pa-speaker-card-category-label{
+    white-space:normal!important;
+    overflow:visible!important;
+    margin:0 0 4px!important;
+  }
+  .pa-event-card .pa-speaker-card{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+  .pa-event-card .pa-speaker-card-text,
+  .pa-event-card .pa-speaker-card-text h3,
+  .pa-event-card .pa-speaker-card-text p,
+  .pa-event-card .pa-speaker-card-text a{
+    min-width:0!important;
+    max-width:100%!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+}
+'''
+if '/* Stagecard mobile categorized agenda speaker cards */' not in public_css:
+    public_css += '\n' + mobile_css
 PUBLIC_CSS.write_text(public_css)
 
-print('Applied root single Event speaker section renderer and layout.')
+print('Applied root single Event renderer and mobile categorized speaker card fixes.')
