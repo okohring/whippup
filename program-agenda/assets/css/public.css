@@ -3186,49 +3186,34 @@ body.pa-program-entity-page .byline{
 }
 
 
-
-/* Stagecard event and speaker card font weights */
+/* Stagecard force lighter Montserrat weights */
 .pa-event-card,
 .pa-event-card *,
 .pa-speaker-card,
 .pa-speaker-card *{
   font-family: Montserrat, Arial, Helvetica, sans-serif !important;
+  font-synthesis-weight: none !important;
 }
 
-/* Event title */
-.pa-event-card .pa-event-card__title,
-.pa-event-card .pa-event-card__title a{
-  font-weight:200!important;
-}
-
-/* Event meta: category, location, invite icon area */
-.pa-event-card .pa-event-card__meta,
-.pa-event-card .pa-event-card__meta *{
-  font-weight:200!important;
-}
-
-/* Date/time bar */
-.pa-event-card .pa-event-card__date,
-.pa-event-card .pa-event-card__time{
-  font-weight:400!important;
-}
-
-/* Speaker name */
-.pa-speaker-card .pa-speaker-card-text h3,
-.pa-speaker-card .pa-speaker-card-text h3 a{
-  font-weight:200!important;
-}
-
-/* Speaker role/company */
+/* Normal text */
+.pa-event-card__meta,
+.pa-event-card__meta *,
 .pa-speaker-card .pa-speaker-card-role,
 .pa-speaker-card .pa-speaker-card-company{
-  font-weight:100!important;
+  font-weight:300!important;
+  font-variation-settings:"wght" 300!important;
 }
 
-/* Speaker category label, like MODERATOR */
-.pa-event-card .pa-speaker-card-category-label,
-.pa-single-event-speaker-section-heading{
+/* Important text, but not too bold */
+.pa-event-card .pa-event-card__title,
+.pa-event-card .pa-event-card__title a,
+.pa-event-card .pa-event-card__date,
+.pa-event-card .pa-event-card__time,
+.pa-speaker-card .pa-speaker-card-text h3,
+.pa-speaker-card .pa-speaker-card-text h3 a,
+.pa-event-card .pa-speaker-card-category-label{
   font-weight:400!important;
+  font-variation-settings:"wght" 400!important;
 }
 
 /* Stagecard Event page speaker cards match agenda cards */
