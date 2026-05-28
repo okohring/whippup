@@ -2939,14 +2939,30 @@ body.pa-program-entity-page .byline{
 
 /* Stagecard event page two-column speaker layout polish */
 .pa-event-single-speakers--categorized{margin-top:2.2rem!important;}
-.pa-event-single-speakers--categorized > h4{display:none!important;}
+.pa-event-single-speakers--categorized > h5{display:none!important;}
 .pa-event-single-speakers--categorized .pa-speaker-card-list--categorized-split{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:clamp(28px,6vw,72px)!important;align-items:start!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-column{display:grid!important;grid-template-columns:repeat(2,minmax(0,max-content))!important;gap:12px!important;align-items:start!important;align-content:start!important;justify-items:start!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-column--default{border-left:1px solid currentColor!important;padding-left:clamp(22px,4vw,44px)!important;}
+.pa-event-single-speakers--categorized .pa-speaker-card-column{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:12px!important;
+  align-items:flex-start!important;
+  align-content:start!important;
+  justify-items:start!important;
+}
+.pa-event-single-speakers--categorized .pa-speaker-card-column--default{border-left:0px solid currentColor!important;padding-left:clamp(22px,4vw,44px)!important;}
 .pa-event-single-speakers--categorized .pa-speaker-card-column-heading--category{display:none!important;}
 .pa-event-single-speakers--categorized .pa-speaker-card-column-heading--speakers,
-.pa-event-single-speakers--categorized .pa-speaker-card-category-label{margin:0 0 12px!important;font-size:.82rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;font-weight:700!important;}
-.pa-event-single-speakers--categorized .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
+.pa-event-single-speakers--categorized .pa-speaker-card-column-heading--speakers,
+.pa-event-single-speakers--categorized .pa-speaker-card-category-label{
+  display:block!important;
+  width:100%!important;
+  margin:0 0 12px!important;
+  font-size:.82rem!important;
+  line-height:1.2!important;
+  text-transform:uppercase!important;
+  letter-spacing:.04em!important;
+  font-weight:700!important;
+}.pa-event-single-speakers--categorized .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
 @media (max-width:900px){
   .pa-event-single-speakers--categorized .pa-speaker-card-list--categorized-split{grid-template-columns:1fr!important;}
   .pa-event-single-speakers--categorized .pa-speaker-card-column{grid-template-columns:1fr!important;}
