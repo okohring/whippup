@@ -80,6 +80,32 @@ mobile_safety = '''
 if '/* Stagecard responsive hover safety */' not in text:
     text += '\n/* Stagecard responsive hover safety */' + mobile_safety
 
+# Safari can repeatedly recalculate percentage-based grid child heights on
+# hover. Keep the children stretched by grid instead of using calc(100% + 4px).
+safari_height_guard = '''
+/* Stagecard Safari event card height guard */
+.pa-event-card .pa-event-card__datebar,
+.pa-event-card .pa-event-card__body{
+  height:auto!important;
+  min-height:0!important;
+  top:auto!important;
+  bottom:auto!important;
+  align-self:stretch!important;
+}
+.pa-event-card .pa-event-card__datebar{
+  left:0!important;
+  right:auto!important;
+  width:calc(100% + 4px)!important;
+}
+.pa-event-card .pa-event-card__body{
+  right:auto!important;
+  width:100%!important;
+  max-width:100%!important;
+}
+'''
+if '/* Stagecard Safari event card height guard */' not in text:
+    text += '\n' + safari_height_guard
+
 # Hard cap sponsor logos in case a theme or malformed earlier CSS tries to make
 # images render at their source dimensions.
 sponsor_guard = '''
@@ -125,4 +151,4 @@ if balance != 0:
     raise SystemExit(f'CSS brace balance is {balance}, expected 0.')
 
 PUBLIC_CSS.write_text(text)
-print('Fixed event-card mobile media query and sponsor logo sizing guard.')
+print('Fixed event-card mobile media query, Safari height guard, and sponsor logo sizing guard.')
