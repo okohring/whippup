@@ -2936,7 +2936,6 @@ body.pa-program-entity-page .byline{
 .pa-single-event .pa-speaker-card-unit{padding-top:0!important;align-self:start!important;justify-content:flex-start!important;}
 .pa-single-event .pa-speaker-card-category-label{margin:0 0 10px!important;font-size:.8rem!important;line-height:1.2!important;text-transform:uppercase!important;letter-spacing:.04em!important;}
 
-
 /* Stagecard event page two-column speaker layout polish */
 .pa-event-single-speakers--categorized{margin-top:2.2rem!important;}
 .pa-event-single-speakers--categorized > h5{display:none!important;}
