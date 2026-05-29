@@ -109,15 +109,15 @@ block = '''
 }
 .pa-program-speaker-grid{
   display:grid!important;
-  grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important;
-  gap:36px 44px!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:38px 44px!important;
   align-items:start!important;
   justify-items:center!important;
 }
 .pa-program-speaker-card{
   box-sizing:border-box!important;
   width:100%!important;
-  max-width:240px!important;
+  max-width:260px!important;
   text-align:center!important;
   font-family:Montserrat, Arial, Helvetica, sans-serif!important;
 }
@@ -129,7 +129,7 @@ block = '''
   overflow:hidden!important;
   align-items:center!important;
   justify-content:center!important;
-  margin:0 auto 16px!important;
+  margin:0 auto 14px!important;
   text-decoration:none!important;
 }
 .pa-program-speaker-image{
@@ -146,9 +146,9 @@ block = '''
   background:rgba(0,0,0,.08)!important;
 }
 .pa-program-speaker-name{
-  margin:0 0 7px!important;
-  font-size:.92rem!important;
-  line-height:1.2!important;
+  margin:0 0 3px!important;
+  font-size:1rem!important;
+  line-height:1.16!important;
   font-weight:600!important;
   text-transform:uppercase!important;
   letter-spacing:.04em!important;
@@ -163,25 +163,31 @@ block = '''
 }
 .pa-program-speaker-role,
 .pa-program-speaker-company{
-  margin:0 0 5px!important;
-  font-size:.82rem!important;
-  line-height:1.35!important;
+  margin:0 0 2px!important;
+  font-size:.9rem!important;
+  line-height:1.24!important;
   font-weight:400!important;
 }
 .pa-program-speakers-empty{
   margin:0!important;
 }
+@media (max-width:900px){
+  .pa-program-speaker-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:34px 32px!important;
+  }
+}
 @media (max-width:640px){
   .pa-program-speaker-grid{
-    grid-template-columns:repeat(auto-fit,minmax(150px,1fr))!important;
-    gap:30px 24px!important;
+    grid-template-columns:1fr!important;
+    gap:30px!important;
   }
   .pa-program-speaker-card{
-    max-width:200px!important;
+    max-width:240px!important;
   }
 }
 '''
 css = css.rstrip() + '\n\n' + block.strip() + '\n'
 PUBLIC_CSS.write_text(css)
 
-print('Added program_speakers shortcode, Program form shortcode box, and public speaker grid styles.')
+print('Added/refined program_speakers shortcode, Program form shortcode box, and public speaker grid styles.')
