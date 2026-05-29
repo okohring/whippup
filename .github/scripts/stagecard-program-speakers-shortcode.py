@@ -131,6 +131,14 @@ block = '''
   justify-content:center!important;
   margin:0 auto 14px!important;
   text-decoration:none!important;
+  transform:scale(1)!important;
+  transform-origin:center center!important;
+  transition:transform 180ms ease!important;
+  will-change:transform!important;
+}
+.pa-program-speaker-image-link:hover,
+.pa-program-speaker-image-link:focus-visible{
+  transform:scale(1.045)!important;
 }
 .pa-program-speaker-image{
   display:block!important;
@@ -163,9 +171,9 @@ block = '''
 }
 .pa-program-speaker-role,
 .pa-program-speaker-company{
-  margin:0 0 2px!important;
+  margin:0!important;
   font-size:.9rem!important;
-  line-height:1.24!important;
+  line-height:1.2!important;
   font-weight:400!important;
 }
 .pa-program-speakers-empty{
@@ -190,4 +198,4 @@ block = '''
 css = css.rstrip() + '\n\n' + block.strip() + '\n'
 PUBLIC_CSS.write_text(css)
 
-print('Added/refined program_speakers shortcode, Program form shortcode box, and public speaker grid styles.')
+print('Added/refined program_speakers shortcode, Program form shortcode box, photo hover, and tighter speaker info spacing.')
