@@ -68,6 +68,22 @@ method = r'''    public function shortcode_program_speakers($atts) {
             'order'=>'ASC',
         ]);
 
+        usort($speakers, function($a, $b) {
+            $a_last = trim((string)get_post_meta($a->ID, '_pa_last_name', true));
+            $b_last = trim((string)get_post_meta($b->ID, '_pa_last_name', true));
+            if ($a_last === '') {
+                $a_parts = preg_split('/\s+/', trim($a->post_title));
+                $a_last = $a_parts ? end($a_parts) : $a->post_title;
+            }
+            if ($b_last === '') {
+                $b_parts = preg_split('/\s+/', trim($b->post_title));
+                $b_last = $b_parts ? end($b_parts) : $b->post_title;
+            }
+            $last_compare = strcasecmp($a_last, $b_last);
+            if ($last_compare !== 0) { return $last_compare; }
+            return strcasecmp($a->post_title, $b->post_title);
+        });
+
         ob_start();
         echo '<section class="pa-program-speakers" aria-label="Program speakers">';
         echo '<div class="pa-program-speaker-grid">';
@@ -96,6 +112,14 @@ method = r'''    public function shortcode_program_speakers($atts) {
 '''
 if 'public function shortcode_program_speakers(' not in php:
     php = php.replace('    public function shortcode_program_pdf($atts) {\n', method + '    public function shortcode_program_pdf($atts) {\n', 1)
+else:
+    php = re.sub(
+        r'    public function shortcode_program_speakers\(\$atts\) \{.*?\n    \}\n\n    public function shortcode_program_pdf\(\$atts\) \{',
+        method + '    public function shortcode_program_pdf($atts) {',
+        php,
+        count=1,
+        flags=re.S,
+    )
 
 PHP.write_text(php)
 
@@ -173,6 +197,10 @@ block = '''
   color:inherit!important;
   text-decoration:none!important;
 }
+.pa-program-speaker-name a:hover,
+.pa-program-speaker-name a:focus-visible{
+  text-decoration:underline!important;
+}
 .pa-program-speaker-role,
 .pa-program-speaker-company{
   display:block!important;
@@ -206,4 +234,4 @@ block = '''
 css = css.rstrip() + '\n\n' + block.strip() + '\n'
 PUBLIC_CSS.write_text(css)
 
-print('Added/refined program_speakers shortcode, Program form shortcode box, photo hover, and tighter speaker info spacing.')
+print('Added/refined program_speakers shortcode, sorted speakers by last name, Program form shortcode box, photo hover, and tighter speaker info spacing.')
