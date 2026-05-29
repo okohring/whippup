@@ -2722,6 +2722,22 @@ final class Program_Agenda_Plugin {
             'order'=>'ASC',
         ]);
 
+        usort($speakers, function($a, $b) {
+            $a_last = trim((string)get_post_meta($a->ID, '_pa_last_name', true));
+            $b_last = trim((string)get_post_meta($b->ID, '_pa_last_name', true));
+            if ($a_last === '') {
+                $a_parts = preg_split('/\s+/', trim($a->post_title));
+                $a_last = $a_parts ? end($a_parts) : $a->post_title;
+            }
+            if ($b_last === '') {
+                $b_parts = preg_split('/\s+/', trim($b->post_title));
+                $b_last = $b_parts ? end($b_parts) : $b->post_title;
+            }
+            $last_compare = strcasecmp($a_last, $b_last);
+            if ($last_compare !== 0) { return $last_compare; }
+            return strcasecmp($a->post_title, $b->post_title);
+        });
+
         ob_start();
         echo '<section class="pa-program-speakers" aria-label="Program speakers">';
         echo '<div class="pa-program-speaker-grid">';

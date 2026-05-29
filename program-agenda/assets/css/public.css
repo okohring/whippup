@@ -3471,6 +3471,10 @@ body.pa-program-entity-page .byline{
   color:inherit!important;
   text-decoration:none!important;
 }
+.pa-program-speaker-name a:hover,
+.pa-program-speaker-name a:focus-visible{
+  text-decoration:underline!important;
+}
 .pa-program-speaker-role,
 .pa-program-speaker-company{
   display:block!important;
