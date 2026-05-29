@@ -26,6 +26,27 @@ jobs:
           python3 .github/scripts/stagecard-program-speakers-shortcode.py
           python3 .github/scripts/stagecard-program-pdf-shortcode.py
 
+      - name: Validate generated files
+        shell: bash
+        run: |
+          php -l program-agenda/program-agenda.php
+          python3 - <<'PY'
+          from pathlib import Path
+          for path in ['program-agenda/assets/css/public.css', 'program-agenda/assets/css/admin.css']:
+              text = Path(path).read_text()
+              balance = 0
+              for i, char in enumerate(text):
+                  if char == '{':
+                      balance += 1
+                  elif char == '}':
+                      balance -= 1
+                  if balance < 0:
+                      raise SystemExit(f'{path}: CSS brace balance went negative near character {i}.')
+              if balance != 0:
+                  raise SystemExit(f'{path}: CSS brace balance is {balance}, expected 0.')
+          print('PHP syntax and CSS brace checks passed.')
+          PY
+
       - name: Commit CSS cleanup
         shell: bash
         run: |
