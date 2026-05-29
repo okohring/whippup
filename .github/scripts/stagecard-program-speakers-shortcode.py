@@ -115,7 +115,7 @@ if 'public function shortcode_program_speakers(' not in php:
 else:
     php = re.sub(
         r'    public function shortcode_program_speakers\(\$atts\) \{.*?\n    \}\n\n    public function shortcode_program_pdf\(\$atts\) \{',
-        method + '    public function shortcode_program_pdf($atts) {',
+        lambda match: method + '    public function shortcode_program_pdf($atts) {',
         php,
         count=1,
         flags=re.S,
