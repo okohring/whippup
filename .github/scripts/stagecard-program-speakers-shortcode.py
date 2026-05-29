@@ -154,7 +154,7 @@ block = '''
   background:rgba(0,0,0,.08)!important;
 }
 .pa-program-speaker-name{
-  margin:0 0 3px!important;
+  margin:0 0 4px!important;
   font-size:1rem!important;
   line-height:1.16!important;
   font-weight:600!important;
@@ -174,7 +174,7 @@ block = '''
 .pa-program-speaker-company{
   margin:0!important;
   font-size:.9rem!important;
-  line-height:.5!important;
+  line-height:1!important;
   font-weight:400!important;
 }
 .pa-program-speakers-empty{
