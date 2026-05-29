@@ -174,7 +174,7 @@ block = '''
 .pa-program-speaker-company{
   margin:0!important;
   font-size:.9rem!important;
-  line-height:1!important;
+  line-height:0!important;
   font-weight:400!important;
 }
 .pa-program-speakers-empty{
